@@ -5,7 +5,7 @@ use warnings;
 use File::stat;
 use File::chdir;
 
-my $bypass=0; #--0-off--|--1-on--
+my $bypass; #--0-off--|--1-on--
 my $max_drops = 0.04;
 my $datestring = strftime "%F %T", localtime;
 my $directory = '/usr/adm/adm_s1/logs/';
@@ -13,6 +13,15 @@ my $directory = '/usr/adm/adm_s1/logs/';
 my $date = strftime "%F", localtime;
 my $log_file;
 my $ct=1; #--------check time
+
+#-------------detecting bypass state
+if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
+	$bypass=0;
+}
+else {
+	$bypass=1;
+}
+
 
 #-------------function obnovleniya
 sub filerefresh {
