@@ -33,10 +33,12 @@ while (my $file = readdir(DIR)) {
 #----proverka obnovlyaetsya li fail
         my $mt = stat($log_file);
         my $st = $mt -> mtime;
-#       print "$st\n";
+#        print "$st\n";
+#	my $fds = time();
+#	print "$fds\n";
 #                 if ($st =~s/(\d+)/localtime($1)/e) {
-		  if ($st == time()) { 
-                      $b=0;
+		  if ($st +2 >= time()) { 
+		       $b=0;
                       print "$datestring Log file updating \n";
                    }
                    else {
@@ -54,7 +56,7 @@ while (my $file = readdir(DIR)) {
         my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
         if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
        	my $drop_rate1 = $1;
-	
+	print "$2\n";
 #		print "Droprate in this moment $1\n";
 
         	if($drop_rate1 > $max_drops){
@@ -73,7 +75,6 @@ while (my $file = readdir(DIR)) {
 				$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
 			        $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
 				$drop_rate1 = $1;
-				
 				my $co = 40-($i+1)*10;
 #				print "Chekaem.I esli vse norm to 4erez $co perevod na osnovu.\n";
 				sleep 10;
@@ -113,7 +114,7 @@ while (my $file = readdir(DIR)) {
 #---------------check process
 
 
-        my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+        my $process_status = `ps afx | grep "bin/dpi-engine" | grep -v grep`;
 	if ($process_status eq ""){
 		$c=1;
         	print "$datestring Did not find DPI process in process list\n";
@@ -133,27 +134,28 @@ while (my $file = readdir(DIR)) {
 
 #--------------stoping bypass	
 if ($a==0 && $b==0 && $c==0 && $d==0) {
-		print "vse good";
+		print "vse good\n";
 		}
 else {
 
 	 for(my $t=0; $chk<3;$t++){
 		print "Stay on bypass, if all good transfer traffic to main  \n";		
 #--------------------------check drops
-#		$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-#                $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
-#                my $drop_rate1 = $1;
-#		if ($drop_rate1 < $max_drops) {$chk++;}
-#		else {$chk=0;}
+		$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+                $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
+                my $drop_rate1 = $1;
+		if ($drop_rate1 < $max_drops) {$chk++;}
+		else {$chk=0; print "Dropi bolshie ili log bitiy\n";}
 #---------------------------check process
-		my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
-	        if ($process_status eq ""){$chk=0;}
-		else {$chk=0;}
+		my $process_status = `ps afx | grep "bin/dpi-engine" | grep -v grep`;
+	        if ($process_status eq ""){$chk=0; 
+			print "Dpi dont run\n";}
+		else {$chk++;}
 #--------------------------log updating
 		my $mt = stat($log_file);
 	        my $st = $mt -> mtime;
-                if ($st =~s/^(\d+)/localtime/e) {$chk++;}
-		else {$chk=0;}
+                if ($st + 2 >= time()) {$chk++;}
+		else {$chk=0;print "Log ne obnovl9ets9\n";}
 		sleep 5;
 	}
 }
