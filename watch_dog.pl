@@ -26,7 +26,7 @@ sub filerefresh {
                    else {
                         $obnovlenie=1;
                         print "$datestring Achtung! Log does not updating!\n";
-                        system("echo $datestring 'bypass on, Log does not updating!' >> ./bypass.log");
+                        system("echo $datestring 'bypass on, Log does not updating!' >> /home/mihail/Develop/Watch_dog/bypass.log");
                 }
         return $obnovlenie;
 }
@@ -41,7 +41,7 @@ sub Check_drops {
                 if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
                         $check=1;
                         print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
-                        system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> ./bypass.log");
+                        system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log");
                         print "Bypass is switched on.\n";
                 }
                 else{
@@ -67,7 +67,7 @@ sub zombie_check {
 	else {
 		$check=1;
 		print "$datestring Achtung! Found ZOMBIE!\n";
-		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> ./bypass.log");
+		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log");
 	}
 	return $check;
 }
@@ -79,7 +79,7 @@ sub process_check {
         if ($process_status eq ""){
                 $check=1;
                 print "$datestring Did not find DPI process in process list\n";
-                system("echo $datestring 'bypass on, Did not find DPI process in process list' >> bypass.log");
+                system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log");
 	}
 	else{
                 $check=0;
@@ -121,7 +121,7 @@ while (1) {
 			else {
 				$bypass=0;
 				system("echo $datestring 'Bypass turn off'");
-				system("echo $datestring 'Bypass turn off' >> ./bypass.log");
+				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				}
 		}
 		else {
@@ -129,7 +129,7 @@ while (1) {
 			if ($bypass == 0) {
 				$bypass=1;
 				system("echo $datestring 'Bypass turn on'");
-        	       		system("echo $datestring 'Bypass turn on' >> ./bypass.log");
+        	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 					}
 			else {
 				system("echo 'Save system state'");
