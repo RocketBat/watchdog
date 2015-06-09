@@ -2,77 +2,160 @@
 use POSIX qw(strftime);
 use strict;
 use warnings;
+use File::stat;
+use File::chdir;
 
+my $bypass; #--0-off--|--1-on--
 my $max_drops = 0.04;
-#print "Устанавливаем макс. значение потерь = $max_drops*100 %\n"; 
-
+my $datestring = strftime "%F %T", localtime;
 my $directory = '/usr/adm/adm_s1/logs/';
-opendir (DIR, $directory) or die $!;
-
-my $filelog = 'bypass_status.txt';
-
+#opendir (DIR, $directory) or die $!;
 my $date = strftime "%F", localtime;
-while (my $file = readdir(DIR)) {
-  if($file =~ m/$date-out.log/){
+my $log_file;
 
-  my $log_file = $directory.$file;
+#-------------detecting bypass state
+if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
+	$bypass=0;
+}
+else {
+	$bypass=1;
+	print "bypass on\n"
+}
 
-    while (1){
+#-----------function check process
+sub process_check {
+        my $check;
+        my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+        if ($process_status eq ""){
+                $check=1;
+                print "$datestring Did not find DPI process in process list\n";
+                system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /usr/adm/watchdog/logs/bypass.log");
+                start();
+        }
+        else{
+                $check=0;
+                print "$datestring Found DPI process in process list.\n";
+                }
+        return $check;
+}
 
-      my $datestring = strftime "%F %T", localtime;
 
-#--------------------check drops
-	
-      my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+#-------------function obnovleniya
+sub filerefresh {
+        my $obnovlenie;
+        my $mt = stat($log_file);
+        my $st = $mt -> mtime;
+                  if ($st +1 >= time()) {
+                        print "$datestring Log file updating \n";
+                        $obnovlenie=0;
+                  }
+                   else {
+                        $obnovlenie=1;
+                        print "$datestring Achtung! Log does not updating!\n";
+                        system("echo $datestring 'bypass on, Log does not updating!' >> /usr/adm/watchdog/logs/bypass.log");
+                }
+        return $obnovlenie;
+}
 
-#	if ($line =~ m/drop rate = (0.\d\d\d\d\d\d)/){
-
+#------------function check drops
+sub Check_drops {
+        my $check;
+        my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
         if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
         my $drop_rate1 = $1;
-	
-	print "Droprate in this moment $1\n";
-
-         if($drop_rate1>$max_drops){
-          print "$datestring Drops level $drop_rate1 exceeds the configured maximum of $max_drops\n";
-#------Vkl bypass
-	`bpctl_util all set_bypass on`;
-#----------------	
-	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
-	print "Bypass is switched on. Exiting..\n";
-          exit;
+        my $drop_rate2 = $2;
+                if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
+                        $check=1;
+                        print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+                        system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /usr/adm/watchdog/logs/bypass.log");
+                        print "Bypass is switched on.\n";
+                }
+                else{
+                        $check=0;
+                        print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
+                        }
         }
-       else{
-          print "$datestring Drops level $drop_rate1 is in normal range\n";
-       }
-      }
-      else{
-        print "$datestring Can not read drop rate\n";
-#------------Vkl bypass
-	`bpctl_util all set_bypass on`;
-#---------------------
-	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
-	print "Bypass is switched on. Exiting..\n";
-        exit;
-      }
+        else{
+                $check=1;
+	print "$datestring Can not read drop rate\n";
+        }
+	return $check;
+}
 
-#---------------check process
+#-----------function check zombie process
+sub zombie_check {
+	my $check;
+	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
+	if ($zombie_ck eq "") {
+		$check=0;
+		print "$datestring No zombie processes.\n";
+	}
+	else {
+		$check=1;
+		print "$datestring Achtung! Found ZOMBIE!\n";
+		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /usr/adm/watchdog/logs/bypass.log");
+	}
+	return $check;
+}
 
+#--------starting function
+sub start {
+	 $CWD = '/usr/adm/adm_s1';
+        system('./start');
+        print "$datestring Starting DPI-Engine.\n";
+        system("echo $datestring 'Starting DPI-Engine.' >> /usr/adm/watchdog/logs/bypass.log");
 
-      my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
-	if ($process_status eq ""){
-        print "$datestring Did not find DPI process in process list\n";
-#---------Vkl Bypass
-	`bpctl_util all set_bypass on`;
-#------------------	
-	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
-        print "Bypass is switched on. Exiting..\n";
-        exit;
-      }
-      else{
-        print "$datestring Found DPI process in process list\n";
-      }
+}
 
-      sleep 5;
-    }
-  }
+#--------restart function
+sub restart {
+	$CWD = '/usr/adm/adm_s1';
+	system('./stop');
+	system('./start');	
+	print "$datestring Restarting DPI-Engine.";
+	system("echo $datestring 'Restarting DPI-Engine.' >> /usr/adm/watchdog/logs/bypass.log");
+}
+
+#--------big function (main function of this script)
+sub watch_dog {
+	if (zombie_check()==1) { restart(); return 1; }
+        if (process_check()==1 || filerefresh()==1 || Check_drops()==1) {return 1;}
+        else {return 0;}
+}
+
+while (1) {
+    $date = strftime "%F", localtime;
+    $log_file = $directory.$date.'-out.log';
+    while (1){
+		$datestring = strftime "%F %T", localtime;
+		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
+		if ($hour==3 && $min==0 && $sec < 5) {last;}
+		if (watch_dog()==0) {
+			print "Everything is allright\n";
+			if ($bypass == 0) {
+				$bypass=0;
+				system("echo $datestring 'Save system state'");
+					}
+			else {
+				$bypass=0;
+				`bpctl_util all set_bypass off`;
+				system("echo $datestring 'Bypass turn off'");
+				system("echo $datestring 'Bypass turn off' >> /usr/adm/watchdog/logs/bypass.log");
+				}
+		}
+		else {
+			print "Something is wrong. Starting bypass.\n";
+			if ($bypass == 0) {
+				$bypass=1;
+				`bpctl_util all set_bypass on`;
+				system("echo $datestring 'Bypass turn on'");
+        	       		system("echo $datestring 'Bypass turn on' >> /usr/adm/watchdog/logs/bypass.log");
+					}
+			else {
+				system("echo 'Save system state'");
+				$bypass=1;
+				}
+		}
+		sleep 5;
+		}
 }
