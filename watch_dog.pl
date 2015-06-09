@@ -23,6 +23,23 @@ else {
 	print "bypass vkl\n"
 }
 
+#-----------function check process
+sub process_check {
+        my $check;
+        my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+        if ($process_status eq ""){
+                $check=1;
+                print "$datestring Did not find DPI process in process list\n";
+                system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log");
+                start();
+        }
+        else{
+                $check=0;
+                print "$datestring Found DPI process in process list.\n";
+                }
+        return $check;
+}
+
 
 #-------------function obnovleniya
 sub filerefresh {
@@ -63,7 +80,7 @@ sub Check_drops {
                 $check=1;
 	print "$datestring Can not read drop rate\n";
         }
-return $check;
+	return $check;
 }
 
 #-----------function check zombie process
@@ -82,20 +99,13 @@ sub zombie_check {
 	return $check;
 }
 
-#-----------function check process
-sub process_check {
-        my $check;
-	my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
-        if ($process_status eq ""){
-                $check=1;
-                print "$datestring Did not find DPI process in process list\n";
-                system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log");
-	}
-	else{
-                $check=0;
-                print "$datestring Found DPI process in process list.\n";
-		}
-        return $check;
+#--------starting function
+sub start {
+	 $CWD = '/usr/adm/adm_s1';
+        system('./start');
+        print "$datestring Starting DPI-Engine.\n";
+        system("echo $datestring 'Starting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log");
+
 }
 
 #--------restart function
@@ -103,14 +113,14 @@ sub restart {
 	$CWD = '/usr/adm/adm_s1';
 	system('./stop');
 	system('./start');	
-	print "$datestring Restatring DPI-Engine.";
+	print "$datestring Restarting DPI-Engine.";
 	system("echo $datestring 'Restarting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log");
 }
 
 #--------big function (main function of this script)
 sub watch_dog {
 	if (zombie_check()==1) { restart(); return 1; }
-        if (filerefresh()==1 || Check_drops()==1 || process_check()==1) {return 1;}
+        if (process_check()==1 || filerefresh()==1 || Check_drops()==1) {return 1;}
         else {return 0;}
 }
 
