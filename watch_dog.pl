@@ -30,6 +30,25 @@ while (my $file = readdir(DIR)) {
 
       my $datestring = strftime "%F %T", localtime;
 
+#----proverka obnovlyaetsya li fail
+        my $mt = stat($log_file);
+        my $st = $mt -> mtime;
+#       print "$st\n";
+#                 if ($st =~s/(\d+)/localtime($1)/e) {
+		  if ($st == time()) { 
+                      $b=0;
+                      print "$datestring Log file updating \n";
+                   }
+                   else {
+                        $b=1;
+                        print "$datestring Achtung! Log does not updating!\n";
+#---------------------Vkl Bypass
+                        system('echo "with LOL by the pass"');
+                        $d=1;
+#------------------------
+                        system("echo $datestring 'bypass on, Log does not updating!' >> ./bypass.log");
+                        }
+
 #--------------------check drops
 	
         my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
@@ -85,10 +104,10 @@ while (my $file = readdir(DIR)) {
         	print "$datestring Can not read drop rate\n";
 #------------Vkl bypass
 		system('echo "with LOL by the pass"');
+		$d=1;
 #---------------------
 		system("echo $datestring 'bypass is on, Can not read drop rate' >> ./bypass.log");
 		print "Bypass is switched on.\n";
-		$d=1;
       }
 
 #---------------check process
@@ -104,46 +123,40 @@ while (my $file = readdir(DIR)) {
 		system("echo $datestring 'bypass on, Did not find DPI process in process list' >> ./bypass.log");
 	        print "Bypass is switched on.\n";
 		$d=1;
-#tyt kagdie 10 sec proveryaem vkl li bypass
-        	
       }
       else{
 		$c=0;
-#	       	print "$datestring Found DPI process in process list\n";
-		system("echo $datestring 'Found DPI process in process list' >> bypass.log");
+	       	print "$datestring Found DPI process in process list\n";
+#		system("echo $datestring 'Found DPI process in process list' >> bypass.log");
       }
 
 
-
-#----proverka obnovlyaetsya li fail
- 	my $mt = stat($log_file);
-	my $st = $mt -> mtime;
-#	print "$st\n";
-                 if ($st =~s/^(\d+)/localtime/e) {
-                       $b=0;
-			print "$datestring Log file updating \n";
-                   }
-                   else {
-			$b=1;
-			print "$datestring Achtung! Log does not updating!\n";
-#---------------------Vkl Bypass
-	                system('echo "with LOL by the pass"');
-			$d=1;
-#------------------------
-			system("echo $datestring 'bypass on, Log does not updating!' >> ./bypass.log");			
-			sleep 5;
-			}
-
-	if ($a==0 && $b==0 && $c==0 && $d==0) {
+#--------------stoping bypass	
+if ($a==0 && $b==0 && $c==0 && $d==0) {
 		print "vse good";
-#		system("echo $datestring 'bypass off' >> ./bypass.log");
 		}
-	elsif ($a==0 && $b==0 && $c==0) {print "ostaemsa na bypasse  \n";
-			$chk++;
-			if ($chk==3) {print "bypass off";}
-	else {sleep 5;}
-			}
+else {
 
+	 for(my $t=0; $chk<3;$t++){
+		print "Stay on bypass, if all good transfer traffic to main  \n";		
+#--------------------------check drops
+#		$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+#                $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
+#                my $drop_rate1 = $1;
+#		if ($drop_rate1 < $max_drops) {$chk++;}
+#		else {$chk=0;}
+#---------------------------check process
+		my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+	        if ($process_status eq ""){$chk=0;}
+		else {$chk=0;}
+#--------------------------log updating
+		my $mt = stat($log_file);
+	        my $st = $mt -> mtime;
+                if ($st =~s/^(\d+)/localtime/e) {$chk++;}
+		else {$chk=0;}
+		sleep 5;
+	}
+}
       sleep 5;
     }
   }
