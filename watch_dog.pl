@@ -21,7 +21,7 @@ sub filerefresh {
 	my $obnovlenie;
         my $mt = stat($log_file);
         my $st = $mt -> mtime;
-                  if ($st +1 >= time()) {
+                  if ($st +2 >= time()) {
                       	print "$datestring Log file updating \n";
 			$obnovlenie=0; 
                   }
@@ -75,7 +75,7 @@ sub process_check {
 	return $check;
 }
 
-#--------big function
+#--------big function (main function of this script)
 sub watch_dog {
 	if (filerefresh()==1 || Check_drops()==1 || process_check()==1) {return 1;}
 	else {return 0;}
@@ -91,7 +91,7 @@ while (1){
 				}
 		else {
 			$bypass=0;
-			`bpctl_util all set_bypass off`;
+			system("echo $datestring 'Bypass turn off'");
 			system("echo $datestring 'Bypass turn off' >> ./bypass.log");
 			}
 	}
@@ -99,7 +99,7 @@ while (1){
 		print "Something is wrong. Starting bypass.\n";
 		if ($bypass == 0) {
 			$bypass=1;
-			`bpctl_util all set_bypass on`;
+			system("echo $datestring 'Bypass turn on'");
         	        system("echo $datestring 'Bypass turn on' >> ./bypass.log");
 				}
 		else {
