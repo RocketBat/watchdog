@@ -15,7 +15,7 @@ my $log_file;
 my $t1=0;
 my $t2=0;
 my $stat;
-my $st #----error status
+my $st; #----error status
 
 #-----function that checking bypass loop
 sub byloop {
@@ -172,10 +172,10 @@ sub watch_dog {
 
 #----error status
 sub status {
-	if (watch_dog()==1) {$stat='Achtung! Zombi process detected!';}
-	if (watch_dog()==2) {$stat='Achtung! DPI-process not found!';}
-	if (watch_dog()==3) {$stat='Achtung! Log file does not updating!;};
-	if (watch_dog()==4) {$stat='Achtung! Drops very high!;}
+	if (watch_dog()==1) {$stat="Achtung! Zombi process detected!";}
+	if (watch_dog()==2) {$stat="Achtung! DPI-process not found!";}
+	if (watch_dog()==3) {$stat="Achtung! Log file does not updating!";}
+	if (watch_dog()==4) {$stat="Achtung! Drops very high!";}
 }
 
 while (1) {
