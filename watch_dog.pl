@@ -166,7 +166,6 @@ while (1) {
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 					}
 			else {
-				byloop();
 				system("echo 'Save system state'");
 				$bypass=1;
 				}
