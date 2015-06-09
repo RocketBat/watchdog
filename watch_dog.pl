@@ -70,29 +70,6 @@ while (my $file = readdir(DIR)) {
 			$d=1;
 #--------Proverka 4to dropi = 0 i perrevod traffica na osnovu
 			
-      			for (my $i=0;$i < 3;$i++){ 
-			
-				$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-			        $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
-				$drop_rate1 = $1;
-				$drop_rate2 = $2;
-				my $co = 40-($i+1)*10;
-#				print "Chekaem.I esli vse norm to 4erez $co perevod na osnovu.\n";
-				sleep 10;
-				if ($drop_rate1 == 0 && $drop_rate2 == 0) {
-					print "Check.And if al $co perevod na osnovu.\n";
-					print "Dropi Up = $drop_rate1 and Down = $drop_rate2\n";
-					if ($i == 2) {print "Transfer traffic to main\n"; 
-							$d=0;}
-				}
-				else {
-				      print "Anything wrong stay bypass.\n";
-				      print "Drop rate is $drop_rate1 and $drop_rate2 \n";
-				      redo;	
-					}
-			 
-			}
-			#sleep 5;
 		}
 	
 		else{
@@ -132,39 +109,69 @@ while (my $file = readdir(DIR)) {
 #		system("echo $datestring 'Found DPI process in process list' >> bypass.log");
       }
 
-
+my $co=0;
 #--------------stoping bypass	
 if ($a==0 && $b==0 && $c==0 && $d==0) {
 		print "vse good\n";
 		}
-else {
+elsif($a==0 && $b==0 && $c==0 && $d==1) {
 
-	 for(my $t=0; $chk<3;$t++){
-		print "Stay on bypass, if all good transfer traffic to main  \n";		
-#--------------------------check drops
+	 for(my $i=0; $i<3;$i++){
+		$co = 40-($i+1)*10;
+		print "Stay on bypass, if all good after $co sec transfer traffic to main  \n";		
+		sleep 10;
+#---------------------------check process
+                my $process_status = `ps afx | grep "bin/dpi-engine" | grep -v grep`;
+                if ($process_status eq ""){$i=0;
+                        print "Dpi dont run\n";}
+                else {$chk=1;}
+
+#--------------------------log updating
+                my $mt = stat($log_file);
+                my $st = $mt -> mtime;
+                if ($st + 2 >= time()) {$chk=1;}
+                else {$i=0;print "Log ne obnovl9ets9\n";}
+
+#------------------------check drops
 		$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
                 $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
                 my $drop_rate1 = $1;
 		my $drop_rate2 = $2;
-		if ($drop_rate1 < $max_drops || $drop_rate2 < $max_drops) {$chk++;}
-		else {$chk=0; print "Dropi bolshie ili log bitiy\n";}
-#---------------------------check process
-		my $process_status = `ps afx | grep "bin/dpi-engine" | grep -v grep`;
-	        if ($process_status eq ""){$chk=0; 
-			print "Dpi dont run\n";}
-		else {$chk++;}
-#--------------------------log updating
-		my $mt = stat($log_file);
-	        my $st = $mt -> mtime;
-                if ($st + 2 >= time()) {$chk++;}
-		else {$chk=0;print "Log ne obnovl9ets9\n";}
+			if ($drop_rate1 <= $max_drops || $drop_rate2 <= $max_drops) {$chk=1;}
+			   else {$i=0;
+                                $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+                                $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
+                                $drop_rate1 = $1;
+                                $drop_rate2 = $2;
+                                my $co = 40-($i+1)*10;
+                                sleep 10;
+                               		 if ($drop_rate1 == 0 && $drop_rate2 == 0) {
+                                        	print "Check.And if all g00d after $co sec perevod na osnovu.\n";
+	                                        print "Dropi Up = $drop_rate1 and Down = $drop_rate2\n";
+        	                                if ($i == 2) {print "Transfer traffic to main\n";
+#------------------------------vik bypass
+							print "Bypass ostanovlen\n";
+							system("echo $datestring 'Transfer traffic to main state' >> ./bypass.log");
+#-----------------------------
+               	                                        }
+                        		 }
+                                	else {
+                                	        print "Anything wrong stay bypass.\n";
+                                      		print "Drop rate is $drop_rate1 and $drop_rate2 \n";
+                                      		redo;
+                                        	}
+
+		}
+		if ($a==0 && $b==0 && $c==0 && $d==0 && $co==0) {
+#------------------------------vik bypass
+               			 print "Bypass ostanovlen\n";
+                                 system("echo $datestring 'Transfer traffic to main state' >> ./bypass.log");
+#-----------------------------
+		}
 		sleep 5;
 	}
-	print "stopnuli bypass";
-#-------------------stoping bypass
-	system("echo $datestring 'Transfer traffic to main state' >> ./bypass.log");
-#-------------------	
 }
+elsif ($d==1) {print"staying on bypass\n";}
       sleep 5;
     }
   }
