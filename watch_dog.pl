@@ -12,15 +12,29 @@ my $directory = '/usr/adm/adm_s1/logs/';
 #opendir (DIR, $directory) or die $!;
 my $date = strftime "%F", localtime;
 my $log_file;
-my $ct=1; #--------check time
+my $t1=0;
+my $t2=0;
+
+#-----function that checking bypass loop
+sub byloop {
+	my $t=time();
+	if ($t-$t1 > 180) {
+		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n"
+		system("echo 'Vkl bypass na chas'");
+		sleep 10;
+	}
+	$t1=$t2;
+	$t2=$t;
+}
 
 #-------------detecting bypass state
 if (`cat get_bypass | grep on | grep -v grep` eq "") {
 	$bypass=0;
+	print "bypass is off\n";
 }
 else {
 	$bypass=1;
-	print "bypass vkl\n"
+	print "bypass is on\n"
 }
 
 #-----------function check process
@@ -54,7 +68,7 @@ sub filerefresh {
                         $obnovlenie=1;
                         print "$datestring Achtung! Log does not updating!\n";
                         system("echo $datestring 'bypass on, Log does not updating!' >> /home/mihail/Develop/Watch_dog/bypass.log");
-                }
+		}
         return $obnovlenie;
 }
 
@@ -130,8 +144,7 @@ while (1) {
     while (1){
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
-		if ($hour==3 && $min==0 && $sec < 5 && $ct==1) {last; $ct=0;}
-		$ct=1; 	
+		if ($hour==3 && $min==0 && $sec < 5 && $ct==1) {last;}
 		if (watch_dog()==0) {
 			print "Everything is allright\n";
 			if ($bypass == 0) {
@@ -148,10 +161,12 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
+				byloop();
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 					}
 			else {
+				byloop();
 				system("echo 'Save system state'");
 				$bypass=1;
 				}
