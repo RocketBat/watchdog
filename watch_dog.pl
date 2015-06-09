@@ -144,7 +144,7 @@ while (1) {
     while (1){
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
-		if ($hour==3 && $min==0 && $sec < 5 && $ct==1) {last;}
+		if ($hour==3 && $min==0 && $sec < 5) {last;}
 		if (watch_dog()==0) {
 			print "Everything is allright\n";
 			if ($bypass == 0) {
