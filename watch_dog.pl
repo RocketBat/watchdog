@@ -14,6 +14,8 @@ my $date = strftime "%F", localtime;
 my $log_file;
 my $t1=0;
 my $t2=0;
+my $stat;
+my $st #----error status
 
 #-----function that checking bypass loop
 sub byloop {
@@ -143,7 +145,7 @@ sub zombie_check {
 
 #--------starting function
 sub start {
-	 $CWD = '/usr/adm/adm_s1';
+	$CWD = '/usr/adm/adm_s1';
         system('./start');
         print "$datestring Starting DPI-Engine.\n";
         system("echo $datestring 'Starting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log");
@@ -162,8 +164,18 @@ sub restart {
 #--------big function (main function of this script)
 sub watch_dog {
 	if (zombie_check()==1) { restart(); return 1; }
-        if (process_check()==1 || filerefresh()==1 || Check_drops()==1) {return 1;}
-        else {return 0;}
+        if (process_check()==1)	{return 2;}
+	if (filerefresh()==1) {return 3;}
+	if (Check_drops()==1) {return 4;}
+        return 0;
+}
+
+#----error status
+sub status {
+	if (watch_dog()==1) {$stat='Achtung! Zombi process detected!';}
+	if (watch_dog()==2) {$stat='Achtung! DPI-process not found!';}
+	if (watch_dog()==3) {$stat='Achtung! Log file does not updating!;};
+	if (watch_dog()==4) {$stat='Achtung! Drops very high!;}
 }
 
 while (1) {
@@ -181,7 +193,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
-				send_mail_all("Bypass on Mighty","$datestring Bypass is off");
+				send_mail_all("Mighty bypass status is OFF","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				}
@@ -190,7 +202,7 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-				send_mail_all("Bypass on Mighty","$datestring Bypass is on");
+				send_mail_all("Mighty bypass status is ON","$datestring status()");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				byloop();
