@@ -22,6 +22,7 @@ sub byloop {
 	my $t=time();
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
+		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /usr/adm/watchdog/logs/bypass.log");
 		system("echo 'Vkl bypass na chas'");
 		sleep 3600;
 	}
