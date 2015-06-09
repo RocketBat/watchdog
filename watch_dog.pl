@@ -26,12 +26,8 @@ while (my $file = readdir(DIR)) {
 #--------------------check drops
 	
         my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-
-#	if ($line =~ m/drop rate = (0.\d\d\d\d\d\d)/){
-
         if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
-
-        	my $drop_rate1 = $1;
+       	my $drop_rate1 = $1;
 	
 #		print "Droprate in this moment $1\n";
 
@@ -43,22 +39,36 @@ while (my $file = readdir(DIR)) {
 #------------------------------	
 			system("echo $datestring 'bypass is on' >> ./bypass.log");
 			print "Bypass is switched on.\n";
-			sleep 5;
-			next;
+#--------Proverka 4to dropi = 0 i perrevod traffica na osnovu
+			
+      			for (my $i=0;$i < 3;$i++){ 
+			
+				$line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+			        $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/;
+				$drop_rate1 = $1;
+				
+				my $co = 40-($i+1)*10;
+#				print "Chekaem.I esli vse norm to 4erez $co perevod na osnovu.\n";
+				sleep 10;
+				if ($drop_rate1 == 0) {
+					print "Check.And if al $co perevod na osnovu.\n";
+					print "Dropi $drop_rate1\n";
+					if ($i == 2) {print "Transfer traffic to main\n";}
+				}
+				else {
+				      print "Anything wrong stay bypass.\n";
+				      print "Drop rate is $drop_rate1\n";
+				      redo;	
+					}
+			 
 			}
-# kod dlya vosstanovleniya DPI posle dropov	
-#			elsif ($drop_rate1 = 0) {
-#				print "Startuem DPI, dropi = $1";
-#				system ("echo $datestring 'Starting DPI, droprate = $1' >> ./bypass.log");
-#     				exit;
-#			}
-#			elsif ($drop_rate1 < $max_drops){
-#				sleep 10;
-#			}
-
-       		else{
-	          print "$datestring Drops level $drop_rate1 is in normal range\n";
-       		}
+			#sleep 5;
+		}
+	
+		else{
+	          	print "$datestring Drops level $drop_rate1 is in normal range\n";
+                        }      
+ 		
       }
       else{
         	print "$datestring Can not read drop rate\n";
@@ -76,7 +86,7 @@ while (my $file = readdir(DIR)) {
 #---------------check process
 
 
-       my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+        my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
 	if ($process_status eq ""){
         	print "$datestring Did not find DPI process in process list\n";
 #---------Vkl Bypass
@@ -85,8 +95,7 @@ while (my $file = readdir(DIR)) {
 		system("echo $datestring 'bypass on' >> ./bypass.log");
 	        print "Bypass is switched on.\n";
 #tyt kagdie 10 sec proveryaem vkl li bypass
-        	sleep 5;
-		next;
+        	
       }
       else{
 #	       	print "$datestring Found DPI process in process list\n";
