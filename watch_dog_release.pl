@@ -12,15 +12,59 @@ my $directory = '/usr/adm/adm_s1/logs/';
 #opendir (DIR, $directory) or die $!;
 my $date = strftime "%F", localtime;
 my $log_file;
+my $t1=0;
+my $t2=0;
+
+#-----function that checking bypass loop
+sub byloop {
+	my $t=time();
+	if ($t1 && $t-$t1 < 180) {
+		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
+		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /usr/adm/watchdog/logs/bypass.log");
+		system("echo 'Vkl bypass na chas'>> /usr/adm/watchdog/logs/bypass.log");
+		sleep 3600;
+	}
+	$t1=$t2;
+	$t2=$t;
+}
 
 #-------------detecting bypass state
 if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
 	$bypass=0;
+	print "bypass is off\n";
 }
 else {
 	$bypass=1;
-	print "bypass on\n"
+	print "bypass is on\n"
 }
+
+#----function sending email
+sub send_mail {
+	my ($to, $subject, $message) = (@_);
+	my $from = 'notifier.adm@gmail.com';
+	open(MAIL, "|/usr/sbin/sendmail -t");
+	# Email Header
+	print MAIL "To: $to\n";
+	print MAIL "From: $from\n";
+	print MAIL "Content-type: text/html\n";
+	print MAIL "Subject: $subject\n\n";
+	
+	# Email Body
+	print MAIL $message;
+	close(MAIL);
+	print "Email Sent Successfully\n";
+}
+
+#---sending mail to all
+sub send_mail_all {
+	my ($subject, $message) = (@_);
+	my @list=('mikhail.kozlov@adm-systems.com','yuriy@adm-systems.com','a.matyzhonok@adm-systems.com');
+	my $m;
+	foreach $m (@list){
+        send_mail($m,$subject, $message);
+	}
+}
+
 
 #-----------function check process
 sub process_check {
@@ -53,7 +97,7 @@ sub filerefresh {
                         $obnovlenie=1;
                         print "$datestring Achtung! Log does not updating!\n";
                         system("echo $datestring 'bypass on, Log does not updating!' >> /usr/adm/watchdog/logs/bypass.log");
-                }
+		}
         return $obnovlenie;
 }
 
@@ -139,6 +183,7 @@ while (1) {
 			else {
 				$bypass=0;
 				`bpctl_util all set_bypass off`;
+				send_mail_all("Bypass on KTB","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /usr/adm/watchdog/logs/bypass.log");
 				}
@@ -148,9 +193,11 @@ while (1) {
 			if ($bypass == 0) {
 				$bypass=1;
 				`bpctl_util all set_bypass on`;
+				send_mail_all("Bypass on KTB","$datestring Bypass is on");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /usr/adm/watchdog/logs/bypass.log");
-					}
+				byloop();
+				}
 			else {
 				system("echo 'Save system state'");
 				$bypass=1;
