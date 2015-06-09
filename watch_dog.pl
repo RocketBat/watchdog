@@ -9,6 +9,8 @@ my $max_drops = 0.04;
 my $directory = '/usr/adm/adm_s1/logs/';
 opendir (DIR, $directory) or die $!;
 
+my $filelog = 'out.log';
+
 my $date = strftime "%F", localtime;
 while (my $file = readdir(DIR)) {
   if($file =~ m/$date-out.log/){
@@ -26,17 +28,18 @@ while (my $file = readdir(DIR)) {
 #	if ($line =~ m/drop rate = (0.\d\d\d\d\d\d)/){
 
         if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
+
         my $drop_rate1 = $1;
 	
 	print "Droprate in this moment $1\n";
 
          if($drop_rate1>$max_drops){
           print "$datestring Drops level $drop_rate1 exceeds the configured maximum of $max_drops\n";
-
+#------Vkl bypass
         system('echo "with LOL by the pass"');
-	system('echo "bypass on" > ./bypass_status.txt');
-
-          print "Bypass is switched on. Exiting..\n";
+#----------------	
+	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
+	print "Bypass is switched on. Exiting..\n";
           exit;
         }
        else{
@@ -45,9 +48,11 @@ while (my $file = readdir(DIR)) {
       }
       else{
         print "$datestring Can not read drop rate\n";
-        system('echo "with LOL by the pass"');
-        system('echo "bypass on" > ./bypass_status.txt');
-        print "Bypass is switched on. Exiting..\n";
+#------------Vkl bypass
+	 system('echo "with LOL by the pass"');
+#---------------------
+	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
+	print "Bypass is switched on. Exiting..\n";
         exit;
       }
 
@@ -57,15 +62,16 @@ while (my $file = readdir(DIR)) {
       my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
 	if ($process_status eq ""){
         print "$datestring Did not find DPI process in process list\n";
-
-        `echo "with LOL by the pass"`;
-        `echo "bypass on" > ./bypass_status.txt`;
-
+#---------Vkl Bypass
+        system('echo "with LOL by the pass"');
+#------------------	
+	system("echo $datestring 'bypass on' >> ./bypass_status.txt");
         print "Bypass is switched on. Exiting..\n";
         exit;
       }
       else{
-        print "$datestring Found DPI process in process list\n";
+#        print "$datestring Found DPI process in process list\n";
+	system("echo $datestring 'Found DPI process in process list' >> /log/adm_s1/out.log");
       }
 
       sleep 5;
