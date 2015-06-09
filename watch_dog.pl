@@ -21,7 +21,7 @@ sub byloop {
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo 'Vkl bypass na chas'");
-		sleep 20;
+		sleep 3600;
 	}
 	$t1=$t2;
 	$t2=$t;
@@ -38,25 +38,32 @@ else {
 }
 
 #----function sending email
-sub email_on {
-	my $to = 'coffe-man@mail.ru';
-	my $from = 'mikhail.kozlov@adm-systems.com';
-	my $subject = 'Bypass status Mighty';
-	my $message = '<h1>$datestring Bypass is on!</h1>';
- 
+sub send_mail {
+	my ($to, $subject, $message) = (@_);
+	$from = 'mikhail.kozlov@adm-systems.com';
+    
 	open(MAIL, "|/usr/sbin/sendmail -t");
- 
 	# Email Header
 	print MAIL "To: $to\n";
 	print MAIL "From: $from\n";
 	print MAIL "Content-type: text/html\n";
 	print MAIL "Subject: $subject\n\n";
+	
 	# Email Body
 	print MAIL $message;
-
 	close(MAIL);
-	print "Email Sent Successfully\n";		
+	print "Email Sent Successfully\n";
 }
+
+#---sending mail to all
+sub send_mail_all {
+	my ($subject, $message) = (@_);
+	@list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
+	foreach $m (@list){
+        send_mail($m,$subject, $message);
+	}
+}
+
 
 #-----------function check process
 sub process_check {
@@ -174,6 +181,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
+				send_mail_all("Bypass on Mighty","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				}
@@ -182,6 +190,7 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
+				send_mail_all("Bypass on Mighty","$datestring Bypass is on");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				byloop();
