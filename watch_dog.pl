@@ -3,6 +3,7 @@ use POSIX qw(strftime);
 use strict;
 use warnings;
 use File::stat;
+use File::chdir;
 
 my $bypass=0; #--0-off--|--1-on--
 my $max_drops = 0.04;
@@ -55,6 +56,22 @@ sub Check_drops {
 return $check;
 }
 
+#-----------function check zombie process
+sub zombie_check {
+	my $check;
+	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
+	if ($zombie_ck eq "") {
+		$check=0;
+		print "$datestring No zombie processes.\n";
+	}
+	else {
+		$check=1;
+		print "$datestring Achtung! Found ZOMBIE!\n";
+		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> ./bypass.log");
+	}
+	return $check;
+}
+
 #-----------function check process
 sub process_check {
         my $check;
@@ -67,12 +84,22 @@ sub process_check {
 	else{
                 $check=0;
                 print "$datestring Found DPI process in process list\n";
-	}
+		}
         return $check;
+}
+
+#--------restart function
+sub restart {
+	$CWD = '/usr/adm/adm_s1';
+	system('./stop');
+	system('./start');	
+	print "$datestring Restatring DPI-Engine.";
+	system("echo $datestring 'Restarting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log");
 }
 
 #--------big function (main function of this script)
 sub watch_dog {
+	if (zombie_check()==1) { restart(); return 1; }
         if (filerefresh()==1 || Check_drops()==1 || process_check()==1) {return 1;}
         else {return 0;}
 }
