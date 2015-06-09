@@ -2,6 +2,7 @@
 use POSIX qw(strftime);
 use strict;
 use warnings;
+use File::stat;
 
 my $max_drops = 0.04;
 #print "Устанавливаем макс. значение потерь = $max_drops*100 %\n"; 
@@ -106,6 +107,24 @@ while (my $file = readdir(DIR)) {
 #	       	print "$datestring Found DPI process in process list\n";
 		system("echo $datestring 'Found DPI process in process list' >> bypass.log");
       }
+
+
+
+#----proverka obnovlyaetsya li fail
+ 	my $mtime = (stat $log_file)[9];
+	
+                   if ($mtime =~s/^(\d+)/localtime($1)/e) {
+                        print "$mtime   -   localtime\n";     
+			print "$datestring Log file updating \n";
+                   }
+                   else {
+	
+			#---------Vkl Bypass
+	                system('echo "with LOL by the pass"');
+			#------------------ 
+			system("echo $datestring 'bypass on' >> ./bypass.log");			
+			sleep 5;
+			}
 
       sleep 5;
     }
