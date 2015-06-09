@@ -40,8 +40,7 @@ else {
 #----function sending email
 sub send_mail {
 	my ($to, $subject, $message) = (@_);
-	$from = 'mikhail.kozlov@adm-systems.com';
-    
+	my $from = 'mikhail.kozlov@adm-systems.com';
 	open(MAIL, "|/usr/sbin/sendmail -t");
 	# Email Header
 	print MAIL "To: $to\n";
@@ -58,7 +57,8 @@ sub send_mail {
 #---sending mail to all
 sub send_mail_all {
 	my ($subject, $message) = (@_);
-	@list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
+	my @list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
+	my $m;
 	foreach $m (@list){
         send_mail($m,$subject, $message);
 	}
