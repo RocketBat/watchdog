@@ -15,11 +15,12 @@ my $log_file;
 my $ct=1; #--------check time
 
 #-------------detecting bypass state
-if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
+if (`cat get_bypass | grep on | grep -v grep` eq "") {
 	$bypass=0;
 }
 else {
 	$bypass=1;
+	print "bypass vkl\n"
 }
 
 
@@ -84,7 +85,7 @@ sub zombie_check {
 #-----------function check process
 sub process_check {
         my $check;
-        my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+	my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
         if ($process_status eq ""){
                 $check=1;
                 print "$datestring Did not find DPI process in process list\n";
@@ -92,7 +93,7 @@ sub process_check {
 	}
 	else{
                 $check=0;
-                print "$datestring Found DPI process in process list\n";
+                print "$datestring Found DPI process in process list.\n";
 		}
         return $check;
 }
