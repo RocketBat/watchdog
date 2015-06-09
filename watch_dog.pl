@@ -37,6 +37,27 @@ else {
 	print "bypass is on\n"
 }
 
+#----function sending email
+sub email_on {
+	my $to = 'coffe-man@mail.ru';
+	my $from = 'mikhail.kozlov@adm-systems.com';
+	my $subject = 'Bypass status Mighty';
+	my $message = '<h1>$datestring Bypass is on!</h1>';
+ 
+	open(MAIL, "|/usr/sbin/sendmail -t");
+ 
+	# Email Header
+	print MAIL "To: $to\n";
+	print MAIL "From: $from\n";
+	print MAIL "Content-type: text/html\n";
+	print MAIL "Subject: $subject\n\n";
+	# Email Body
+	print MAIL $message;
+
+	close(MAIL);
+	print "Email Sent Successfully\n";		
+}
+
 #-----------function check process
 sub process_check {
         my $check;
