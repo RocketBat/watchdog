@@ -18,10 +18,10 @@ my $t2=0;
 #-----function that checking bypass loop
 sub byloop {
 	my $t=time();
-	if ($t-$t1 > 180) {
+	if ($t1 && $t-$t1 > 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo 'Vkl bypass na chas'");
-		sleep 10;
+		sleep 20;
 	}
 	$t1=$t2;
 	$t2=$t;
