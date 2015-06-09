@@ -30,7 +30,7 @@ sub byloop {
 	$t2=$t;
 }
 
-#-------------detecting bypass state
+#---------detecting bypass state
 if (`cat get_bypass | grep on | grep -v grep` eq "") {
 	$bypass=0;
 	print "bypass is off\n";
