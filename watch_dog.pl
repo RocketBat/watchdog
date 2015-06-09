@@ -161,10 +161,10 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-				byloop();
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
-					}
+				byloop();
+				}
 			else {
 				system("echo 'Save system state'");
 				$bypass=1;
