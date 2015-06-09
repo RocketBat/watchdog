@@ -14,14 +14,14 @@ while (my $file = readdir(DIR)) {
 	if($file =~ m/$date-out.log/){
 
 	  my $log_file = $directory.$file;
-
+my $old_date = $date; # zapisivaem staruy datu
 
 #-------------function obnovleniya
 sub filerefresh {
 	my $obnovlenie;
         my $mt = stat($log_file);
         my $st = $mt -> mtime;
-                  if ($st +2 >= time()) {
+                  if ($st +1 >= time()) {
                       	print "$datestring Log file updating \n";
 			$obnovlenie=0; 
                   }
@@ -31,6 +31,7 @@ sub filerefresh {
                         system("echo $datestring 'bypass on, Log does not updating!' >> ./bypass.log");
 		}
 	return $obnovlenie;                        
+	print "File name is: $file";
 }
 	
 
