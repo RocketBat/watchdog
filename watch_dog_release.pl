@@ -24,6 +24,7 @@ sub byloop {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /usr/adm/watchdog/logs/bypass.log");
 		system("echo 'Vkl bypass na chas'");
+		send_mail("KTB bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}
 	$t1=$t2;
@@ -42,13 +43,16 @@ else {
 
 #----function sending email
 sub send_mail {
-	my ($to, $subject, $message) = (@_);
+	my ($subject, $message) = (@_);
 	my $from = 'notifier.adm@gmail.com';
+	my $to = 'mikhail.kozlov@adm-systems.com';
 	open(MAIL, "|/usr/sbin/sendmail -t");
 	# Email Header
 	print MAIL "To: $to\n";
 	print MAIL "From: $from\n";
 	print MAIL "Content-type: text/html\n";
+	print MAIL "Cc: yuriy\@adm-systems.com\n";
+	print MAIL "Cc: a.matyzhonok\@adm-systems.com\n";
 	print MAIL "Subject: $subject\n\n";
 	
 	# Email Body
@@ -56,17 +60,6 @@ sub send_mail {
 	close(MAIL);
 	print "Email Sent Successfully\n";
 }
-
-#---sending mail to all
-sub send_mail_all {
-	my ($subject, $message) = (@_);
-	my @list=('mikhail.kozlov@adm-systems.com','yuriy@adm-systems.com','a.matyzhonok@adm-systems.com');
-	my $m;
-	foreach $m (@list){
-        send_mail($m,$subject, $message);
-	}
-}
-
 
 #-----------function check process
 sub process_check {
@@ -173,11 +166,13 @@ sub watch_dog {
 
 #----error status
 sub status {
-	if (watch_dog()==0) {return 0;}
-	if (watch_dog()==1) {$stat="Achtung! Zombi process detected!";}
-	if (watch_dog()==2) {$stat="Achtung! DPI-process not found!";}
-	if (watch_dog()==3) {$stat="Achtung! Log file does not updating!";}
-	if (watch_dog()==4) {$stat="Achtung! Drops very high!";}
+	my $wd_status=watch_dog();
+	if ($wd_status==0) {return 0;}
+	elsif ($wd_status==1) {$stat="Achtung! Zombi process detected!"; }
+	elsif ($wd_status==2) {$stat="Achtung! DPI-process not found!";}
+	elsif ($wd_status==3) {$stat="Achtung! Log file does not updating!";}
+	elsif ($wd_status==4) {$stat="Achtung! Drops very high!";}
+	return 1;
 }
 
 while (1) {
@@ -195,8 +190,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
-				`bpctl_util all set_bypass off`;
-				send_mail_all("KTB bypass status - OFF","$datestring Bypass is off");
+				send_mail("KTB bypass status is OFF","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /usr/adm/watchdog/logs/bypass.log");
 				}
@@ -205,9 +199,8 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-				`bpctl_util all set_bypass on`;
-				my $vr=status(); #need for emailing status
-				send_mail_all("KTB bypass status - ON","$datestring $vr");
+				#my $vr=status(); #need for emailing status
+				send_mail("KTB bypass status is ON","$datestring $stat");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /usr/adm/watchdog/logs/bypass.log");
 				byloop();
