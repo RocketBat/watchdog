@@ -173,11 +173,13 @@ sub watch_dog {
 
 #----error status
 sub status {
-	if (watch_dog()==0) {return 0;}
-	if (watch_dog()==1) {$stat="Achtung! Zombi process detected!";}
-	if (watch_dog()==2) {$stat="Achtung! DPI-process not found!";}
-	if (watch_dog()==3) {$stat="Achtung! Log file does not updating!";}
-	if (watch_dog()==4) {$stat="Achtung! Drops very high!";}
+	my $wd_status=watch_dog();
+	if ($wd_status==0) {return 0;}
+	elsif ($wd_status==1) {$stat="Achtung! Zombi process detected!"; }
+	elsif ($wd_status==2) {$stat="Achtung! DPI-process not found!";}
+	elsif ($wd_status==3) {$stat="Achtung! Log file does not updating!";}
+	elsif ($wd_status==4) {$stat="Achtung! Drops very high!";}
+	return 1;
 }
 
 while (1) {
@@ -204,8 +206,8 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-				my $vr=status(); #need for emailing status
-				send_mail_all("Mighty bypass status is ON","$datestring $vr");
+				#my $vr=status(); #need for emailing status
+				send_mail_all("Mighty bypass status is ON","$datestring $stat");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				byloop();
