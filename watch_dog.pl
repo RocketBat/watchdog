@@ -24,6 +24,7 @@ sub byloop {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /usr/adm/watchdog/logs/bypass.log");
 		system("echo 'Vkl bypass na chas'");
+		send_mail("Mighty bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}
 	$t1=$t2;
@@ -42,13 +43,16 @@ else {
 
 #----function sending email
 sub send_mail {
-	my ($to, $subject, $message) = (@_);
+	my ($subject, $message) = (@_);
 	my $from = 'mikhail.kozlov@adm-systems.com';
+	my $to = 'mikhail.kozlov@adm-systems.com';
 	open(MAIL, "|/usr/sbin/sendmail -t");
 	# Email Header
 	print MAIL "To: $to\n";
 	print MAIL "From: $from\n";
 	print MAIL "Content-type: text/html\n";
+	print MAIL "Cc: Coffe-man\@mail.ru\n";
+#	print MAIL "Cc: some-mail@site\n";
 	print MAIL "Subject: $subject\n\n";
 	
 	# Email Body
@@ -58,14 +62,14 @@ sub send_mail {
 }
 
 #---sending mail to all
-sub send_mail_all {
-	my ($subject, $message) = (@_);
-	my @list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
-	my $m;
-	foreach $m (@list){
-        send_mail($m,$subject, $message);
-	}
-}
+#sub send_mail_all {
+#	my ($subject, $message) = (@_);
+#	my @list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
+#	my $m;
+#	foreach $m (@list){
+#       send_mail($m,$subject, $message);
+#	}
+#}
 
 
 #-----------function check process
@@ -197,7 +201,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
-				send_mail_all("Mighty bypass status is OFF","$datestring Bypass is off");
+				send_mail("Mighty bypass status is OFF","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				}
@@ -207,7 +211,7 @@ while (1) {
 			if ($bypass == 0) {
 				$bypass=1;
 				#my $vr=status(); #need for emailing status
-				send_mail_all("Mighty bypass status is ON","$datestring $stat");
+				send_mail("Mighty bypass status is ON","$datestring $stat");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log");
 				byloop();
