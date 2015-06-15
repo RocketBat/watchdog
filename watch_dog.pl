@@ -61,17 +61,6 @@ sub send_mail {
 	print "Email Sent Successfully\n";
 }
 
-#---sending mail to all
-#sub send_mail_all {
-#	my ($subject, $message) = (@_);
-#	my @list=('mikhail.kozlov@adm-systems.com','coffe-man@mail.ru');
-#	my $m;
-#	foreach $m (@list){
-#       send_mail($m,$subject, $message);
-#	}
-#}
-
-
 #-----------function check process
 sub process_check {
         my $check;
@@ -116,19 +105,22 @@ sub Check_drops {
         my $drop_rate2 = $2;
                 if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
                         $check=1;
-                        print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+                        print "$line\n";#---debug information can be deleted
+			print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
                         system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log");
                         print "Bypass is switched on.\n";
                 }
                 else{
                         $check=0;
+			print "$line\n";#---debug information can be deleted
                         print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
-                        }
+			}
         }
         else{
                 $check=1;
 	print "$datestring Can not read drop rate\n";
-        }
+        print "$line\n";#---debug information can be deleted
+	}
 	return $check;
 }
 
