@@ -24,7 +24,7 @@ sub byloop {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /usr/adm/watchdog/logs/bypass.log");
 		system("echo 'Vkl bypass na chas'");
-		send_mail("KTB bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
+		send_mail("KTB bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!"); #------<-check this NAME
 		sleep 3600;
 	}
 	$t1=$t2;
@@ -105,19 +105,22 @@ sub Check_drops {
         my $drop_rate2 = $2;
                 if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
                         $check=1;
-                        print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+                        print "$line\n";#---debug information can be deleted
+			print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
                         system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /usr/adm/watchdog/logs/bypass.log");
                         print "Bypass is switched on.\n";
                 }
                 else{
                         $check=0;
+			print "$line\n";#---debug information can be deleted
                         print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
-                        }
+			}
         }
         else{
                 $check=1;
-	print "$datestring Can not read drop rate\n";
-        }
+		print "$datestring Can not read drop rate\n";
+	        print "$line\n";#---debug information can be deleted
+	}
 	return $check;
 }
 
@@ -171,7 +174,7 @@ sub status {
 	elsif ($wd_status==1) {$stat="Achtung! Zombi process detected!"; }
 	elsif ($wd_status==2) {$stat="Achtung! DPI-process not found!";}
 	elsif ($wd_status==3) {$stat="Achtung! Log file does not updating!";}
-	elsif ($wd_status==4) {$stat="Achtung! Drops very high!";}
+	elsif ($wd_status==4) {$stat="Achtung! Drops very high or can not read drop rate!";}
 	return 1;
 }
 
@@ -190,6 +193,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
+				`bpctl_util all set_bypass off`;
 				send_mail("KTB bypass status is OFF","$datestring Bypass is off");
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /usr/adm/watchdog/logs/bypass.log");
@@ -199,7 +203,7 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-				#my $vr=status(); #need for emailing status
+				`bpctl_util all set_bypass on`;				
 				send_mail("KTB bypass status is ON","$datestring $stat");
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /usr/adm/watchdog/logs/bypass.log");
