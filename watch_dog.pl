@@ -49,7 +49,7 @@ else {
 }
 
 #----function sending email
-sub send_mail { #<--- CHECK THIS
+sub send_mail {                                     #<--- CHECK THIS
 	my ($subject, $message) = (@_);
 	my $from = 'mikhail.kozlov@adm-systems.com';
 	my $to = 'mikhail.kozlov@adm-systems.com';
@@ -201,7 +201,7 @@ while (1) {
 					}
 			else {
 				$bypass=0;
- #----------------------REMEMBER: add the real function of bypass
+#----------------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
@@ -211,7 +211,7 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
- #----------------------REMEMBER: add the real function of bypass
+#----------------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
