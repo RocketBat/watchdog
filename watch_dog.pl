@@ -5,13 +5,6 @@ use warnings;
 use File::stat;
 use File::chdir;
 
-#  _        _     _         __  _         __  
-# | \ |    /  \  / \ |   | |   / \ |  /  /  \ |    |
-# | | |    |     |   |   | |   |   | /   |  | |    |
-# |/  |     \    |   |---| |-- |   |/    |__| |    |
-# |   |      \   |   |   | |   |   |\    |  | |    |
-# |   |__| \ _/  \_/ |   | |__ \_/ | \   |  | |__| |__|
-
 my $bypass; #--0-off--|--1-on--
 my $max_drops = 0.04;
 my $datestring = strftime "%F %T", localtime;
@@ -151,9 +144,9 @@ sub zombie_check {
 #--------starting function
 sub start {
 	$CWD = '/usr/adm/adm_s1';
-        system('./start');
-        print "$datestring Starting DPI-Engine.\n";
-        system("echo $datestring 'Starting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+    system('./start');
+    print "$datestring Starting DPI-Engine.\n";
+    system("echo $datestring 'Starting DPI-Engine.' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 
 }
 
@@ -169,10 +162,10 @@ sub restart {
 #--------big function (main function of this script)
 sub watch_dog {
 	if (zombie_check()==1) { restart(); return 1; }
-        if (process_check()==1)	{return 2;}
+    if (process_check()==1)	{return 2;}
 	if (filerefresh()==1) {return 3;}
 	if (Check_drops()==1) {return 4;}
-        return 0;
+    return 0;
 }
 
 #----error status
@@ -198,14 +191,14 @@ while (1) {
 			if ($bypass == 0) {
 				$bypass=0;
 				system("echo $datestring 'Save system state'");
-					}
+			}
 			else {
 				$bypass=0;
 #----------------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-				}
+			}
 		}
 		else {
 			print "Something is wrong. Starting bypass.\n";
@@ -216,12 +209,12 @@ while (1) {
 				system("echo $datestring 'Bypass turn on'");
         	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 				byloop();  #-------------------------------------comment this if version for Fastlink
-				}
+			}
 			else {
 				system("echo 'Save system state'");
 				$bypass=1;
-				}
+			}
 		}
-		sleep 5;
-		}
+	sleep 5;
+	}
 }
