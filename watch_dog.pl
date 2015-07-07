@@ -14,8 +14,11 @@ my $date = strftime "%F", localtime;
 my $log_file;
 my $t1=0;
 my $t2=0;
+my $tt1=0;
+my $tt2=0;
 my $stat;
 my $st; #----error status
+my $textmsg; #---text message
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
@@ -23,7 +26,7 @@ sub byloop {
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-		system("echo 'Vkl bypass na chas'");
+		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
 		send_mail("Mighty bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!"); #<--- CHECK THIS
 		sleep 3600;
 	}
@@ -32,7 +35,7 @@ sub byloop {
 }
 
 #---------detecting bypass state
-if (`cat get_bypass | grep on | grep -v grep` eq "") {
+if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
 	$bypass=0;
 	print "bypass is off\n";
 }
@@ -67,19 +70,21 @@ sub process_check {
         my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
         if ($process_status eq ""){
                 $check=1;
-                print "$datestring Did not find DPI process in process list\n";
+                #print "$datestring Did not find DPI process in process list\n";
+                $textmsg="$datestring Did not find DPI process in process list\n";
                 system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
                 start();
         }
         else{
                 $check=0;
                 print "$datestring Found DPI process in process list.\n";
+                $textmsg="$datestring Found DPI process in process list.\n";
                 }
         return $check;
 }
 
 
-#-------------function obnovleniya
+#-------------function filerefresh
 sub filerefresh {
         my $obnovlenie;
         my $mt = stat($log_file);
@@ -106,21 +111,21 @@ sub Check_drops {
                 if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
                         $check=1;
                         print "$line\n";#---debug information can be deleted
-			print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+						print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
                         system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
                         print "Bypass is switched on.\n";
                 }
                 else{
                         $check=0;
-			print "$line\n";#---debug information can be deleted
+						print "$line\n";#---debug information can be deleted
                         print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
 			}
         }
         else{
-                $check=1;
-		print "$datestring Can not read drop rate\n";
+            $check=1;
+			print "$datestring Can not read drop rate\n";
         	print "$line\n";#---debug information can be deleted
-		system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
 }
@@ -179,6 +184,16 @@ sub status {
 	return 1;
 }
 
+#---text out function
+sub textout {
+	$tt1=time();
+	if ($tt1-$tt2>=5) {
+		print "$textmsg";
+	}
+	$tt2=$tt1;
+}
+
+
 while (1) {
     $date = strftime "%F", localtime;
     $log_file = $directory.$date.'-out.log';
@@ -186,6 +201,7 @@ while (1) {
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
+		textout();
 		if (status()==0) {
 			print "Everything is allright\n";
 			if ($bypass == 0) {
@@ -207,7 +223,7 @@ while (1) {
 #----------------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn on'");
-        	       		system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+        	    system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 				byloop();  #-------------------------------------comment this if version for Fastlink
 			}
 			else {
@@ -215,6 +231,6 @@ while (1) {
 				$bypass=1;
 			}
 		}
-	sleep 5;
+	#sleep 5;
 	}
 }
