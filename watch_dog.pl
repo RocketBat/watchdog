@@ -18,7 +18,10 @@ my $tt1=0;
 my $tt2=0;
 my $stat;
 my $st; #----error status
-my $textmsg; #---text message
+my $textmsg_proc; #---text message for processcheck
+my $textmsg_fresh; #---text message for filerefresh
+my $textmsg_cdrops; #---text message for checkdrops
+my $textmsg_zcheck; #---text message for zombie
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
@@ -71,14 +74,14 @@ sub process_check {
         if ($process_status eq ""){
                 $check=1;
                 #print "$datestring Did not find DPI process in process list\n";
-                $textmsg="$datestring Did not find DPI process in process list\n";
+                $textmsg_proc='$datestring Did not find DPI process in process list\n';
                 system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
                 start();
         }
         else{
                 $check=0;
-                print "$datestring Found DPI process in process list.\n";
-                $textmsg="$datestring Found DPI process in process list.\n";
+                #print "$datestring Found DPI process in process list.\n";
+                $textmsg_proc='$datestring Found DPI process in process list.\n';
                 }
         return $check;
 }
@@ -90,12 +93,14 @@ sub filerefresh {
         my $mt = stat($log_file);
         my $st = $mt -> mtime;
                   if ($st +1 >= time()) {
-                        print "$datestring Log file updating \n";
+                        #print "$datestring Log file updating \n";
+                        $textmsg_fresh='$datestring Log file updating \n';
                         $obnovlenie=0;
                   }
                    else {
                         $obnovlenie=1;
-                        print "$datestring Achtung! Log does not updating!\n";
+                        #print "$datestring Achtung! Log does not updating!\n";
+                        $textmsg_fresh='$datestring Achtung! Log does not updating!\n';
                         system("echo $datestring 'bypass on, Log does not updating!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 		}
         return $obnovlenie;
@@ -110,21 +115,24 @@ sub Check_drops {
         my $drop_rate2 = $2;
                 if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
                         $check=1;
-                        print "$line\n";#---debug information can be deleted
-						print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+                        #print "$line\n";#---debug information can be deleted
+						#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+                        $textmsg_cdrops='$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n';
                         system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-                        print "Bypass is switched on.\n";
+                        #print "Bypass is switched on.\n";
                 }
                 else{
                         $check=0;
-						print "$line\n";#---debug information can be deleted
-                        print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
+						#print "$line\n";#---debug information can be deleted
+                        #print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
+                        $textmsg_cdrops='$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n';
 			}
         }
         else{
             $check=1;
-			print "$datestring Can not read drop rate\n";
-        	print "$line\n";#---debug information can be deleted
+			#print "$datestring Can not read drop rate\n";
+			$textmsg_cdrops='$datestring Can not read drop rate\n';
+        	#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
@@ -136,11 +144,13 @@ sub zombie_check {
 	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
 	if ($zombie_ck eq "") {
 		$check=0;
-		print "$datestring No zombie processes.\n";
+		#print "$datestring No zombie processes.\n";
+		$textmsg_zcheck='$datestring No zombie processes.\n';
 	}
 	else {
 		$check=1;
-		print "$datestring Achtung! Found ZOMBIE!\n";
+		#print "$datestring Achtung! Found ZOMBIE!\n";
+		$textmsg_cdrops='$datestring Achtung! Found ZOMBIE!\n';
 		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
@@ -188,7 +198,10 @@ sub status {
 sub textout {
 	$tt1=time();
 	if ($tt1-$tt2>=5) {
-		print "$textmsg";
+		print "$textmsg_proc";
+		print "$textmsg_fresh";
+		print "$textmsg_cdrops";
+		print "$textmsg_zcheck";
 	}
 	$tt2=$tt1;
 }
