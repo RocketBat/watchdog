@@ -18,10 +18,10 @@ my $tt1=0;
 my $tt2=0;
 my $stat;
 my $st; #----error status
-my $textmsg_proc; #---text message for processcheck
-my $textmsg_fresh; #---text message for filerefresh
-my $textmsg_cdrops; #---text message for checkdrops
-my $textmsg_zcheck; #---text message for zombie
+my $textmsg_proc; #---text message processcheck
+my $textmsg_fresh; #---text message filerefresh
+my $textmsg_cdrops; #---text message checkdrops
+my $textmsg_zcheck; #---text message zombie
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
@@ -108,31 +108,31 @@ sub filerefresh {
 
 #------------function check drops
 sub Check_drops {
-        my $check;
-        my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-        if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
-        my $drop_rate1 = $1;
-        my $drop_rate2 = $2;
-                if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
-                        $check=1;
-                        #print "$line\n";#---debug information can be deleted
-						#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
-                        $textmsg_cdrops='$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n';
-                        system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-                        #print "Bypass is switched on.\n";
-                }
-                else{
-                        $check=0;
-						#print "$line\n";#---debug information can be deleted
-                        #print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
-                        $textmsg_cdrops='$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n';
+    my $check;
+    my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
+    if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
+        	my $drop_rate1 = $1;
+        	my $drop_rate2 = $2;
+       		if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
+        			$check=1;
+            		#print "$line\n";#---debug information can be deleted
+					#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
+            		$textmsg_cdrops='$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n';
+           			 system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+            		#print "Bypass is switched on.\n";
+        	}
+       		else{
+            		$check=0;
+					#print "$line\n";#---debug information can be deleted
+            		#print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
+            		$textmsg_cdrops='$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n';
 			}
-        }
-        else{
-            $check=1;
+    }
+    else{
+        	$check=1;
 			#print "$datestring Can not read drop rate\n";
 			$textmsg_cdrops='$datestring Can not read drop rate\n';
-        	#print "$line\n";#---debug information can be deleted
+       		#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
@@ -143,15 +143,15 @@ sub zombie_check {
 	my $check;
 	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
 	if ($zombie_ck eq "") {
-		$check=0;
-		#print "$datestring No zombie processes.\n";
-		$textmsg_zcheck='$datestring No zombie processes.\n';
+			$check=0;
+			#print "$datestring No zombie processes.\n";
+			$textmsg_zcheck='$datestring No zombie processes.\n';
 	}
 	else {
-		$check=1;
-		#print "$datestring Achtung! Found ZOMBIE!\n";
-		$textmsg_cdrops='$datestring Achtung! Found ZOMBIE!\n';
-		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			$check=1;
+			#print "$datestring Achtung! Found ZOMBIE!\n";
+			$textmsg_cdrops='$datestring Achtung! Found ZOMBIE!\n';
+			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
 }
@@ -198,10 +198,10 @@ sub status {
 sub textout {
 	$tt1=time();
 	if ($tt1-$tt2>=5) {
-		print "$textmsg_proc";
-		print "$textmsg_fresh";
-		print "$textmsg_cdrops";
-		print "$textmsg_zcheck";
+			print "$textmsg_proc";
+			print "$textmsg_fresh";
+			print "$textmsg_cdrops";
+			print "$textmsg_zcheck";
 	}
 	$tt2=$tt1;
 }
@@ -214,16 +214,16 @@ while (1) {
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
-		textout();
 		if (status()==0) {
 			print "Everything is allright\n";
+			textout();
 			if ($bypass == 0) {
 				$bypass=0;
 				system("echo $datestring 'Save system state'");
 			}
 			else {
 				$bypass=0;
-#----------------------REMEMBER: add the real function of bypass
+#---------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
@@ -233,7 +233,7 @@ while (1) {
 			print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
-#----------------------REMEMBER: add the real function of bypass
+#---------------REMEMBER: add the real function of bypass
 				send_mail("Mighty bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn on'");
         	    system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
