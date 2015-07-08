@@ -21,6 +21,8 @@ my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
 my $temp=1; #---need for text output
+my $dru; #--drops upload
+my $drd; #--drops download
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
@@ -73,14 +75,14 @@ sub process_check {
         if ($process_status eq ""){
                 $check=1;
                 #print "$datestring Did not find DPI process in process list\n";
-                $textmsg_proc='$datestring Did not find DPI process in process list';
+                $textmsg_proc=' Did not find DPI process in process list';
                 system("echo $datestring 'bypass on, Did not find DPI process in process list' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
                 start();
         }
         else{
                 $check=0;
                 #print "$datestring Found DPI process in process list.\n";
-                $textmsg_proc='$datestring Found DPI process in process list.';
+                $textmsg_proc=' Found DPI process in process list.';
                 }
         return $check;
 }
@@ -93,13 +95,13 @@ sub filerefresh {
         my $st = $mt -> mtime;
                   if ($st +1 >= time()) {
                         #print "$datestring Log file updating \n";
-                        $textmsg_fresh='$datestring Log file updating ';
+                        $textmsg_fresh=' Log file updating ';
                         $obnovlenie=0;
                   }
                    else {
                         $obnovlenie=1;
                         #print "$datestring Achtung! Log does not updating!\n";
-                        $textmsg_fresh='$datestring Achtung! Log does not updating!';
+                        $textmsg_fresh=' Achtung! Log does not updating!';
                         system("echo $datestring 'bypass on, Log does not updating!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 		}
         return $obnovlenie;
@@ -116,15 +118,17 @@ sub Check_drops {
         			$check=1;
             		#print "$line\n";#---debug information can be deleted
 					#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
-            		$textmsg_cdrops='$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops';
+            		$textmsg_cdrops=' Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops';
            			 system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
             		#print "Bypass is switched on.\n";
+            		$dru = $drop_rate1;
+            		$drd = $drop_rate2;
         	}
        		else{
             		$check=0;
 					#print "$line\n";#---debug information can be deleted
             		#print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
-            		$textmsg_cdrops='$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range';
+            		$textmsg_cdrops=' Drops level $drop_rate1 and $drop_rate2 is in normal range';
 			}
     }
     else{
@@ -144,12 +148,12 @@ sub zombie_check {
 	if ($zombie_ck eq "") {
 			$check=0;
 			#print "$datestring No zombie processes.\n";
-			$textmsg_zcheck='$datestring No zombie processes.';
+			$textmsg_zcheck=' No zombie processes.';
 	}
 	else {
 			$check=1;
 			#print "$datestring Achtung! Found ZOMBIE!\n";
-			$textmsg_cdrops='$datestring Achtung! Found ZOMBIE!';
+			$textmsg_cdrops=' Achtung! Found ZOMBIE!';
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
@@ -196,10 +200,10 @@ sub status {
 #---text out function
 sub textout {
 	if ($temp==5) {
-			print "$textmsg_proc \n";
-			print "$textmsg_fresh \n";
-			print "$textmsg_cdrops \n";
-			print "$textmsg_zcheck \n";
+			print "$datestring $textmsg_proc \n";
+			print "$datestring $textmsg_fresh \n";
+			print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
+			print "$datestring $textmsg_zcheck \n";
 			$temp=1;
 	}
 	else {
