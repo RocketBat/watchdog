@@ -1,8 +1,12 @@
 #!/usr/bin/perl
 
-#
-# Build is 46
-#
+#----------|
+# Build 48 |
+#----------|
+
+#-----SERVER NAME-----|
+my $server = 'Mighty'#|
+#---------------------|
 
 use POSIX qw(strftime);
 use strict;
@@ -36,7 +40,7 @@ sub byloop {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
-		send_mail("Mighty bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!"); #<--- CHECK THIS
+		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!"); #<--- CHECK THIS
 		sleep 3600;
 	}
 	$t1=$t2;
@@ -204,7 +208,7 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($temp==100) {
+	if ($temp==85) {
 			if (status()==0) {
 				print "Everything is allright\n";
 			}
@@ -241,7 +245,7 @@ while (1) {
 			else {
 				$bypass=0;
 #---------------REMEMBER: add the real function of bypass
-				send_mail("Mighty bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
+				send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn off'");
 				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 			}
@@ -251,7 +255,7 @@ while (1) {
 			if ($bypass == 0) {
 				$bypass=1;
 #---------------REMEMBER: add the real function of bypass
-				send_mail("Mighty bypass status is ON","$datestring $stat"); #<--- CHECK THIS
+				send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 				system("echo $datestring 'Bypass turn on'");
         	    system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 				byloop();  #-------------------------------------comment this if version for Fastlink
