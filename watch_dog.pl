@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 49 |
+# Build 50 |
 #----------|
 
 #-----SERVER NAME------|
@@ -30,8 +30,8 @@ my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
 my $temp=0; #---need for text output
-my $dru; #--drops upload
-my $drd; #--drops download
+my $drop_rate1; #--drops upload
+my $drop_rate2; #--drops download
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
@@ -121,8 +121,8 @@ sub Check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
     if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
-        	my $drop_rate1 = $1;
-        	my $drop_rate2 = $2;
+        	$drop_rate1 = $1;
+        	$drop_rate2 = $2;
        		if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         			$check=1;
             		#print "$line\n";#---debug information can be deleted
@@ -130,8 +130,6 @@ sub Check_drops {
             		$textmsg_cdrops=' Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops';
            			 system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
             		#print "Bypass is switched on.\n";
-            		$dru = $drop_rate1;
-            		$drd = $drop_rate2;
         	}
        		else{
             		$check=0;
@@ -147,7 +145,7 @@ sub Check_drops {
        		#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
-	return $check;
+	return ($check, $drop_rate1, $drop_rate2);
 }
 
 #-----------function check zombie process
@@ -217,8 +215,8 @@ sub textout {
 			}
 			print "$datestring $textmsg_proc \n";
 			print "$datestring $textmsg_fresh \n";
-			#print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
-			print "$datestring $textmsg_cdrops \n";
+			print "$datestring $textmsg_cdrops drops is $drop_rate1 and $drop_rate2\n";
+			#print "$datestring $textmsg_cdrops \n";
 			print "$datestring $textmsg_zcheck \n";
 			$temp=0;
 	}
@@ -227,7 +225,47 @@ sub textout {
 	}
 }
 
+#--function when all is GOOD
+sub bypass_out_status_ok {
+	if ($bypass == 0) {
+			$bypass=0;
+			if ($temp==85) {
+				system("echo $datestring 'Save system state'");
+				$temp=0;
+			}
+			else {$temp++;}
+	}
+	else {
+			$bypass=0;
+			#-----------REMEMBER: add the real function of bypass
+			send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
+			system("echo $datestring 'Bypass turn off'");
+			system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+	}
+}
 
+#--function when needs to be bypass in ON
+sub bypass_out_status_bad {
+	if ($bypass == 0) {
+			$bypass=1;
+#-----------REMEMBER: add the real function of bypass
+			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
+			system("echo $datestring 'Bypass turn on'");
+        	system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			byloop();  #-------------------------------------comment this if version for Fastlink
+	}
+	else {
+			$bypass=1;
+			if ($temp==85) {
+				system("echo 'Save system state'");
+				$temp=0;
+			}
+			else {$temp++;}
+	}
+}
+
+
+#--main logic of script
 while (1) {
     $date = strftime "%F", localtime;
     $log_file = $directory.$date.'-out.log';
@@ -238,32 +276,12 @@ while (1) {
 		if (status()==0) {
 			#print "Everything is allright\n";
 			textout();
-			if ($bypass == 0) {
-				$bypass=0;
-				system("echo $datestring 'Save system state'");
-			}
-			else {
-				$bypass=0;
-#---------------REMEMBER: add the real function of bypass
-				send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
-				system("echo $datestring 'Bypass turn off'");
-				system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-			}
+			bypass_out_status_ok();
 		}
 		else {
 			#print "Something is wrong. Starting bypass.\n";
-			if ($bypass == 0) {
-				$bypass=1;
-#---------------REMEMBER: add the real function of bypass
-				send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
-				system("echo $datestring 'Bypass turn on'");
-        	    system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-				byloop();  #-------------------------------------comment this if version for Fastlink
-			}
-			else {
-				system("echo 'Save system state'");
-				$bypass=1;
-			}
+			textout();
+			bypass_out_status_bad();
 		}
 	#sleep 5;
 	}
