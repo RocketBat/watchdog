@@ -204,7 +204,7 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($temp==40) {
+	if ($temp==100) {
 			if (status()==0) {
 				print "Everything is allright\n";
 			}
@@ -213,7 +213,8 @@ sub textout {
 			}
 			print "$datestring $textmsg_proc \n";
 			print "$datestring $textmsg_fresh \n";
-			print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
+			#print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
+			print "$datestring $textmsg_cdrops \n";
 			print "$datestring $textmsg_zcheck \n";
 			$temp=0;
 	}
