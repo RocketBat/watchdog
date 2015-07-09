@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+
+#
+# Build is 46
+#
+
 use POSIX qw(strftime);
 use strict;
 use warnings;
@@ -20,7 +25,7 @@ my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
-my $temp=1; #---need for text output
+my $temp=0; #---need for text output
 my $dru; #--drops upload
 my $drd; #--drops download
 
@@ -199,7 +204,7 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($temp==5) {
+	if ($temp==40) {
 			if (status()==0) {
 				print "Everything is allright\n";
 			}
@@ -210,7 +215,7 @@ sub textout {
 			print "$datestring $textmsg_fresh \n";
 			print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
 			print "$datestring $textmsg_zcheck \n";
-			$temp=1;
+			$temp=0;
 	}
 	else {
 			$temp++;
