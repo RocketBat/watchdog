@@ -200,6 +200,12 @@ sub status {
 #---text out function
 sub textout {
 	if ($temp==5) {
+			if (status()==0) {
+				print "Everything is allright\n";
+			}
+			else {
+				print "Something is wrong. Bypass mode is on.\n";
+			}
 			print "$datestring $textmsg_proc \n";
 			print "$datestring $textmsg_fresh \n";
 			print "$datestring $textmsg_cdrops drops is $dru and $drd\n";
@@ -220,7 +226,7 @@ while (1) {
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
-			print "Everything is allright\n";
+			#print "Everything is allright\n";
 			textout();
 			if ($bypass == 0) {
 				$bypass=0;
@@ -235,7 +241,7 @@ while (1) {
 			}
 		}
 		else {
-			print "Something is wrong. Starting bypass.\n";
+			#print "Something is wrong. Starting bypass.\n";
 			if ($bypass == 0) {
 				$bypass=1;
 #---------------REMEMBER: add the real function of bypass
