@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 50 |
+# Build 51 |
 #----------|
 
 #-----SERVER NAME------|
@@ -219,9 +219,6 @@ sub textout {
 			#print "$datestring $textmsg_cdrops \n";
 			print "$datestring $textmsg_zcheck \n";
 			$temp=0;
-	}
-	else {
-			$temp++;
 	}
 }
 
