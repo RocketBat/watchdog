@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 51 |
+# Build 52 |
 #----------|
 
 #-----SERVER NAME------|
@@ -127,7 +127,7 @@ sub Check_drops {
         			$check=1;
             		#print "$line\n";#---debug information can be deleted
 					#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
-            		$textmsg_cdrops=' Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops';
+            		$textmsg_cdrops=' Drops level exceeds the configured maximum of $max_drops';
            			 system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
             		#print "Bypass is switched on.\n";
         	}
@@ -135,7 +135,7 @@ sub Check_drops {
             		$check=0;
 					#print "$line\n";#---debug information can be deleted
             		#print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
-            		$textmsg_cdrops=' Drops level $drop_rate1 and $drop_rate2 is in normal range';
+            		$textmsg_cdrops=' Drops level is in normal range';
 			}
     }
     else{
@@ -145,7 +145,7 @@ sub Check_drops {
        		#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
-	return ($check, $drop_rate1, $drop_rate2);
+	return ($check, $drop_rate1, $drop_rate2, $max_drops);
 }
 
 #-----------function check zombie process
@@ -160,7 +160,7 @@ sub zombie_check {
 	else {
 			$check=1;
 			#print "$datestring Achtung! Found ZOMBIE!\n";
-			$textmsg_cdrops=' Achtung! Found ZOMBIE!';
+			$textmsg_zcheck=' Achtung! Found ZOMBIE!';
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return $check;
@@ -234,7 +234,9 @@ sub bypass_out_status_ok {
 	}
 	else {
 			$bypass=0;
-			#-----------REMEMBER: add the real function of bypass
+			#-----------REMEMBER: add the real function of bypass|
+			system(echo "Bypasss is oFFFFFFFFuuuuu");#           |
+			#----------------------------------------------------|
 			send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn off'");
 			system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
@@ -245,7 +247,9 @@ sub bypass_out_status_ok {
 sub bypass_out_status_bad {
 	if ($bypass == 0) {
 			$bypass=1;
-#-----------REMEMBER: add the real function of bypass
+			#-----------REMEMBER: add the real function of bypass|
+			system(echo "Bypasss is onnnN!");#                   |
+			#----------------------------------------------------|
 			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn on'");
         	system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
@@ -271,12 +275,12 @@ while (1) {
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
-			#print "Everything is allright\n";
+			print "Everything is allright\n";
 			textout();
 			bypass_out_status_ok();
 		}
 		else {
-			#print "Something is wrong. Starting bypass.\n";
+			print "Something is wrong. Starting bypass.\n";
 			textout();
 			bypass_out_status_bad();
 		}
