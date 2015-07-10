@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 52 |
+# Build 53 |
 #----------|
 
 #-----SERVER NAME------|
@@ -235,7 +235,7 @@ sub bypass_out_status_ok {
 	else {
 			$bypass=0;
 			#-----------REMEMBER: add the real function of bypass|
-			system(echo "Bypasss is oFFFFFFFFuuuuu");#           |
+			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
 			#----------------------------------------------------|
 			send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn off'");
@@ -248,7 +248,7 @@ sub bypass_out_status_bad {
 	if ($bypass == 0) {
 			$bypass=1;
 			#-----------REMEMBER: add the real function of bypass|
-			system(echo "Bypasss is onnnN!");#                   |
+			system("echo 'Bypasss is onnnN!'");#                 |
 			#----------------------------------------------------|
 			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn on'");
