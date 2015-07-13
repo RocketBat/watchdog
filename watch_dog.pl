@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 54 |
+# Build 55 |
 #----------|
 
 #-----SERVER NAME------|
@@ -24,7 +24,7 @@ my $log_file;
 my $t1=0;
 my $t2=0;
 my $stat;
-my $st; #----error status
+my $refresh_timer=80; #----speed of logging
 my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
@@ -243,7 +243,7 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($temp==85) {
+	if ($temp==$refresh_timer) {
 			if (status()==0) {
 				print "Everything is allright\n";
 			}
@@ -263,7 +263,7 @@ sub textout {
 sub bypass_out_status_ok {
 	if ($bypass == 0) {
 			$bypass=0;
-			if ($temp==85) {
+			if ($temp==$refresh_timer) {
 				system("echo $datestring 'Save system state'");
 				$temp=0;
 			}
@@ -294,7 +294,7 @@ sub bypass_out_status_bad {
 	}
 	else {
 			$bypass=1;
-			if ($temp==85) {
+			if ($temp==$refresh_timer) {
 				system("echo 'Save system state'");
 				$temp=0;
 			}
