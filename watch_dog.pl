@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 57 |
+# Build 58 |
 #----------|
 
 #-----SERVER NAME------|
@@ -181,9 +181,8 @@ sub Check_drops {
 			$textmsg_cdrops='$datestring Can not read drop rate';
        		#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-			$stat=$textmsg_cdrops;
 	}
-	return ($check, $drop_rate1, $drop_rate2, $max_drops, $stat);
+	return ($check, $drop_rate1, $drop_rate2, $max_drops);
 }
 
 #-----------function check zombie process
