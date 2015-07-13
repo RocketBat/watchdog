@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 56 |
+# Build 57 |
 #----------|
 
 #-----SERVER NAME------|
@@ -181,8 +181,9 @@ sub Check_drops {
 			$textmsg_cdrops='$datestring Can not read drop rate';
        		#print "$line\n";#---debug information can be deleted
 			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			$stat=$textmsg_cdrops;
 	}
-	return ($check, $drop_rate1, $drop_rate2, $max_drops);
+	return ($check, $drop_rate1, $drop_rate2, $max_drops, $stat);
 }
 
 #-----------function check zombie process
@@ -270,13 +271,14 @@ sub bypass_out_status_ok {
 			else {$temp++;}
 	}
 	else {
-			$bypass=0;
+			bypass_check();
+			#$bypass=0;
 			#-----------REMEMBER: add the real function of bypass|
-			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+			#system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
 			#----------------------------------------------------|
-			send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
-			system("echo $datestring 'Bypass turn off'");
-			system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			#send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
+			#system("echo $datestring 'Bypass turn off'");
+			#system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 }
 
@@ -290,6 +292,7 @@ sub bypass_out_status_bad {
 			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn on'");
         	system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			#sleep 15;
 			bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
@@ -300,4 +303,22 @@ sub bypass_out_status_bad {
 			}
 			else {$temp++;}
 	}
+}
+
+sub bypass_check {
+	my $bypass_on_time=time();
+	my $bypass_off_time;
+	if ($bypass_on_time-$bypass_off_time<=15) {
+		print "$datestring save system state, because bypass is ON recently"
+	}
+	else {
+		$bypass=0;
+		#-----------REMEMBER: add the real function of bypass|
+		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+		#----------------------------------------------------|
+		send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
+		system("echo $datestring 'Bypass turn off'");
+		system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+	}
+	$bypass_off_time=$bypass_on_time;
 }
