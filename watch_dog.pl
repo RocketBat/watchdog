@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 58 |
+# Build 59 |
 #----------|
 
 #-----SERVER NAME------|
@@ -32,6 +32,8 @@ my $textmsg_zcheck; #---text message zombie
 my $temp=0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
+my $bypass_on_time;
+my $bypass_off_time;
 
 #---Prototypes
 sub bypass_loop;
@@ -305,8 +307,8 @@ sub bypass_out_status_bad {
 }
 
 sub bypass_check {
-	my $bypass_on_time=time();
-	my $bypass_off_time;
+	$bypass_on_time=time();
+	$bypass_off_time;
 	if ($bypass_on_time-$bypass_off_time<=15) {
 		print "$datestring save system state, because bypass is ON recently"
 	}
