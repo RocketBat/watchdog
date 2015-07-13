@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 55 |
+# Build 56 |
 #----------|
 
 #-----SERVER NAME------|
@@ -34,7 +34,7 @@ my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
 
 #---Prototypes
-sub byloop;
+sub bypass_loop;
 sub send_mail;
 sub process_check;
 sub filerefresh;
@@ -81,7 +81,7 @@ while (1) {
 }
 
 #-----function that checking bypass loop (must be commented if version for Fastlink)
-sub byloop {
+sub bypass_loop {
 	my $t=time();
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
@@ -290,7 +290,7 @@ sub bypass_out_status_bad {
 			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
 			system("echo $datestring 'Bypass turn on'");
         	system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-			byloop();  #-------------------------------------comment this if version for Fastlink
+			bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
 			$bypass=1;
