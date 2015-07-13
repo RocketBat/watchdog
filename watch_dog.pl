@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 60 |
+# Build 61 |
 #----------|
 
 #-----SERVER NAME------|
@@ -32,8 +32,8 @@ my $textmsg_zcheck; #---text message zombie
 my $temp=0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
-my $bypass_on_time;
-my $bypass_off_time;
+my $bypass_on_time=0; # last time when bypass is on
+my $bypass_off_time=0; # last time when bypass is off
 
 #---Prototypes
 sub bypass_loop;
@@ -287,6 +287,7 @@ sub bypass_out_status_ok {
 sub bypass_out_status_bad {
 	if ($bypass == 0) {
 			$bypass=1;
+			$bypass_on_time=time();
 			#-----------REMEMBER: add the real function of bypass|
 			system("echo 'Bypasss is onnnN!'");#                 |
 			#----------------------------------------------------|
@@ -307,8 +308,8 @@ sub bypass_out_status_bad {
 }
 
 sub bypass_check {
-	$bypass_on_time=time();
-	if ($bypass_on_time-$bypass_off_time<=15) {
+	$bypass_off_time=time();
+	if ($bypass_on_time - $bypass_off_time <= 15) {
 		print "$datestring save system state, because bypass is ON recently"
 	}
 	else {
@@ -320,5 +321,4 @@ sub bypass_check {
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
-	$bypass_off_time=$bypass_on_time;
 }
