@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 53 |
+# Build 54 |
 #----------|
 
 #-----SERVER NAME------|
@@ -33,6 +33,53 @@ my $temp=0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
 
+#---Prototypes
+sub byloop;
+sub send_mail;
+sub process_check;
+sub filerefresh;
+sub Check_drops;
+sub zombie_check;
+sub start;
+sub restart;
+sub watch_dog;
+sub status;
+sub textout;
+sub bypass_out_status_ok;
+sub bypass_out_status_bad;
+
+#---------detecting bypass state
+if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
+	$bypass=0;
+	print "bypass is off\n";
+}
+else {
+	$bypass=1;
+	print "bypass is on\n"
+}
+
+#--main logic of script
+while (1) {
+    $date = strftime "%F", localtime;
+    $log_file = $directory.$date.'-out.log';
+    while (1){
+		$datestring = strftime "%F %T", localtime;
+		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
+		if ($hour==3 && $min==0 && $sec <= 5) {last;}
+		if (status()==0) {
+			print "Everything is allright\n";
+			textout();
+			bypass_out_status_ok();
+		}
+		else {
+			print "Something is wrong. Starting bypass.\n";
+			textout();
+			bypass_out_status_bad();
+		}
+	#sleep 5;
+	}
+}
+
 #-----function that checking bypass loop (must be commented if version for Fastlink)
 sub byloop {
 	my $t=time();
@@ -45,16 +92,6 @@ sub byloop {
 	}
 	$t1=$t2;
 	$t2=$t;
-}
-
-#---------detecting bypass state
-if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
-	$bypass=0;
-	print "bypass is off\n";
-}
-else {
-	$bypass=1;
-	print "bypass is on\n"
 }
 
 #----function sending email
@@ -262,28 +299,5 @@ sub bypass_out_status_bad {
 				$temp=0;
 			}
 			else {$temp++;}
-	}
-}
-
-
-#--main logic of script
-while (1) {
-    $date = strftime "%F", localtime;
-    $log_file = $directory.$date.'-out.log';
-    while (1){
-		$datestring = strftime "%F %T", localtime;
-		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
-		if ($hour==3 && $min==0 && $sec <= 5) {last;}
-		if (status()==0) {
-			print "Everything is allright\n";
-			textout();
-			bypass_out_status_ok();
-		}
-		else {
-			print "Something is wrong. Starting bypass.\n";
-			textout();
-			bypass_out_status_bad();
-		}
-	#sleep 5;
 	}
 }
