@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 76 |
+# Build 77 |
 #----------|
 
 #-----SERVER NAME------|
@@ -210,7 +210,7 @@ sub check_drops {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
 		}
 	}
-	return ($check, $drop_rate1, $drop_rate2, $max_drops);
+	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }
 
 #-----------function check zombie process
