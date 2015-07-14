@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 69 |
+# Build 70 |
 #----------|
 
 #-----SERVER NAME------|
@@ -30,6 +30,10 @@ my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
+my $logmsg_proc; #---text message processcheck
+my $logmsg_fresh; #---text message filerefresh
+my $logmsg_cdrops; #---text message checkdrops
+my $logmsg_zcheck; #---text message zombie
 my $temp = 0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
@@ -130,8 +134,9 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		#print "$datestring Did not find DPI process in process list\n";
-		$textmsg_proc=' Did not find DPI process in process list';
-		system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
+		$textmsg_proc = ' Did not find DPI process in process list';
+		$logmsg_proc = ' bypass on, Did not find DPI process in process list';
+		#system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
 		start();
     }
     else{
@@ -156,8 +161,9 @@ sub filerefresh {
     else {
         $obnovlenie=1;
         #print "$datestring Achtung! Log does not updating!\n";
-        $textmsg_fresh=' Achtung! Log does not updating!';
-        system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
+        $textmsg_fresh = ' Achtung! Log does not updating!';
+        #system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
+		$logmsg_fresh = ' bypass on, Log does not updating!';
 	}
     return $obnovlenie;
 }
@@ -173,8 +179,9 @@ sub check_drops {
         	$check=1;
             #print "$line\n";#---debug information can be deleted
 			#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
-            $textmsg_cdrops=' Drops level exceeds the configured maximum of $max_drops';
-           	system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+            $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
+           	#system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+			$logmsg_cdrops = ' bypass is on, droprate is ';
             #print "Bypass is switched on.\n";
         }
        	else{
@@ -187,9 +194,10 @@ sub check_drops {
     else{
         $check=1;
 		#print "$datestring Can not read drop rate\n";
-		$textmsg_cdrops='$datestring Can not read drop rate';
+		$textmsg_cdrops = '$datestring Can not read drop rate';
        	#print "$line\n";#---debug information can be deleted
-		system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+		#system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+		$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
 	}
 	return ($check, $drop_rate1, $drop_rate2, $max_drops);
 }
@@ -207,7 +215,8 @@ sub zombie_check {
 		$check=1;
 		#print "$datestring Achtung! Found ZOMBIE!\n";
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+		#system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
 	}
 	return $check;
 }
@@ -259,11 +268,14 @@ sub textout {
 		else {
 			print "Something is wrong. Bypass mode is on.\n";
 		}
+		print "$datestring $textmsg_zcheck \n";
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
-		print "$datestring $textmsg_cdrops drops is $drop_rate1 and $drop_rate2\n";
-		#print "$datestring $textmsg_cdrops \n";
-		print "$datestring $textmsg_zcheck \n";
+		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
+		system("echo $datestring $logmsg_zcheck >> $watchdog_log");
+		system("echo $datestring $logmsg_proc >> $watchdog_log");
+		system("echo $datestring $logmsg_fresh >> $watchdog_log");
+		system("echo $datestring $logmsg_cdrops $droprate1 and $drop_rate2 >> $watchdog_log");
 		$temp = 0;
 	}
 }
