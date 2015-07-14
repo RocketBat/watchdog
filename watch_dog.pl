@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 71 |
+# Build 72 |
 #----------|
 
 #-----SERVER NAME------|
@@ -144,7 +144,7 @@ sub process_check {
         #print "$datestring Found DPI process in process list.\n";
         $textmsg_proc=' Found DPI process in process list.';
     }
-    return $check;
+    return ($check, $logmsg_proc);
 }
 
 
@@ -165,7 +165,7 @@ sub filerefresh {
         #system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
 		$logmsg_fresh = ' bypass on, Log does not updating!';
 	}
-    return $obnovlenie;
+    return ($obnovlenie, $logmsg_fresh);
 }
 
 #------------function check drops
@@ -199,7 +199,7 @@ sub check_drops {
 		#system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
 		$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
 	}
-	return ($check, $drop_rate1, $drop_rate2, $max_drops);
+	return ($check, $drop_rate1, $drop_rate2, $max_drops, $logmsg_cdrops);
 }
 
 #-----------function check zombie process
@@ -218,7 +218,7 @@ sub zombie_check {
 		#system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
 		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
 	}
-	return $check;
+	return ($check, $logmsg_zcheck);
 }
 
 #--------starting function
