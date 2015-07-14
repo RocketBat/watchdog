@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 66 |
+# Build 67 |
 #----------|
 
 #-----SERVER NAME------|
@@ -167,7 +167,7 @@ sub check_drops {
         $drop_rate1 = $1;
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
-        	check=1;
+        	$check=1;
             #print "$line\n";#---debug information can be deleted
 			#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
             $textmsg_cdrops=' Drops level exceeds the configured maximum of $max_drops';
@@ -313,7 +313,7 @@ sub bypass_out_status_bad {
 
 sub bypass_check {
 	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= 15) {
+	if ($bypass_off_time - $bypass_on_time <= 10) {
 		print "$datestring save system state, because bypass is recently ON\n"
 	}
 	else {
