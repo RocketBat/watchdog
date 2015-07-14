@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 77 |
+# Build 78 |
 #----------|
 
 #-----SERVER NAME------|
@@ -24,7 +24,7 @@ my $date = strftime "%F", localtime;
 my $log_file;
 my $t1 = 0;
 my $t2 = 0;
-my $stat;
+my $stat; #---need for mailing status
 my $refresh_timer = 80; #----speed of logging
 my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
@@ -34,7 +34,7 @@ my $logmsg_proc; #---log message processcheck
 my $logmsg_fresh; #---log message filerefresh
 my $logmsg_cdrops; #---log message checkdrops
 my $logmsg_zcheck; #---log message zombie
-my $temp = 0; #---need for text output
+my $text_out = 0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
@@ -136,17 +136,15 @@ sub process_check {
     my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
     if ($process_status eq ""){
         $check=1;
-		#print "$datestring Did not find DPI process in process list\n";
 		$textmsg_proc = ' Did not find DPI process in process list';
 		#$logmsg_proc = ' bypass on, Did not find DPI process in process list';
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
 		}
 		start();
     }
     else{
         $check=0;
-        #print "$datestring Found DPI process in process list.\n";
         $textmsg_proc=' Found DPI process in process list.';
     }
     return $check;
@@ -159,15 +157,13 @@ sub filerefresh {
     my $mt = stat($log_file);
     my $st = $mt -> mtime;
     if ($st +1 >= time()) {
-        #print "$datestring Log file updating \n";
         $textmsg_fresh=' Log file updating ';
         $obnovlenie=0;
     }
     else {
         $obnovlenie=1;
-        #print "$datestring Achtung! Log does not updating!\n";
         $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
 		}
 		#$logmsg_fresh = ' bypass on, Log does not updating!';
@@ -184,29 +180,22 @@ sub check_drops {
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
-            #print "$line\n";#---debug information can be deleted
-			#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-			if ($temp==$refresh_timer) {
+			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
 			}
 			#$logmsg_cdrops = ' bypass is on, droprate is ';
-            #print "Bypass is switched on.\n";
         }
        	else{
             $check=0;
-			#print "$line\n";#---debug information can be deleted
-            #print "$datestring Drops level $drop_rate1 and $drop_rate2 is in normal range\n";
             $textmsg_cdrops=' Drops level is in normal range';
 		}
     }
     else{
         $check=1;
-		#print "$datestring Can not read drop rate\n";
 		$textmsg_cdrops = '$datestring Can not read drop rate';
-       	#print "$line\n";#---debug information can be deleted
 		#$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
 		}
 	}
@@ -219,15 +208,13 @@ sub zombie_check {
 	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
 	if ($zombie_ck eq "") {
 		$check=0;
-		#print "$datestring No zombie processes.\n";
 		$textmsg_zcheck=' No zombie processes.';
 	}
 	else {
 		$check=1;
-		#print "$datestring Achtung! Found ZOMBIE!\n";
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
 		#$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
 		}
 	}
@@ -274,7 +261,7 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($temp==$refresh_timer) {
+	if ($text_out==$refresh_timer) {
 		if (status() == 0) {
 			print "Everything is allright\n";
 		}
@@ -286,7 +273,6 @@ sub textout {
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
 		system("echo ' '");
-		$temp = 0;
 	}
 }
 
@@ -294,21 +280,21 @@ sub textout {
 sub logging {
 	my ($tol)=(@_);
 	if ($tol == 1) {
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring $logmsg_zcheck >> $watchdog_log");
 		}
 	}
 	elsif ($tol == 2) {
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring $logmsg_proc >> $watchdog_log");
 		}
 	}
 	elsif ($tol == 3) {
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring $logmsg_fresh >> $watchdog_log");
 		}
 	elsif ($tol == 4) {
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring $logmsg_cdrops $drop_rate1 and $drop_rate2 >> $watchdog_log");
 		}
 	}
@@ -319,21 +305,14 @@ sub logging {
 sub bypass_out_status_ok {
 	if ($bypass == 0) {
 		$bypass=0;
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'Save system state'");
-			$temp=0;
+			$text_out=0;
 		}
-		else {$temp++;}
+		else {$text_out++;}
 	}
 	else {
 		bypass_check();
-		#$bypass=0;
-		#-----------REMEMBER: add the real function of bypass|
-		#system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-		#----------------------------------------------------|
-		#send_mail("$server bypass status is OFF","$datestring Bypass is off");
-		#system("echo $datestring 'Bypass turn off'");
-		#system("echo $datestring 'Bypass turn off' >> $watchdog_log");
 	}
 }
 
@@ -348,27 +327,26 @@ sub bypass_out_status_bad {
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		#sleep 10;
 		bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
 		$bypass=1;
-		if ($temp==$refresh_timer) {
+		if ($text_out==$refresh_timer) {
 			system("echo 'Save system state'");
-			$temp=0;
+			$text_out=0;
 		}
-		else {$temp++;}
+		else {$text_out++;}
 	}
 }
 
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_off_time - $bypass_on_time <= 45) {
-		if ($temp == $refresh_timer) {
+		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
-			$temp = 0;
+			$text_out = 0;
 		}
-		else {$temp++;}
+		else {$text_out++;}
 	}
 	else {
 		$bypass=0;
