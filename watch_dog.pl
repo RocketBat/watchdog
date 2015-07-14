@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 74 |
+# Build 75 |
 #----------|
 
 #-----SERVER NAME------|
@@ -73,12 +73,14 @@ while (1) {
 			#logging();
 			textout();
 			bypass_out_status_ok();
+			system("echo ' '");
 		}
 		else {
 			#print "Something is wrong. Starting bypass.\n";
 			#logging();
 			textout();
 			bypass_out_status_bad();
+			system("echo ' '");
 		}
 	#sleep 5;
 	}
