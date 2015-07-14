@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 71 |
+# Build 73 |
 #----------|
 
 #-----SERVER NAME------|
@@ -30,10 +30,10 @@ my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
-my $logmsg_proc; #---text message processcheck
-my $logmsg_fresh; #---text message filerefresh
-my $logmsg_cdrops; #---text message checkdrops
-my $logmsg_zcheck; #---text message zombie
+my $logmsg_proc; #---log message processcheck
+my $logmsg_fresh; #---log message filerefresh
+my $logmsg_cdrops; #---log message checkdrops
+my $logmsg_zcheck; #---log message zombie
 my $temp = 0; #---need for text output
 my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
@@ -69,11 +69,13 @@ while (1) {
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
 			#print "Everything is allright\n";
+			logging();
 			textout();
 			bypass_out_status_ok();
 		}
 		else {
 			#print "Something is wrong. Starting bypass.\n";
+			logging();
 			textout();
 			bypass_out_status_bad();
 		}
@@ -135,8 +137,10 @@ sub process_check {
         $check=1;
 		#print "$datestring Did not find DPI process in process list\n";
 		$textmsg_proc = ' Did not find DPI process in process list';
-		$logmsg_proc = ' bypass on, Did not find DPI process in process list';
-		#system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
+		#$logmsg_proc = ' bypass on, Did not find DPI process in process list';
+		if ($temp==$refresh_timer) {
+			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
+		}
 		start();
     }
     else{
@@ -162,8 +166,10 @@ sub filerefresh {
         $obnovlenie=1;
         #print "$datestring Achtung! Log does not updating!\n";
         $textmsg_fresh = ' Achtung! Log does not updating!';
-        #system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-		$logmsg_fresh = ' bypass on, Log does not updating!';
+		if ($temp==$refresh_timer) {
+			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
+		}
+		#$logmsg_fresh = ' bypass on, Log does not updating!';
 	}
     return $obnovlenie;
 }
@@ -180,8 +186,10 @@ sub check_drops {
             #print "$line\n";#---debug information can be deleted
 			#print "$datestring Drops level $drop_rate1 , $drop_rate2 exceeds the configured maximum of $max_drops\n";
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-           	#system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-			$logmsg_cdrops = ' bypass is on, droprate is ';
+			if ($temp==$refresh_timer) {
+				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+			}
+			#$logmsg_cdrops = ' bypass is on, droprate is ';
             #print "Bypass is switched on.\n";
         }
        	else{
@@ -196,8 +204,10 @@ sub check_drops {
 		#print "$datestring Can not read drop rate\n";
 		$textmsg_cdrops = '$datestring Can not read drop rate';
        	#print "$line\n";#---debug information can be deleted
-		#system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
-		$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
+		#$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
+		if ($temp==$refresh_timer) {
+			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+		}
 	}
 	return ($check, $drop_rate1, $drop_rate2, $max_drops);
 }
@@ -215,8 +225,10 @@ sub zombie_check {
 		$check=1;
 		#print "$datestring Achtung! Found ZOMBIE!\n";
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		#system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
-		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
+		#$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
+		if ($temp==$refresh_timer) {
+			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+		}
 	}
 	return $check;
 }
@@ -272,13 +284,34 @@ sub textout {
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-		system("echo $datestring $logmsg_zcheck >> $watchdog_log");
-		system("echo $datestring $logmsg_proc >> $watchdog_log");
-		system("echo $datestring $logmsg_fresh >> $watchdog_log");
-		system("echo $datestring $logmsg_cdrops $drop_rate1 and $drop_rate2 >> $watchdog_log");
 		$temp = 0;
 	}
 }
+
+=pod
+sub logging {
+	my ($tol)=(@_);
+	if ($tol == 1) {
+		if ($temp==$refresh_timer) {
+			system("echo $datestring $logmsg_zcheck >> $watchdog_log");
+		}
+	}
+	elsif ($tol == 2) {
+		if ($temp==$refresh_timer) {
+			system("echo $datestring $logmsg_proc >> $watchdog_log");
+		}
+	}
+	elsif ($tol == 3) {
+		if ($temp==$refresh_timer) {
+			system("echo $datestring $logmsg_fresh >> $watchdog_log");
+		}
+	elsif ($tol == 4) {
+		if ($temp==$refresh_timer) {
+			system("echo $datestring $logmsg_cdrops $drop_rate1 and $drop_rate2 >> $watchdog_log");
+		}
+	}
+}
+=cut
 
 #--function when all is GOOD
 sub bypass_out_status_ok {
