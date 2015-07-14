@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 63 |
+# Build 64 |
 #----------|
 
 #-----SERVER NAME------|
@@ -49,7 +49,7 @@ sub status;
 sub textout;
 sub bypass_out_status_ok;
 sub bypass_out_status_bad;
-sub bypass_check;
+#sub bypass_check;
 
 #---------detecting bypass state
 if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
@@ -183,7 +183,7 @@ sub Check_drops {
 			#print "$datestring Can not read drop rate\n";
 			$textmsg_cdrops='$datestring Can not read drop rate';
        		#print "$line\n";#---debug information can be deleted
-			system("echo $datestring 'bypass is on, Can not read frop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			system("echo $datestring 'bypass is on, Can not read drop rate!' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 	return ($check, $drop_rate1, $drop_rate2, $max_drops);
 }
@@ -273,14 +273,14 @@ sub bypass_out_status_ok {
 			else {$temp++;}
 	}
 	else {
-			bypass_check();
-			#$bypass=0;
+			#bypass_check();
+			$bypass=0;
 			#-----------REMEMBER: add the real function of bypass|
-			#system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
 			#----------------------------------------------------|
-			#send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
-			#system("echo $datestring 'Bypass turn off'");
-			#system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+			send_mail("$server bypass status is OFF","$datestring Bypass is off"); #<--- CHECK THIS
+			system("echo $datestring 'Bypass turn off'");
+			system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 }
 
@@ -293,9 +293,12 @@ sub bypass_out_status_bad {
 			system("echo 'Bypasss is onnnN!'");#                 |
 			#----------------------------------------------------|
 			send_mail("$server bypass status is ON","$datestring $stat"); #<--- CHECK THIS
-			system("echo $datestring 'Bypass turn on'");
-        	system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
-			#sleep 15;
+			if ($temp==$refresh_timer) {
+				system("echo $datestring 'Bypass turn on'");
+				system("echo $datestring 'Bypass turn on' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
+				sleep 10;
+			}
+			else {$temp++;}
 			bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
@@ -308,6 +311,7 @@ sub bypass_out_status_bad {
 	}
 }
 
+=pod
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_on_time - $bypass_off_time <= 15) {
@@ -323,3 +327,4 @@ sub bypass_check {
 		system("echo $datestring 'Bypass turn off' >> /home/mihail/Develop/Watch_dog/bypass.log"); #<--- CHECK THIS
 	}
 }
+=cut
