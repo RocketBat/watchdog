@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 67 |
+# Build 68 |
 #----------|
 
 #-----SERVER NAME------|
@@ -20,7 +20,6 @@ my $bypass; #--0-off--|--1-on--
 my $max_drops = 0.04;
 my $datestring = strftime "%F %T", localtime;
 my $directory = '/usr/adm/adm_s1/logs/';
-#opendir (DIR, $directory) or die $!;
 my $date = strftime "%F", localtime;
 my $log_file;
 my $t1 = 0;
@@ -36,7 +35,7 @@ my $drop_rate1; #--drops upload
 my $drop_rate2; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
-my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log';
+my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 
 #---Prototypes
 sub bypass_loop;
@@ -53,18 +52,10 @@ sub textout;
 sub bypass_out_status_ok;
 sub bypass_out_status_bad;
 sub bypass_check;
-
-#---------detecting bypass state
-if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
-	$bypass=0;
-	print "bypass is off\n";
-}
-else {
-	$bypass=1;
-	print "bypass is on\n"
-}
+sub bypass_state;
 
 #--main logic of script
+bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
     $log_file = $directory.$date.'-out.log';
@@ -73,16 +64,28 @@ while (1) {
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
-			print "Everything is allright\n";
+			#print "Everything is allright\n";
 			textout();
 			bypass_out_status_ok();
 		}
 		else {
-			print "Something is wrong. Starting bypass.\n";
+			#print "Something is wrong. Starting bypass.\n";
 			textout();
 			bypass_out_status_bad();
 		}
 	#sleep 5;
+	}
+}
+
+#---------detecting bypass state
+sub bypass_state {
+	if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
+		$bypass=0;
+		print "bypass is off\n";
+	}
+	else {
+		$bypass=1;
+		print "bypass is on\n";
 	}
 }
 
@@ -276,14 +279,14 @@ sub bypass_out_status_ok {
 		else {$temp++;}
 	}
 	else {
-		#bypass_check();
-		$bypass=0;
+		bypass_check();
+		#$bypass=0;
 		#-----------REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+		#system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
 		#----------------------------------------------------|
-		send_mail("$server bypass status is OFF","$datestring Bypass is off");
-		system("echo $datestring 'Bypass turn off'");
-		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
+		#send_mail("$server bypass status is OFF","$datestring Bypass is off");
+		#system("echo $datestring 'Bypass turn off'");
+		#system("echo $datestring 'Bypass turn off' >> $watchdog_log");
 	}
 }
 
@@ -298,7 +301,7 @@ sub bypass_out_status_bad {
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		sleep 10;
+		#sleep 10;
 		bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
@@ -313,8 +316,12 @@ sub bypass_out_status_bad {
 
 sub bypass_check {
 	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= 10) {
-		print "$datestring save system state, because bypass is recently ON\n"
+	if ($bypass_off_time - $bypass_on_time <= 15) {
+		if ($temp == $refresh_timer) {
+			print "$datestring save system state, because bypass is recently ON\n";
+			$temp = 0;
+		}
+		else {$temp++;}
 	}
 	else {
 		$bypass=0;
