@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 68 |
+# Build 69 |
 #----------|
 
 #-----SERVER NAME------|
@@ -316,7 +316,7 @@ sub bypass_out_status_bad {
 
 sub bypass_check {
 	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= 15) {
+	if ($bypass_off_time - $bypass_on_time <= 45) {
 		if ($temp == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			$temp = 0;
