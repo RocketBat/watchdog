@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 73 |
+# Build 74 |
 #----------|
 
 #-----SERVER NAME------|
@@ -57,6 +57,7 @@ sub bypass_out_status_ok;
 sub bypass_out_status_bad;
 sub bypass_check;
 sub bypass_state;
+#sub logging;
 
 #--main logic of script
 bypass_state();
@@ -69,13 +70,13 @@ while (1) {
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
 			#print "Everything is allright\n";
-			logging();
+			#logging();
 			textout();
 			bypass_out_status_ok();
 		}
 		else {
 			#print "Something is wrong. Starting bypass.\n";
-			logging();
+			#logging();
 			textout();
 			bypass_out_status_bad();
 		}
