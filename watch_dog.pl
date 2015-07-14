@@ -110,7 +110,7 @@ sub bypass_loop {
 }
 
 #----function sending email
-sub send_mail {                                     #<--- CHECK THIS
+sub send_mail { #<--- CHECK THIS
 	my ($subject, $message) = (@_);
 	my $from = 'mikhail.kozlov@adm-systems.com';
 	my $to = 'mikhail.kozlov@adm-systems.com';
