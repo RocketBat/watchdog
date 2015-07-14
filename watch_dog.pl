@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 75 |
+# Build 76 |
 #----------|
 
 #-----SERVER NAME------|
@@ -73,14 +73,12 @@ while (1) {
 			#logging();
 			textout();
 			bypass_out_status_ok();
-			system("echo ' '");
 		}
 		else {
 			#print "Something is wrong. Starting bypass.\n";
 			#logging();
 			textout();
 			bypass_out_status_bad();
-			system("echo ' '");
 		}
 	#sleep 5;
 	}
@@ -287,6 +285,7 @@ sub textout {
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
+		system("echo ' '");
 		$temp = 0;
 	}
 }
