@@ -49,6 +49,7 @@ sub status;
 sub textout;
 sub bypass_out_status_ok;
 sub bypass_out_status_bad;
+sub bypass_check;
 
 #---------detecting bypass state
 if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
