@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 70 |
+# Build 71 |
 #----------|
 
 #-----SERVER NAME------|
@@ -275,7 +275,7 @@ sub textout {
 		system("echo $datestring $logmsg_zcheck >> $watchdog_log");
 		system("echo $datestring $logmsg_proc >> $watchdog_log");
 		system("echo $datestring $logmsg_fresh >> $watchdog_log");
-		system("echo $datestring $logmsg_cdrops $droprate1 and $drop_rate2 >> $watchdog_log");
+		system("echo $datestring $logmsg_cdrops $drop_rate1 and $drop_rate2 >> $watchdog_log");
 		$temp = 0;
 	}
 }
