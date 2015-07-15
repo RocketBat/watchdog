@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 84 |
+# Build 85 |
 #----------|
 
 #-----SERVER NAME------|
@@ -40,7 +40,7 @@ my $drop_rate2 = 0; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
-my $relay_for_text = 1;
+my $relay_for_text = 1; # --- a temporary "crutch" to log output
 
 #---Prototypes
 sub bypass_loop;
@@ -178,8 +178,9 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-			if ($text_out==$refresh_timer) {
+			if ($text_out==$refresh_timer && $relay_for_text == 1) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+				$relay_for_text = 0;
 			}
         }
        	else{
@@ -190,8 +191,9 @@ sub check_drops {
     else{
         $check=1;
 		$textmsg_cdrops = ' Can not read drop rate';
-		if ($text_out==$refresh_timer) {
+		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+			$relay_for_text = 0;
 		}
 	}
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
@@ -208,8 +210,9 @@ sub zombie_check {
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		if ($text_out==$refresh_timer) {
+		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+			$relay_for_text = 0;
 		}
 	}
 	return $check;
@@ -312,6 +315,7 @@ sub bypass_check {
 	if ($bypass_off_time - $bypass_on_time <= 50) {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
+			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
 			$text_out = 0;
 		}
 		else {$text_out++;}
