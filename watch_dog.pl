@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 82 |
+# Build 83 |
 #----------|
 
 #-----SERVER NAME------|
@@ -133,7 +133,7 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';
-		if ($text_out==$refresh_timer && $relay_for_text = 1) {
+		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
 			$relay_for_text = 0;
 		}
