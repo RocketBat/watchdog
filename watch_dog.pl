@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 81 |
+# Build 82 |
 #----------|
 
 #-----SERVER NAME------|
@@ -40,6 +40,7 @@ my $drop_rate2 = 0; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
+my $relay_for_text = 1;
 
 #---Prototypes
 sub bypass_loop;
@@ -75,6 +76,7 @@ while (1) {
 			textout();
 			bypass_out_status_bad();
 		}
+		$relay_for_text = 1;
 	}
 }
 
@@ -131,8 +133,9 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';
-		if ($text_out==$refresh_timer) {
+		if ($text_out==$refresh_timer && $relay_for_text = 1) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
+			$relay_for_text = 0;
 		}
 		start();
     }
@@ -156,7 +159,7 @@ sub filerefresh {
     else {
         $obnovlenie=1;
         $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($text_out==$refresh_timer * 2) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
 			print "It is only debug information and must be deleted\n";
 		}
@@ -185,7 +188,7 @@ sub check_drops {
     }
     else{
         $check=1;
-		$textmsg_cdrops = '$datestring Can not read drop rate';
+		$textmsg_cdrops = ' Can not read drop rate';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
 		}
