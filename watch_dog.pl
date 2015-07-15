@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 79 |
+# Build 80 |
 #----------|
 
 #-----SERVER NAME------|
@@ -28,15 +28,15 @@ my $stat; #---need for mailing status
 my $refresh_timer = 80; #----speed of logging
 my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
-my $textmsg_cdrops; #---text message checkdrops
+my $textmsg_cdrops = ' Can not read drop rate!'; #---text message checkdrops
 my $textmsg_zcheck; #---text message zombie
 my $logmsg_proc; #---log message processcheck
 my $logmsg_fresh; #---log message filerefresh
 my $logmsg_cdrops; #---log message checkdrops
 my $logmsg_zcheck; #---log message zombie
 my $text_out = 0; #---need for text output
-my $drop_rate1; #--drops upload
-my $drop_rate2; #--drops download
+my $drop_rate1 = 0; #--drops upload
+my $drop_rate2 = 0; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
@@ -158,6 +158,7 @@ sub filerefresh {
         $textmsg_fresh = ' Achtung! Log does not updating!';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
+			print "It is only debug information and must be deleted\n";
 		}
 	}
     return $obnovlenie;
@@ -224,7 +225,7 @@ sub restart {
 	$CWD = '/usr/adm/adm_s1';
 	system('./stop');
 	system('./start');	
-	print "$datestring Restarting DPI-Engine.";
+	print "$datestring Restarting DPI-Engine.\n";
 	system("echo $datestring 'Restarting DPI-Engine.' >> $watchdog_log");
 }
 
@@ -304,7 +305,7 @@ sub bypass_out_status_bad {
 
 sub bypass_check {
 	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= 45) {
+	if ($bypass_off_time - $bypass_on_time <= 50) {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			$text_out = 0;
