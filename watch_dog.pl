@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 86 |
+# Build 87 |
 #----------|
 
 #-----SERVER NAME------|
@@ -161,7 +161,6 @@ sub filerefresh {
         $textmsg_fresh = ' Achtung! Log does not updating!';
 		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-			print "It is only debug information and must be deleted\n";
 			$relay_for_text = 0;
 		}
 	}
@@ -315,7 +314,7 @@ sub bypass_check {
 			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
 			$text_out = 0;
 		}
-		else {$text_out++;}R
+		else {$text_out++;}
 	}
 	else {
 		$bypass=0;
