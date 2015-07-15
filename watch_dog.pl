@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 89 |
+# Build 90 |
 #----------|
 
 #-----SERVER NAME------|
@@ -222,8 +222,8 @@ sub zombie_check {
 sub start {
 	$CWD = '/usr/adm/adm_s1';
     system('./start');
-    print "$datestring Starting DPI-Engine.\n";
-    system("echo $datestring 'Starting DPI-Engine.' >> $watchdog_log");
+    print "$datestring DPI process not found. Starting DPI-Engine.\n";
+    system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
 
 }
 
