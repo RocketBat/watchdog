@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 88 |
+# Build 89 |
 #----------|
 
 #-----SERVER NAME------|
@@ -41,6 +41,7 @@ my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 my $relay_for_text = 1;
+my $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
 
 #---Prototypes
 sub bypass_loop;
@@ -311,7 +312,7 @@ sub bypass_out_status_bad {
 
 sub bypass_check {
 	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= 50) {
+	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
