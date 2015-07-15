@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 87 |
+# Build 88 |
 #----------|
 
 #-----SERVER NAME------|
@@ -177,8 +177,9 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-			if ($text_out==$refresh_timer) {
+			if ($text_out==$refresh_timer && $relay_for_text == 1) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+				$relay_for_text = 0;
 			}
         }
        	else{
@@ -189,8 +190,9 @@ sub check_drops {
     else{
         $check=1;
 		$textmsg_cdrops = ' Can not read drop rate';
-		if ($text_out==$refresh_timer) {
+		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+			$relay_for_text = 0;
 		}
 	}
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
@@ -207,8 +209,9 @@ sub zombie_check {
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		if ($text_out==$refresh_timer) {
+		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+			$relay_for_text = 0;
 		}
 	}
 	return $check;
