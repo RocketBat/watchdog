@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 90 |
+# Build 91 |
 #----------|
 
 #-----SERVER NAME------|
@@ -180,6 +180,7 @@ sub check_drops {
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
 			if ($text_out==$refresh_timer && $relay_for_text == 1) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+				print "$line\n"; #debug information
 				$relay_for_text = 0;
 			}
         }
@@ -193,6 +194,7 @@ sub check_drops {
 		$textmsg_cdrops = ' Can not read drop rate';
 		if ($text_out==$refresh_timer && $relay_for_text == 1) {
 			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+			print "$line\n"; #debug information
 			$relay_for_text = 0;
 		}
 	}
