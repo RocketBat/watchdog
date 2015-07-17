@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 91 |
+# Build 92 |
 #----------|
 
 #-----SERVER NAME------|
@@ -40,8 +40,8 @@ my $drop_rate2 = 0; #--drops download
 my $bypass_on_time = 0; # last time when bypass is on
 my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
-my $relay_for_text = 1;
 my $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
+my $droprate_read = 0; # need for check_drop function? when can not read drop rate
 
 #---Prototypes
 sub bypass_loop;
@@ -77,7 +77,6 @@ while (1) {
 			textout();
 			bypass_out_status_bad();
 		}
-		$relay_for_text = 1;
 	}
 }
 
@@ -98,9 +97,9 @@ sub bypass_loop {
 	my $t = time();
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
-		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log"); #<--- CHECK THIS
+		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
 		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
-		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!"); #<--- CHECK THIS
+		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}
 	$t1 = $t2;
@@ -134,9 +133,8 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';
-		if ($text_out==$refresh_timer && $relay_for_text == 1) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
-			$relay_for_text = 0;
 		}
 		start();
     }
@@ -160,9 +158,8 @@ sub filerefresh {
     else {
         $obnovlenie=1;
         $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($text_out==$refresh_timer && $relay_for_text == 1) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-			$relay_for_text = 0;
 		}
 	}
     return $obnovlenie;
@@ -178,10 +175,9 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-			if ($text_out==$refresh_timer && $relay_for_text == 1) {
+			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
 				print "$line\n"; #debug information
-				$relay_for_text = 0;
 			}
         }
        	else{
@@ -190,13 +186,16 @@ sub check_drops {
 		}
     }
     else{
-        $check=1;
-		$textmsg_cdrops = ' Can not read drop rate';
-		if ($text_out==$refresh_timer && $relay_for_text == 1) {
-			system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
-			print "$line\n"; #debug information
-			$relay_for_text = 0;
+		if ($droprate_read == 3){
+			$check=1;
+			$textmsg_cdrops = ' Can not read drop rate';
+			if ($text_out==$refresh_timer) {
+				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+				print "$line\n"; #debug information
+			}
+		$droprate_read = 0;	
 		}
+		$droprate_read++;
 	}
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }
@@ -212,9 +211,8 @@ sub zombie_check {
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		if ($text_out==$refresh_timer && $relay_for_text == 1) {
+		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
-			$relay_for_text = 0;
 		}
 	}
 	return $check;
@@ -261,12 +259,6 @@ sub status {
 #---text out function
 sub textout {
 	if ($text_out==$refresh_timer) {
-		if (status() == 0) {
-			print "Everything is allright\n";
-		}
-		else {
-			print "Something is wrong. Bypass mode is on.\n";
-		}
 		print "$datestring $textmsg_zcheck \n";
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
