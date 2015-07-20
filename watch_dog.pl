@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 98 |
+# Build 99 |
 #----------|
 
 #-----SERVER NAME------|
@@ -51,7 +51,6 @@ my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 my $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
 my $droprate_read = 0; # need for check_drop function? when can not read drop rate
-my $logger;
 
 #---Prototypes
 sub bypass_loop;
@@ -71,6 +70,8 @@ sub bypass_check;
 sub bypass_state;
 
 #--main logic of script
+my $logger = Log::Log4perl->get_logger();
+
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
