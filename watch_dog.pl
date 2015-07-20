@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 94 |
+# Build 95 |
 #----------|
 
 #-----SERVER NAME------|
@@ -20,7 +20,7 @@ use Exporter;
 use modules::bypass_state;
 
 #---variables
-my $bypass; #--0-off--|--1-on--
+#my $bypass; #--0-off--|--1-on--
 my $max_drops = 0.04;
 my $datestring = strftime "%F %T", localtime;
 my $directory = '/usr/adm/adm_s1/logs/';
