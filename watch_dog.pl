@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 97 |
+# Build 98 |
 #----------|
 
 #-----SERVER NAME------|
@@ -18,7 +18,7 @@ use Exporter;
 use Log::Log4perl;
 
 #--initialise logging config
-Log::Log4perl::init('/etc/log4perl.conf');
+Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
 
 #---include my libraries
 use modules::bypass_state;
