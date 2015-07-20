@@ -1,12 +1,21 @@
 package modules::bypass_state;
 
+=pod
+This module checks the status of the bypass
+during the initial initialization script.
+=cut
+
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use strict;
 use warnings;
 use Exporter;
+
+#--my libraries
+use lib '/home/Develop/Watch_dog/configs';
+use configs::main;
 
 BEGIN {
     require Exporter;
@@ -21,7 +30,6 @@ BEGIN {
 }
 
 our $bypass;
-my $revision = 'debug';
 
 sub bypass_state {
     if ($revision eq "debug") {

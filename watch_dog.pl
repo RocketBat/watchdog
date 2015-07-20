@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 95 |
+# Build 96 |
 #----------|
 
 #-----SERVER NAME------|
@@ -18,6 +18,7 @@ use Exporter;
 
 #---include my libraries
 use modules::bypass_state;
+use modules::mail_send;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--
@@ -96,26 +97,6 @@ sub bypass_loop {
 	}
 	$t1 = $t2;
 	$t2 = $t;
-}
-
-#----function sending email
-sub send_mail { #<--- CHECK THIS
-	my ($subject, $message) = (@_);
-	my $from = 'mikhail.kozlov@adm-systems.com';
-	my $to = 'mikhail.kozlov@adm-systems.com';
-	open(MAIL, "|/usr/sbin/sendmail -t");
-	# Email Header
-	print MAIL "To: $to\n";
-	print MAIL "From: $from\n";
-	print MAIL "Content-type: text/html\n";
-	print MAIL "Cc: Coffe-man\@mail.ru\n";
-#	print MAIL "Cc: some-mail@site\n";
-	print MAIL "Subject: $subject\n\n";
-	
-	# Email Body
-	print MAIL $message;
-	close(MAIL);
-	print "Email Sent Successfully\n";
 }
 
 #-----------function check process
