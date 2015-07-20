@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 93 |
+# Build 94 |
 #----------|
 
 #-----SERVER NAME------|
@@ -14,6 +14,10 @@ use strict;
 use warnings;
 use File::stat;
 use File::chdir;
+use Exporter;
+
+#---include my libraries
+use modules::bypass_state;
 
 #---variables
 my $bypass; #--0-off--|--1-on--
@@ -77,18 +81,6 @@ while (1) {
 			textout();
 			bypass_out_status_bad();
 		}
-	}
-}
-
-#---------detecting bypass state
-sub bypass_state {
-	if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
-		$bypass=0;
-		print "bypass is off\n";
-	}
-	else {
-		$bypass=1;
-		print "bypass is on\n";
 	}
 }
 
