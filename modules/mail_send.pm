@@ -5,7 +5,7 @@ This module is required for sending status of the bypass via email
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use strict;
@@ -57,3 +57,5 @@ sub send_mail { #<--- CHECK THIS
 	close(MAIL);
 	print "Email Sent Successfully\n";
 }
+
+1;

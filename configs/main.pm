@@ -5,7 +5,7 @@ This module setup the ervision of watchdog
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use strict;
@@ -37,3 +37,5 @@ sub revision_check {
         print "Variable /$revision is wrong\n";
     }
 }
+
+1;

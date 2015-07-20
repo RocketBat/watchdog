@@ -6,7 +6,7 @@ during the initial initialization script.
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use strict;
@@ -53,3 +53,5 @@ sub bypass_state {
 	}
     }
 }
+
+1;
