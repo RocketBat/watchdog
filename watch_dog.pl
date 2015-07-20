@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #----------|
-# Build 96 |
+# Build 97 |
 #----------|
 
 #-----SERVER NAME------|
@@ -15,6 +15,10 @@ use warnings;
 use File::stat;
 use File::chdir;
 use Exporter;
+use Log::Log4perl;
+
+#--initialise logging config
+Log::Log4perl::init('/etc/log4perl.conf');
 
 #---include my libraries
 use modules::bypass_state;
@@ -47,6 +51,7 @@ my $bypass_off_time = 0; # last time when bypass is off
 my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 my $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
 my $droprate_read = 0; # need for check_drop function? when can not read drop rate
+my $logger;
 
 #---Prototypes
 sub bypass_loop;
@@ -91,6 +96,7 @@ sub bypass_loop {
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
+		$logger->info("$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!");
 		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
 		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
@@ -108,6 +114,7 @@ sub process_check {
 		$textmsg_proc = ' Did not find DPI process in process list';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
+			$logger->info("$datestring bypass on, Did not find DPI process in process list");
 		}
 		start();
     }
@@ -133,6 +140,7 @@ sub filerefresh {
         $textmsg_fresh = ' Achtung! Log does not updating!';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
+			$logger->info("$datestring bypass on, Log does not updating!");
 		}
 	}
     return $obnovlenie;

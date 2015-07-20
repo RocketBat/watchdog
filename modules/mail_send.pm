@@ -5,7 +5,7 @@ This module is required for sending status of the bypass via email
 =cut
 
 ############
-# Build 3  #
+# Build 4  #
 ############
 
 use strict;
@@ -13,7 +13,7 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/Develop/Watch_dog/configs';
+use lib '/home/mihail/Develop/Watch_dog/configs';
 use configs::main;
 
 BEGIN {
