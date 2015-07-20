@@ -5,7 +5,7 @@ This module is required for sending status of the bypass via email
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use strict;
@@ -28,13 +28,15 @@ BEGIN {
     our @EXPORT_OK   = qw();
 }
 
+my $from;
+
 sub send_mail { #<--- CHECK THIS
 	my ($subject, $message) = (@_);
     if ($revision eq "debug") {
-        my $from = 'mikhail.kozlov@adm-systems.com';
+        $from = 'mikhail.kozlov@adm-systems.com';
     }
     elsif ($revision eq "release") {
-        my $from = 'notifier.adm@gmail.com';
+        $from = 'notifier.adm@gmail.com';
     }
 	my $to = 'mikhail.kozlov@adm-systems.com';
 	open(MAIL, "|/usr/sbin/sendmail -t");
