@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 103 |
+# Build 104 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -25,6 +25,7 @@ my $logger = Log::Log4perl->get_logger("wd_info");
 use modules::bypass_state;
 use modules::mail_send;
 use modules::process_check;
+use common::variables;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--

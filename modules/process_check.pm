@@ -5,7 +5,7 @@ This module checking process for dpi
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use strict;
@@ -17,6 +17,8 @@ use lib '/home/mihail/Develop/Watch_dog/configs';
 use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/scripts';
 use scripts::start;
+use lib '/home/mihail/Develop/Watch_dog/common';
+use common::variables;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
