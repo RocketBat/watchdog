@@ -5,7 +5,7 @@ This module checking process for dpi
 =cut
 
 ############
-# Build 3  #
+# Build 4  #
 ############
 
 use strict;
@@ -31,7 +31,7 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(process_status);
+    our @EXPORT      = qw(process_check);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
