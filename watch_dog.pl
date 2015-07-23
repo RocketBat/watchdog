@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 104 |
+# Build 105 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -32,14 +32,6 @@ use common::variables;
 my $log_file;
 my $t1 = 0;
 my $t2 = 0;
-my $textmsg_proc; #---text message processcheck
-my $textmsg_fresh; #---text message filerefresh
-my $textmsg_cdrops = ' Can not read drop rate!'; #---text message checkdrops
-my $textmsg_zcheck; #---text message zombie
-my $logmsg_proc; #---log message processcheck
-my $logmsg_fresh; #---log message filerefresh
-my $logmsg_cdrops; #---log message checkdrops
-my $logmsg_zcheck; #---log message zombie
 
 #---Prototypes
 sub bypass_loop;
