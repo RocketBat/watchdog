@@ -5,9 +5,10 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
+use POSIX qw(strftime);
 use strict;
 use warnings;
 use Exporter;
