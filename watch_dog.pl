@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-#----------|
-# Build 99 |
-#----------|
+#-----------|
+# Build 100 |
+#-----------|
 
 #-----SERVER NAME------|
 my $server = 'Mighty';#|
@@ -19,6 +19,7 @@ use Log::Log4perl;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
+my $logger = Log::Log4perl->get_logger("wd_info");
 
 #---include my libraries
 use modules::bypass_state;
@@ -70,8 +71,6 @@ sub bypass_check;
 sub bypass_state;
 
 #--main logic of script
-my $logger = Log::Log4perl->get_logger();
-
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
@@ -98,7 +97,10 @@ sub bypass_loop {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
 		$logger->info("$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!");
+		$logger->debug("Bypass is on");
+		###########Bypass#ON##################
 		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
+		######################################
 		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}
@@ -194,6 +196,7 @@ sub zombie_check {
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
+			$logger->info("Achtung! Found ZOMBIE in process list!");
 		}
 	}
 	return $check;
@@ -205,7 +208,7 @@ sub start {
     system('./start');
     print "$datestring DPI process not found. Starting DPI-Engine.\n";
     system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
-
+	$logger->info("DPI process not found. Starting DPI-Engine.");
 }
 
 #--------restart function
@@ -215,6 +218,7 @@ sub restart {
 	system('./start');	
 	print "$datestring Restarting DPI-Engine.\n";
 	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
+	$logger->("Zombie found. Restarting DPI-Engine.");
 }
 
 #--------big function (main function of this script)
@@ -273,6 +277,7 @@ sub bypass_out_status_bad {
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
+		$logger->info("Bypass turn on");
 		bypass_loop();  #-------------------------------------comment this if version for Fastlink
 	}
 	else {
@@ -291,6 +296,7 @@ sub bypass_check {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
+			$logger->info("save system state, because bypass is recently ON");
 			$text_out = 0;
 		}
 		else {$text_out++;}
@@ -303,5 +309,6 @@ sub bypass_check {
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
+		$logger->info("Bypass turn off");
 	}
 }
