@@ -20,10 +20,14 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw();
+    our @EXPORT      = qw(start);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
+
+#--my libraries
+use lib '/home/mihail/Develop/Watch_dog/common';
+use common::variables;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 102 |
+# Build 103 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -28,15 +28,9 @@ use modules::process_check;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--
-my $max_drops = 0.04;
-my $datestring = strftime "%F %T", localtime;
-my $directory = '/usr/adm/adm_s1/logs/';
-my $date = strftime "%F", localtime;
 my $log_file;
 my $t1 = 0;
 my $t2 = 0;
-my $stat; #---need for mailing status
-my $refresh_timer = 80; #----speed of logging
 my $textmsg_proc; #---text message processcheck
 my $textmsg_fresh; #---text message filerefresh
 my $textmsg_cdrops = ' Can not read drop rate!'; #---text message checkdrops
@@ -45,14 +39,6 @@ my $logmsg_proc; #---log message processcheck
 my $logmsg_fresh; #---log message filerefresh
 my $logmsg_cdrops; #---log message checkdrops
 my $logmsg_zcheck; #---log message zombie
-my $text_out = 0; #---need for text output
-my $drop_rate1 = 0; #--drops upload
-my $drop_rate2 = 0; #--drops download
-my $bypass_on_time = 0; # last time when bypass is on
-my $bypass_off_time = 0; # last time when bypass is off
-my $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
-my $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
-my $droprate_read = 0; # need for check_drop function? when can not read drop rate
 
 #---Prototypes
 sub bypass_loop;
