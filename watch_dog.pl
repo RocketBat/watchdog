@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 106 |
+# Build 107 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -120,6 +120,7 @@ sub check_drops {
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
 			}
         }
        	else{
@@ -134,6 +135,7 @@ sub check_drops {
 			$textmsg_cdrops = ' Can not read drop rate';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
+				$logger->info("bypass is on, Can not read drop rate!");
 			}
 		$droprate_read = 0;	
 		}
@@ -168,7 +170,7 @@ sub restart {
 	system('./start');	
 	print "$datestring Restarting DPI-Engine.\n";
 	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
-	$logger->("Zombie found. Restarting DPI-Engine.");
+	$logger->info("Zombie found. Restarting DPI-Engine.");
 }
 
 #--------big function (main function of this script)
