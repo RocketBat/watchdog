@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 101 |
+# Build 102 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -13,7 +13,7 @@ use POSIX qw(strftime);
 use strict;
 use warnings;
 use File::stat;
-use File::chdir;
+#use File::chdir;
 use Exporter;
 use Log::Log4perl;
 
@@ -24,6 +24,7 @@ my $logger = Log::Log4perl->get_logger("wd_info");
 #---include my libraries
 use modules::bypass_state;
 use modules::mail_send;
+use modules::process_check;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--
@@ -74,7 +75,7 @@ sub bypass_state;
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
-    $log_file = $directory.$date.'-master-out.log';
+    $log_file = $directory.$date.'-out.log';
     while (1){
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
@@ -107,27 +108,6 @@ sub bypass_loop {
 	$t1 = $t2;
 	$t2 = $t;
 }
-
-#-----------function check process
-sub process_check {
-    my $check;
-    my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
-    if ($process_status eq ""){
-        $check=1;
-		$textmsg_proc = ' Did not find DPI process in process list';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
-			$logger->info("$datestring bypass on, Did not find DPI process in process list");
-		}
-		start();
-    }
-    else{
-        $check=0;
-        $textmsg_proc=' Found DPI process in process list.';
-    }
-    return $check;
-}
-
 
 #-------------function filerefresh
 sub filerefresh {
@@ -200,15 +180,6 @@ sub zombie_check {
 		}
 	}
 	return $check;
-}
-
-#--------starting function
-sub start {
-	$CWD = '/usr/adm/adm_s1';
-    system('./start');
-    print "$datestring DPI process not found. Starting DPI-Engine.\n";
-    system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
-	$logger->info("DPI process not found. Starting DPI-Engine.");
 }
 
 #--------restart function
