@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 105 |
+# Build 106 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -13,7 +13,7 @@ use POSIX qw(strftime);
 use strict;
 use warnings;
 use File::stat;
-#use File::chdir;
+use File::chdir;
 use Exporter;
 use Log::Log4perl;
 
