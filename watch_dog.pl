@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 107 |
+# Build 108 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -25,11 +25,11 @@ my $logger = Log::Log4perl->get_logger("wd_info");
 use modules::bypass_state;
 use modules::mail_send;
 use modules::process_check;
+use modules::filerefresh;
 use common::variables;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--
-my $log_file;
 my $t1 = 0;
 my $t2 = 0;
 
@@ -86,26 +86,6 @@ sub bypass_loop {
 	}
 	$t1 = $t2;
 	$t2 = $t;
-}
-
-#-------------function filerefresh
-sub filerefresh {
-    my $obnovlenie;
-    my $mt = stat($log_file);
-    my $st = $mt -> mtime;
-    if ($st +1 >= time()) {
-        $textmsg_fresh=' Log file updating ';
-        $obnovlenie=0;
-    }
-    else {
-        $obnovlenie=1;
-        $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-			$logger->info("$datestring bypass on, Log does not updating!");
-		}
-	}
-    return $obnovlenie;
 }
 
 #------------function check drops

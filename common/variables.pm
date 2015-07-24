@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 3  #
+# Build 4  #
 ############
 
 use POSIX qw(strftime);
@@ -24,7 +24,7 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw($textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
+    our @EXPORT      = qw($log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
@@ -47,5 +47,6 @@ our $textmsg_proc; #---text message processcheck
 our $textmsg_fresh; #---text message filerefresh
 our $textmsg_cdrops = ' Can not read drop rate!'; #---text message checkdrops
 our $textmsg_zcheck; #---text message zombie
+our $log_file;
 
 1;
