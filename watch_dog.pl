@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 108 |
+# Build 109 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -27,6 +27,7 @@ use modules::mail_send;
 use modules::process_check;
 use modules::filerefresh;
 use common::variables;
+use modules::drops_check;
 
 #---variables
 #my $bypass; #--0-off--|--1-on--
@@ -86,42 +87,6 @@ sub bypass_loop {
 	}
 	$t1 = $t2;
 	$t2 = $t;
-}
-
-#------------function check drops
-sub check_drops {
-    my $check;
-    my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-    if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
-        $drop_rate1 = $1;
-        $drop_rate2 = $2;
-       	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
-        	$check=1;
-            $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
-			if ($text_out==$refresh_timer) {
-				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
-			}
-        }
-       	else{
-            $check=0;
-            $textmsg_cdrops=' Drops level is in normal range';
-		}
-    }
-    else{
-		$check = 0; #need for return value
-		if ($droprate_read == 3){
-			$check=1;
-			$textmsg_cdrops = ' Can not read drop rate';
-			if ($text_out==$refresh_timer) {
-				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
-				$logger->info("bypass is on, Can not read drop rate!");
-			}
-		$droprate_read = 0;	
-		}
-		$droprate_read++;
-	}
-	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }
 
 #-----------function check zombie process
