@@ -1,11 +1,11 @@
-package modules::drop_check;
+package modules::check_drops;
 
 =pod
 This module checking drops in DPI
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use strict;
@@ -31,7 +31,7 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(check_drops );
+    our @EXPORT      = qw(check_drops);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
