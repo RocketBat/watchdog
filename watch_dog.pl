@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 109 |
+# Build 110 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -55,7 +55,7 @@ sub bypass_state;
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
-    $log_file = $directory.$date.'-out.log';
+    $log_file = $directory.$date.'-master-out.log';
     while (1){
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
