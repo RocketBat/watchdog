@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use strict;
@@ -39,7 +39,7 @@ BEGIN {
 sub check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-    if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)/){
+    if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s+(\d.*)\s/){
         $drop_rate1 = $1;
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
