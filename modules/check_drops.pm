@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 4  #
+# Build 5  #
 ############
 
 use strict;
@@ -57,7 +57,7 @@ sub check_drops {
     }
     else{
 		$check = 0; #need for return value
-		if ($droprate_read == 3){
+		if ($droprate_read == $readDropRateDelay){
 			$check=1;
 			$textmsg_cdrops = ' Can not read drop rate';
 			if ($text_out==$refresh_timer) {

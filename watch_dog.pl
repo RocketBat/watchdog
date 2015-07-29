@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 118 |
+# Build 119 |
 #-----------|
 
 #------SERVER NAME------|
@@ -31,23 +31,12 @@ use modules::check_drops;
 use modules::zombie_check;
 use scripts::restart;
 use scripts::bypass_on;
+use scripts::bypass_off;
 
-#---Prototypes
-#sub bypass_loop;
-#sub send_mail;
-#sub process_check;
-#sub filerefresh;
-#sub check_drops;
-#sub zombie_check;
-#sub start;
-#sub restart;
 sub watch_dog;
 sub status;
 sub textout;
-sub bypass_out_status_ok;
-sub bypass_out_status_bad;
-#sub bypass_check;
-#sub bypass_state;
+
 
 #--main logic of script
 bypass_state();
@@ -96,43 +85,5 @@ sub textout {
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-	}
-}
-
-#--function when all is GOOD
-sub bypass_out_status_ok {
-	if ($bypass == 0) {
-		$bypass=0;
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'Save system state'");
-			$text_out=0;
-		}
-		else {$text_out++;}
-	}
-	else {
-		bypass_check();
-	}
-}
-
-sub bypass_check {
-	$bypass_off_time=time();
-	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {
-		if ($text_out == $refresh_timer) {
-			print "$datestring save system state, because bypass is recently ON\n";
-			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
-			$logger->info("save system state, because bypass is recently ON");
-			$text_out = 0;
-		}
-		else {$text_out++;}
-	}
-	else {
-		$bypass=0;
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-		#####################################################|
-		send_mail("$server bypass status is OFF","$datestring Bypass is off");
-		system("echo $datestring 'Bypass turn off'");
-		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
-		$logger->info("Bypass turn off");
 	}
 }
