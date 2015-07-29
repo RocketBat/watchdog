@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 112 |
+# Build 113 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -19,7 +19,7 @@ use Log::Log4perl;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
-my $logger = Log::Log4perl->get_logger("wd_info");
+my $logger = Log::Log4perl->get_logger("wd_debug");
 
 #--include my libraries
 use modules::bypass_state;
@@ -29,6 +29,7 @@ use modules::filerefresh;
 use common::variables;
 use modules::check_drops;
 use modules::zombie_check;
+use common::bypass_loop;
 
 #---Prototypes
 sub bypass_loop;
@@ -65,24 +66,6 @@ while (1) {
 			bypass_out_status_bad();
 		}
 	}
-}
-
-#-----function that checking bypass loop (must be commented if version for Fastlink)
-sub bypass_loop {
-	my $t = time();
-	if ($t1 && $t-$t1 < 180) {
-		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
-		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
-		$logger->info("$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!");
-		$logger->debug("Bypass is on");
-		###########Bypass#ON##################
-		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
-		######################################
-		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
-		sleep 3600;
-	}
-	$t1 = $t2;
-	$t2 = $t;
 }
 
 #--------restart function

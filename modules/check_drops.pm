@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 3  #
+# Build 4  #
 ############
 
 use strict;
@@ -44,7 +44,7 @@ sub check_drops {
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
-            $textmsg_cdrops = ' Drops level exceeds the configured maximum of $max_drops';
+            $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
 				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
