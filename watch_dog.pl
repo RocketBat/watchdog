@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 117 |
+# Build 118 |
 #-----------|
 
 #------SERVER NAME------|
@@ -113,9 +113,6 @@ sub bypass_out_status_ok {
 		bypass_check();
 	}
 }
-
-#--function when needs to be bypass in ON
-
 
 sub bypass_check {
 	$bypass_off_time=time();
