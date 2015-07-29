@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 119 |
+# Build 120 |
 #-----------|
 
 #------SERVER NAME------|
@@ -16,6 +16,7 @@ use File::stat;
 use File::chdir;
 use Exporter;
 use Log::Log4perl;
+use threads;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
@@ -37,7 +38,6 @@ sub watch_dog;
 sub status;
 sub textout;
 
-
 #--main logic of script
 bypass_state();
 while (1) {
@@ -48,13 +48,13 @@ while (1) {
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (status()==0) {
-			textout();
 			bypass_out_status_ok();
 		}
 		else {
-			textout();
 			bypass_out_status_bad();
 		}
+		my $logthread=threads->create(\&textout);
+		$logthread->join();
 	}
 }
 
@@ -80,10 +80,9 @@ sub status {
 
 #---text out function
 sub textout {
-	if ($text_out==$refresh_timer) {
 		print "$datestring $textmsg_zcheck \n";
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-	}
+		sleep 5; #tak nado
 }
