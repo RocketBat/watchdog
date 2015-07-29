@@ -5,7 +5,7 @@ This module prevents bypass looping
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use POSIX qw(strftime);
@@ -18,6 +18,10 @@ use lib '/home/mihail/Develop/Watch_dog/configs';
 use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
+
+#--initialise logging config
+Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
+my $logger = Log::Log4perl->get_logger("wd_debug");
 
 BEGIN {
     require Exporter;
