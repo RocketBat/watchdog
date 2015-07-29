@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 113 |
+# Build 114 |
 #-----------|
 
-#-----SERVER NAME------|
-my $server = 'Mighty';#|
-#----------------------|
+#------SERVER NAME------|
+#my $server = 'Mighty';#|
+#-----------------------|
 
 #--includes
 use POSIX qw(strftime);
