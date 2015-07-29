@@ -5,7 +5,7 @@ This module set bypass to ON state
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use strict;
@@ -20,6 +20,7 @@ use common::variables;
 use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
+use modules::mail_send;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
