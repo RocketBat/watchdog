@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 111 |
+# Build 112 |
 #-----------|
 
 #-----SERVER NAME------|
@@ -21,18 +21,14 @@ use Log::Log4perl;
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
 my $logger = Log::Log4perl->get_logger("wd_info");
 
-#---include my libraries
+#--include my libraries
 use modules::bypass_state;
 use modules::mail_send;
 use modules::process_check;
 use modules::filerefresh;
 use common::variables;
 use modules::check_drops;
-
-#---variables
-#my $bypass; #--0-off--|--1-on--
-my $t1 = 0;
-my $t2 = 0;
+use modules::zombie_check;
 
 #---Prototypes
 sub bypass_loop;
@@ -87,25 +83,6 @@ sub bypass_loop {
 	}
 	$t1 = $t2;
 	$t2 = $t;
-}
-
-#-----------function check zombie process
-sub zombie_check {
-	my $check;
-	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
-	if ($zombie_ck eq "") {
-		$check=0;
-		$textmsg_zcheck=' No zombie processes.';
-	}
-	else {
-		$check=1;
-		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
-			$logger->info("Achtung! Found ZOMBIE in process list!");
-		}
-	}
-	return $check;
 }
 
 #--------restart function
@@ -168,14 +145,14 @@ sub bypass_out_status_bad {
 	if ($bypass == 0) {
 		$bypass=1;
 		$bypass_on_time=time();
-		#-----------REMEMBER: add the real function of bypass|
+		############REMEMBER: add the real function of bypass|
 		system("echo 'Bypasss is onnnN!'");#                 |
-		#----------------------------------------------------|
+		#####################################################|
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
 		$logger->info("Bypass turn on");
-		bypass_loop();  #-------------------------------------comment this if version for Fastlink
+		bypass_loop();
 	}
 	else {
 		$bypass=1;
@@ -200,9 +177,9 @@ sub bypass_check {
 	}
 	else {
 		$bypass=0;
-		#-----------REMEMBER: add the real function of bypass|
+		############REMEMBER: add the real function of bypass|
 		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-		#----------------------------------------------------|
+		#####################################################|
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
