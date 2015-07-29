@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 115 |
+# Build 116 |
 #-----------|
 
 #------SERVER NAME------|
@@ -29,25 +29,24 @@ use modules::filerefresh;
 use common::variables;
 use modules::check_drops;
 use modules::zombie_check;
-use common::bypass_loop;
 use scripts::restart;
 
 #---Prototypes
 #sub bypass_loop;
 #sub send_mail;
-sub process_check;
-sub filerefresh;
-sub check_drops;
-sub zombie_check;
-sub start;
-sub restart;
+#sub process_check;
+#sub filerefresh;
+#sub check_drops;
+#sub zombie_check;
+#sub start;
+#sub restart;
 sub watch_dog;
 sub status;
 sub textout;
 sub bypass_out_status_ok;
 sub bypass_out_status_bad;
-sub bypass_check;
-sub bypass_state;
+#sub bypass_check;
+#sub bypass_state;
 
 #--main logic of script
 bypass_state();
@@ -115,28 +114,7 @@ sub bypass_out_status_ok {
 }
 
 #--function when needs to be bypass in ON
-sub bypass_out_status_bad {
-	if ($bypass == 0) {
-		$bypass=1;
-		$bypass_on_time=time();
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is onnnN!'");#                 |
-		#####################################################|
-		send_mail("$server bypass status is ON","$datestring $stat");
-		system("echo $datestring 'Bypass turn on'");
-		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		$logger->info("Bypass turn on");
-		bypass_loop();
-	}
-	else {
-		$bypass=1;
-		if ($text_out==$refresh_timer) {
-			system("echo 'Save system state'");
-			$text_out=0;
-		}
-		else {$text_out++;}
-	}
-}
+
 
 sub bypass_check {
 	$bypass_off_time=time();
