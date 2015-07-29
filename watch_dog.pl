@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 116 |
+# Build 117 |
 #-----------|
 
 #------SERVER NAME------|
@@ -30,6 +30,7 @@ use common::variables;
 use modules::check_drops;
 use modules::zombie_check;
 use scripts::restart;
+use scripts::bypass_on;
 
 #---Prototypes
 #sub bypass_loop;
