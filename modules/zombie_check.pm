@@ -5,7 +5,7 @@ This module checking DPI process about zombie
 =cut
 
 ############
-# Build 1  #
+# Build 2  #
 ############
 
 use strict;
@@ -15,8 +15,6 @@ use Exporter;
 #--my libraries
 use lib '/home/mihail/Develop/Watch_dog/configs';
 use configs::main;
-use lib '/home/mihail/Develop/Watch_dog/scripts';
-use scripts::start;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 

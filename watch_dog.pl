@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 114 |
+# Build 115 |
 #-----------|
 
 #------SERVER NAME------|
@@ -30,10 +30,11 @@ use common::variables;
 use modules::check_drops;
 use modules::zombie_check;
 use common::bypass_loop;
+use scripts::restart;
 
 #---Prototypes
-sub bypass_loop;
-sub send_mail;
+#sub bypass_loop;
+#sub send_mail;
 sub process_check;
 sub filerefresh;
 sub check_drops;
@@ -68,19 +69,9 @@ while (1) {
 	}
 }
 
-#--------restart function
-sub restart {
-	$CWD = '/usr/adm/adm_s1';
-	system('./stop');
-	system('./start');	
-	print "$datestring Restarting DPI-Engine.\n";
-	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
-	$logger->info("Zombie found. Restarting DPI-Engine.");
-}
-
 #--------big function (main function of this script)
 sub watch_dog {
-	if (zombie_check()==1) { restart(); return 1; }
+	if (zombie_check()==1) {restart(); return 1; }
 	if (process_check()==1)	{return 2;}
 	if (filerefresh()==1) {return 3;}
 	if (check_drops()==1) {return 4;}
