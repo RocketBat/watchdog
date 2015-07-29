@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 5  #
+# Build 6  #
 ############
 
 use strict;
@@ -36,6 +36,8 @@ BEGIN {
     our @EXPORT_OK   = qw();
 }
 
+my $timeCheckCNRdrops = 0; # initial time to check "can not read drop rate"
+
 sub check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
@@ -56,9 +58,16 @@ sub check_drops {
 		}
     }
     else{
-		$check = 0; #need for return value
-		if ($droprate_read == $readDropRateDelay){
+		$check = 0; #--need for return value
+        if (time() - $timeCheckCNRdrops <= $readDropRateDelay) { 
+            $droprate_read++;
+        }
+        else {
+            $droprate_read = 0; #--relevance "not read the log" has passed
+        }
+		if ($droprate_read == $readDropRateDelay) {
 			$check=1;
+            $timeCheckCNRdrops = time();
 			$textmsg_cdrops = ' Can not read drop rate';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
@@ -66,7 +75,6 @@ sub check_drops {
 			}
 		$droprate_read = 0;	
 		}
-		$droprate_read++;
 	}
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }

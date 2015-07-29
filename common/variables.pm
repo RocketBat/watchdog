@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 7  #
+# Build 8  #
 ############
 
 use POSIX qw(strftime);
@@ -37,7 +37,7 @@ our $server = 'Mighty';#|
 our $max_drops = 0.04;
 our $refresh_timer = 80; #----speed of logging
 our $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
-our $readDropRateDelay = 3; # how many times needs to be in "can not read drop rate" state
+our $readDropRateDelay = 5; # how many times needs to be in "can not read drop rate" state
 our $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 our $directory = '/usr/adm/adm_s1/logs/';
 #--secondary variables
