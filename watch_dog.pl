@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 124 |
+# Build 125 |
 #-----------|
 
 #------SERVER NAME------|
@@ -17,6 +17,7 @@ use File::chdir;
 use Exporter;
 use Log::Log4perl;
 use threads;
+use Parallel::ForkManager;
 
 #--initialise logging config
 Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
@@ -39,6 +40,7 @@ sub status;
 sub textout;
 
 #--main logic of script
+my $logProc = Parallel::ForkManager->new(1); #max 1 child process
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
@@ -56,9 +58,9 @@ while (1) {
 			my $thr2 = threads->create(\&bypass_out_status_bad);
 			$thr2->join();
 		}
-		my $logthread=threads->create(\&textout, 5);
-		$logthread->join();
+		my $logthread = threads->start and textout(5);
 	}
+	$logthread->finish;
 }
 
 #--------big function (main function of this script)
