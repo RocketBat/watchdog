@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 127 |
+# Build 128 |
 #-----------|
 
 #------SERVER NAME------|
@@ -62,9 +62,10 @@ while (1) {
 			my $thr2 = threads->create(\&bypass_out_status_bad);
 			$thr2->join();
 		}
-		$logthread = $logProc->start and textout(5);
+		$logthread = $logProc->start and next;
+		textout(5);
+		$logthread->finish;
 	}
-	$logthread->finish;
 }
 
 #--------big function (main function of this script)
