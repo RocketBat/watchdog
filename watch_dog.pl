@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 125 |
+# Build 126 |
 #-----------|
 
 #------SERVER NAME------|
@@ -35,9 +35,13 @@ use scripts::restart;
 use scripts::bypass_on;
 use scripts::bypass_off;
 
+#--prototypes
 sub watch_dog;
 sub status;
 sub textout;
+
+#--variable
+my $logthread;
 
 #--main logic of script
 my $logProc = Parallel::ForkManager->new(1); #max 1 child process
@@ -58,7 +62,7 @@ while (1) {
 			my $thr2 = threads->create(\&bypass_out_status_bad);
 			$thr2->join();
 		}
-		my $logthread = threads->start and textout(5);
+		$logthread = threads->start and textout(5);
 	}
 	$logthread->finish;
 }
