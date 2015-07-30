@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 122 |
+# Build 123 |
 #-----------|
 
 #------SERVER NAME------|
@@ -47,7 +47,7 @@ while (1) {
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
-		print"Debug message";
+		print"Debug message\n";
 		if (status()==0) {
 			my $thr1 = threads->create(\&bypass_out_status_ok);
 			$thr1->join();
@@ -56,7 +56,7 @@ while (1) {
 			my $thr2 = threads->create(\&bypass_out_status_bad);
 			$thr2->join();
 		}
-		my $logthread=threads->create(\&textout);
+		my $logthread=threads->create(\&textout, sleep 5);
 		$logthread->join();
 	}
 }
@@ -87,5 +87,5 @@ sub textout {
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-		sleep 5; #tak nado
+		#sleep 5; #tak nado
 }
