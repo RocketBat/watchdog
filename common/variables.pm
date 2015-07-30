@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 12 #
+# Build 13 #
 ############
 
 use POSIX qw(strftime);
@@ -33,7 +33,7 @@ BEGIN {
 our $server = 'Mighty';#|
 #-----------------------|
 
-my $wd_conf = '/home/mihail/Develop/Watch_dog/configs/wd_conf.cfg'
+my $wd_conf = '/home/mihail/Develop/Watch_dog/configs/wd_conf.cfg';
 
 #--main params
 our $revision;
