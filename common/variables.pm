@@ -60,10 +60,10 @@ our $t1 = 0;
 our $t2 = 0;
 
 #--options
-GetOptions ("max_drops = set_maxdrops" => \$max_drops,
-            "log_speed = set_logspeed" => \$refresh_timer,
-            "delay_removal_from_bypass = set_delayforremovebypass" => \$delay_removal_from_bypass,
-            "readDropRateDelay = set_readdropratedelay" => \$readDropRateDelay)
+GetOptions ("max_drops = set_md" => \$max_drops,
+            "refresh_timer = set_rt" => \$refresh_timer,
+            "delay_removal_from_bypass = set_drfb" => \$delay_removal_from_bypass,
+            "readDropRateDelay = set_rdrd" => \$readDropRateDelay)
             or die("Error in command line arguments\n");
 
 1;
