@@ -5,13 +5,14 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 8  #
+# Build 9  #
 ############
 
 use POSIX qw(strftime);
 use strict;
 use warnings;
 use Exporter;
+use Getopt::Long;
 
 #--our libraries
 use lib '/home/mihail/Develop/Watch_dog/configs';
@@ -34,6 +35,10 @@ our $server = 'Mighty';#|
 #-----------------------|
 
 #--main params
+my $options = GetOptions ("max_drops = set_maxdrops" = \$max_drops;
+                          "log_speed = set_logspeed" = \$refresh_timer;
+                          "delay_removal_from_bypass = set_delayforremovebypass" = \$delay_removal_from_bypass;
+                          "readDropRateDelay = set_readdropratedelay" = \$readDropRateDelay;
 our $max_drops = 0.04;
 our $refresh_timer = 80; #----speed of logging
 our $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary

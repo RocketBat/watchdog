@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 119 |
+# Build 131 |
 #-----------|
 
 #------SERVER NAME------|
-#my $server = 'Mighty';#|
+#        'Mighty'       |
 #-----------------------|
 
 #--includes
