@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 10 #
+# Build 11 #
 ############
 
 use POSIX qw(strftime);
@@ -60,10 +60,10 @@ our $t1 = 0;
 our $t2 = 0;
 
 #--options
-GetOptions ("max_drops = set_md" => \$max_drops,
-            "refresh_timer = set_rt" => \$refresh_timer,
-            "delay_removal_from_bypass = set_drfb" => \$delay_removal_from_bypass,
-            "readDropRateDelay = set_rdrd" => \$readDropRateDelay)
+GetOptions ("max_drops=d" => \$max_drops,
+            "refresh_timer=r" => \$refresh_timer,
+            "delay_removal_from_bypass=w" => \$delay_removal_from_bypass,
+            "readDropRateDelay=p" => \$readDropRateDelay)
             or die("Error in command line arguments\n");
 
 1;
