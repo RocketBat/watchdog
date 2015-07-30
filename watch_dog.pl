@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 121 |
+# Build 122 |
 #-----------|
 
 #------SERVER NAME------|
@@ -49,10 +49,12 @@ while (1) {
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		print"Debug message";
 		if (status()==0) {
-			bypass_out_status_ok();
+			my $thr1 = threads->create(\&bypass_out_status_ok);
+			$thr1->join();
 		}
 		else {
-			bypass_out_status_bad();
+			my $thr2 = threads->create(\&bypass_out_status_bad);
+			$thr2->join();
 		}
 		my $logthread=threads->create(\&textout);
 		$logthread->join();
