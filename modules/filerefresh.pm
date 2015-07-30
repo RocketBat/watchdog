@@ -5,7 +5,7 @@ This module checking that dpi log is updating
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use POSIX qw(strftime);
@@ -15,8 +15,8 @@ use File::stat;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
+#use lib '/home/mihail/Develop/Watch_dog/configs';
+#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/scripts';
 use scripts::start;
 use lib '/home/mihail/Develop/Watch_dog/common';

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 131 |
+# Build 132 |
 #-----------|
 
 #------SERVER NAME------|
@@ -39,6 +39,7 @@ sub textout;
 
 
 #--main logic of script
+options();
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;

@@ -5,7 +5,7 @@ This module prevents bypass looping
 =cut
 
 ############
-# Build 2  #
+# Build 3  #
 ############
 
 use POSIX qw(strftime);
@@ -14,8 +14,8 @@ use warnings;
 use Exporter;
 
 #--our libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
+#use lib '/home/mihail/Develop/Watch_dog/configs';
+#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 

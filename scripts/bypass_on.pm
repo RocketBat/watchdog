@@ -5,7 +5,7 @@ This module set bypass to ON state
 =cut
 
 ############
-# Build 3  #
+# Build 4  #
 ############
 
 use strict;
@@ -13,8 +13,8 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
+#use lib '/home/mihail/Develop/Watch_dog/configs';
+#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use common::bypass_loop;

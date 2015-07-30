@@ -5,18 +5,17 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 11 #
+# Build 12 #
 ############
 
 use POSIX qw(strftime);
 use strict;
 use warnings;
 use Exporter;
-use Getopt::Long;
 
 #--our libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
+#use lib '/home/mihail/Develop/Watch_dog/configs';
+#use configs::main;
 
 BEGIN {
     require Exporter;
@@ -25,7 +24,7 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw($readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
+    our @EXPORT      = qw(options $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
@@ -34,7 +33,10 @@ BEGIN {
 our $server = 'Mighty';#|
 #-----------------------|
 
+my $wd_conf = '/home/mihail/Develop/Watch_dog/configs/wd_conf.cfg'
+
 #--main params
+our $revision;
 our $max_drops = 0.04;
 our $refresh_timer = 80; #----speed of logging
 our $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
@@ -60,10 +62,10 @@ our $t1 = 0;
 our $t2 = 0;
 
 #--options
-GetOptions ("max_drops=d" => \$max_drops,
-            "refresh_timer=r" => \$refresh_timer,
-            "delay_removal_from_bypass=w" => \$delay_removal_from_bypass,
-            "readDropRateDelay=p" => \$readDropRateDelay)
-            or die("Error in command line arguments\n");
+sub options { 
+    my ($parse_string) = @_;
+    my $line = `tail -n 12 $wd_conf`;
+    if ($line =~ m/$parse_string:\s+(\d.*)/) {$parse_string = $1;}
+}
 
 1;

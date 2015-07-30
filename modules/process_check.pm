@@ -5,7 +5,7 @@ This module checking process for dpi
 =cut
 
 ############
-# Build 4  #
+# Build 5  #
 ############
 
 use strict;
@@ -13,8 +13,8 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
+#use lib '/home/mihail/Develop/Watch_dog/configs';
+#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/scripts';
 use scripts::start;
 use lib '/home/mihail/Develop/Watch_dog/common';
