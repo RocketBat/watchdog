@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 123 |
+# Build 124 |
 #-----------|
 
 #------SERVER NAME------|
@@ -56,7 +56,7 @@ while (1) {
 			my $thr2 = threads->create(\&bypass_out_status_bad);
 			$thr2->join();
 		}
-		my $logthread=threads->create(\&textout, sleep 5);
+		my $logthread=threads->create(\&textout, 5);
 		$logthread->join();
 	}
 }
@@ -83,9 +83,10 @@ sub status {
 
 #---text out function
 sub textout {
+		my ($sleep) = @_;
 		print "$datestring $textmsg_zcheck \n";
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_fresh \n";
 		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-		#sleep 5; #tak nado
+		sleep $sleep; #tak nado
 }
