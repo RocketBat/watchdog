@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 9  #
+# Build 10 #
 ############
 
 use POSIX qw(strftime);
@@ -35,10 +35,6 @@ our $server = 'Mighty';#|
 #-----------------------|
 
 #--main params
-my $options = GetOptions ("max_drops = set_maxdrops" = \$max_drops;
-                          "log_speed = set_logspeed" = \$refresh_timer;
-                          "delay_removal_from_bypass = set_delayforremovebypass" = \$delay_removal_from_bypass;
-                          "readDropRateDelay = set_readdropratedelay" = \$readDropRateDelay;
 our $max_drops = 0.04;
 our $refresh_timer = 80; #----speed of logging
 our $delay_removal_from_bypass = 90; # this delay needs when Bypass is turned off earlier than necessary
@@ -62,5 +58,11 @@ our $textmsg_zcheck; #---text message zombie
 our $log_file;
 our $t1 = 0;
 our $t2 = 0;
+
+#--options
+my $options = GetOptions ("max_drops = set_maxdrops" = \$max_drops,
+                          "log_speed = set_logspeed" = \$refresh_timer,
+                          "delay_removal_from_bypass = set_delayforremovebypass" = \$delay_removal_from_bypass,
+                          "readDropRateDelay = set_readdropratedelay" = \$readDropRateDelay);
 
 1;
