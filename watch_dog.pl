@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 129 |
+# Build 130 |
 #-----------|
 
 #------SERVER NAME------|
@@ -53,18 +53,16 @@ while (1) {
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		print"Debug message\n";
 		if (status()==0) {
-			my $thr1 = threads->create(\&bypass_out_status_ok);
-			$thr1->join();
+			my $thr1 = threads->new(\&bypass_out_status_ok);
+			$thr1->join;
 		}
 		else {
-			my $thr2 = threads->create(\&bypass_out_status_bad);
-			$thr2->join();
+			my $thr2 = threads->new(\&bypass_out_status_bad);
+			$thr2->join;
 		}
-		if (fork() == 0) {
-			textout(5);
-			exit;
-		}
+		$logthread = threads->new(\&textout, 5);
 	}
+	$logthread->join;
 }
 
 #--------big function (main function of this script)
