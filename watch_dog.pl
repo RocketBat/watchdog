@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 120 |
+# Build 121 |
 #-----------|
 
 #------SERVER NAME------|
@@ -47,6 +47,7 @@ while (1) {
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
+		print"Debug message";
 		if (status()==0) {
 			bypass_out_status_ok();
 		}
