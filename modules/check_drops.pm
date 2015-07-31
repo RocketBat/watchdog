@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 7  #
+# Build 8  #
 ############
 
 use strict;
@@ -41,7 +41,7 @@ my $timeCheckCNRdrops = 0; # initial time to check "can not read drop rate"
 sub check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-    if ($shaper_type == 'twin' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s+(\d.*)\s/){ #when master and slave
+    if ($shaper_type eq 'twin' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s+(\d.*)\s/){ #when master and slave
         $drop_rate1 = $1;
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
@@ -57,7 +57,7 @@ sub check_drops {
             $textmsg_cdrops=' Drops level is in normal range';
 		}
     }
-    elsif ($shaper_type == 'one' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s/){
+    elsif ($shaper_type eq 'one' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s/){
         $drop_rate1 = $1;
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
