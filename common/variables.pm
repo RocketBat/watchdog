@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 14 #
+# Build 15 #
 ############
 
 use POSIX qw(strftime);
@@ -63,10 +63,10 @@ our $t2 = 0;
 
 #--options
 sub options { 
-    my @strings = ($revision, $max_drops, $refresh_timer, $delay_removal_from_bypass, $readDropRateDelay, $watchdog_log, $directory);
-    for (my $i=0;$i<7;$i++) {
+    my @strings = ('$revision', '$max_drops', '$refresh_timer', '$delay_removal_from_bypass', '$readDropRateDelay', '$watchdog_log', '$directory');
+    foreach (@strings) {
         my $line = `tail -n 12 $wd_conf`;
-        if ($line =~ m/*$strings[$i]:\s+(\d.*)/) {$strings[$i] = $1;}
+        if ($line =~ m/*$_:\s+(\d.*)/) {$_ = $1;}
     }
 }
 
