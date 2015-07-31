@@ -5,7 +5,7 @@ This module checking drops in DPI
 =cut
 
 ############
-# Build 6  #
+# Build 7  #
 ############
 
 use strict;
@@ -41,7 +41,23 @@ my $timeCheckCNRdrops = 0; # initial time to check "can not read drop rate"
 sub check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
-    if ($line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s+(\d.*)\s/){
+    if ($shaper_type == 'twin' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s+(\d.*)\s/){ #when master and slave
+        $drop_rate1 = $1;
+        $drop_rate2 = $2;
+       	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
+        	$check=1;
+            $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
+			if ($text_out==$refresh_timer) {
+				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
+				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
+			}
+        }
+       	else{
+            $check=0;
+            $textmsg_cdrops=' Drops level is in normal range';
+		}
+    }
+    elsif ($shaper_type == 'one' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s/){
         $drop_rate1 = $1;
         $drop_rate2 = $2;
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
@@ -76,6 +92,7 @@ sub check_drops {
 		$droprate_read = 0;	
 		}
 	}
+    
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }
 
