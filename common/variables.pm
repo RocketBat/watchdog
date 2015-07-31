@@ -5,7 +5,7 @@ This module return all variables in watchdog
 =cut
 
 ############
-# Build 19 #
+# Build 20 #
 ############
 
 use POSIX qw(strftime);
@@ -25,7 +25,7 @@ BEGIN {
     # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw($shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
+    our @EXPORT      = qw($log_params $shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
     # Functions and variables which can be optionally exported
     our @EXPORT_OK   = qw();
 }
@@ -44,9 +44,11 @@ our $max_drops = $config->{main}->{maximum_percent_of_drops};
 our $refresh_timer = $config->{main}->{refresh_timer}; #----speed of logging
 our $delay_removal_from_bypass = $config->{main}->{delay_removal_from_bypass}; # this delay needs when Bypass is turned off earlier than necessary
 our $readDropRateDelay = $config->{main}->{readDropRateDelay}; # how many times needs to be in "can not read drop rate" state
+our $shaper_type = $config->{dpi}->{shaper};
 our $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log'; #---CHECK FULL PATH
 our $directory = '/usr/adm/adm_s1/logs/';
-our $shaper_type = $config->{dpi}->{shaper};
+our $log_params = '/home/mihail/Develop/Watch_dog/configs/log.conf';
+
 #--secondary variables
 our $datestring = strftime "%F %T", localtime;
 our $date = strftime "%F", localtime;

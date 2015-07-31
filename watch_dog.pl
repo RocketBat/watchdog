@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 134 |
+# Build 135 |
 #-----------|
 
 #------SERVER NAME------|
@@ -18,7 +18,7 @@ use Exporter;
 use Log::Log4perl;
 
 #--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
+Log::Log4perl::init($log_params);
 my $logger = Log::Log4perl->get_logger("wd_debug");
 
 #--include my libraries

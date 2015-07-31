@@ -30,7 +30,7 @@ use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
 #--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
+Log::Log4perl::init($log_params);
 my $logger = Log::Log4perl->get_logger("wd_info");
 
 sub restart {
