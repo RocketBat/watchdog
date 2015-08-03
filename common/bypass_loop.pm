@@ -37,8 +37,7 @@ sub bypass_loop {
 		}
 		elsif ($revision eq "release") {
 			###########Bypass#ON##################
-			system("echo 'bypasssishe vklycheno'"); #
-			#`bpctl_util all set_bypass on`;
+			`bpctl_util all set_bypass on`;		 #
 			######################################
 		}
 		else {

@@ -39,8 +39,7 @@ sub bypass_out_status_bad {
 		}
 		elsif ($revision eq "release") {
 			############REMEMBER: add the real function of bypass|
-			#`bpctl_util all set_bypass on`;#	                 |
-			system("echo 'bypasssishe vklycheno'");
+			`bpctl_util all set_bypass on`;#	                 |
 			#####################################################|
 		}
 		else {

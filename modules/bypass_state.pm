@@ -39,7 +39,7 @@ sub bypass_state {
         }
     }
     elsif ($revision eq "release") {
-        if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
+        if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
 		$bypass=0;
 		print "Bypass is off\n";
 	}
