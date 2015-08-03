@@ -25,6 +25,9 @@ BEGIN {
 #--open the config
 my $config = Config::Tiny->new;
 $config = Config::Tiny->read('/home/mihail/Develop/Watch_dog/configs/wd_conf.cfg');
+####################REAL#CONFIG#FILE####################################
+#$config = Config::Tiny->read('/usr/adm/watchdog/configs/wd_conf.cfg');#
+########################################################################
 
 #-----------------SERVER NAME-------------------|
 our $server = $config->{server}->{server_name};#|
