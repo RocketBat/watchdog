@@ -38,7 +38,6 @@ sub bypass_out_status_bad {
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		$logger->info("Bypass turn on");
 		bypass_loop();
 	}
 	else {
