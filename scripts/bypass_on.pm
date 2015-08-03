@@ -32,9 +32,20 @@ sub bypass_out_status_bad {
 	if ($bypass == 0) {
 		$bypass=1;
 		$bypass_on_time=time();
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is onnnN!'");#                 |
-		#####################################################|
+		if ($revision eq "debug") {
+			############REMEMBER: add the real function of bypass|
+			system("echo 'Bypasss is onnnN!'");#                 |
+			#####################################################|
+		}
+		elsif ($revision eq "release") {
+			############REMEMBER: add the real function of bypass|
+			#`bpctl_util all set_bypass on`;#	                 |
+			system("echo 'bypasssishe vklycheno'");
+			#####################################################|
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");

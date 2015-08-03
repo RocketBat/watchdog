@@ -30,9 +30,16 @@ sub bypass_loop {
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
-		###########Bypass#ON##################
-		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
-		######################################
+		if ($revision eq "debug") {
+			###########Bypass#ON##################
+			system("echo 'Vkl bypass na chas'"); #
+			######################################
+		}
+		elsif ($revision eq "release") {
+			###########Bypass#ON##################
+			system("echo 'bypasssishe vklycheno'"); #
+			#`bpctl_util all set_bypass on`;
+			######################################
 		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}

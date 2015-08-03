@@ -57,9 +57,20 @@ sub bypass_check {
 	}
 	else {
 		$bypass=0;
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-		#####################################################|
+		if ($revision eq "debug") {
+			############REMEMBER: add the real function of bypass|
+			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+			#####################################################|
+		}
+		elsif ($revision eq "release")  {
+			############REMEMBER: add the real function of bypass|
+			#`bpctl_util all set_bypass off`;#        			 |
+			system("echo 'bypasssishe vyklycheno'");
+			#####################################################|
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");

@@ -27,7 +27,7 @@ BEGIN {
 
 sub process_check {
     my $check;
-    my $process_status = `ps afx | grep "dpi-engine" | grep -v grep`;
+    my $process_status = `ps afx | grep "bin/dpi-engine" | grep -v grep`;
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';

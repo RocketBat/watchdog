@@ -45,8 +45,9 @@ sub send_mail { #<--- CHECK THIS
         print MAIL "Cc: Coffe-man\@mail.ru\n";
     }
     elsif ($revision eq "release") {
-        print MAIL "Cc: yuriy\@adm-systems.com\n";
-        print MAIL "Cc: a.matyzhonok\@adm-systems.com\n";
+       #print MAIL "Cc: yuriy\@adm-systems.com\n";
+       #print MAIL "Cc: a.matyzhonok\@adm-systems.com\n";
+       print MAIL "Cc: shadow1194\@mail.ru\n";
     }
 	print MAIL "Subject: $subject\n\n";
 	
