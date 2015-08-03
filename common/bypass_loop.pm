@@ -40,6 +40,10 @@ sub bypass_loop {
 			system("echo 'bypasssishe vklycheno'"); #
 			#`bpctl_util all set_bypass on`;
 			######################################
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}	
 		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}
