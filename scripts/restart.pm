@@ -28,9 +28,11 @@ use common::variables;
 sub restart {
 	$CWD = '/usr/adm/adm_s1';
 	system('./stop');
-	system('./start');	
-	print "$datestring Restarting DPI-Engine.\n";
-	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
+	system('./start');
+    if ($text_out==$refresh_timer) {	
+	   print "$datestring Restarting DPI-Engine.\n";
+	   system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
+    }
 }
 
 1;

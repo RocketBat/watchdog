@@ -28,8 +28,10 @@ use common::variables;
 sub start {
 	$CWD = '/usr/adm/adm_s1';
     system('./start');
-    print "$datestring DPI process not found. Starting DPI-Engine.\n";
-    system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
+    if ($text_out==$refresh_timer) {
+        print "$datestring DPI process not found. Starting DPI-Engine.\n";
+        system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
+    }
 }
 
 1;
