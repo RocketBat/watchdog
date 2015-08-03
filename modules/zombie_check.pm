@@ -4,23 +4,13 @@ package modules::zombie_check;
 This module checking DPI process about zombie
 =cut
 
-############
-# Build 3  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -46,7 +36,6 @@ sub zombie_check {
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
-			$logger->info("Achtung! Found ZOMBIE in process list!");
 		}
 	}
 	return $check;

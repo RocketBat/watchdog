@@ -4,19 +4,11 @@ package common::variables;
 This module return all variables in watchdog
 =cut
 
-############
-# Build 20 #
-############
-
 use POSIX qw(strftime);
 use strict;
 use warnings;
 use Exporter;
 use Config::Tiny;
-
-#--our libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 
 BEGIN {
     require Exporter;

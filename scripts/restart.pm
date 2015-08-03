@@ -4,10 +4,6 @@ package scripts::restart;
 This module restarting DPI
 =cut
 
-############
-# Build 1  #
-############
-
 use strict;
 use warnings;
 use Exporter;
@@ -29,17 +25,12 @@ BEGIN {
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
-
 sub restart {
 	$CWD = '/usr/adm/adm_s1';
 	system('./stop');
 	system('./start');	
 	print "$datestring Restarting DPI-Engine.\n";
 	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
-	$logger->info("Zombie found. Restarting DPI-Engine.");
 }
 
 1;

@@ -4,25 +4,15 @@ package modules::check_drops;
 This module checking drops in DPI
 =cut
 
-############
-# Build 8  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#se configs::main;
 use lib '/home/mihail/Develop/Watch_dog/scripts';
 use scripts::start;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -49,7 +39,6 @@ sub check_drops {
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
 			}
         }
        	else{
@@ -65,7 +54,6 @@ sub check_drops {
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-				$logger->info("bypass is on, droprate is = $drop_rate1 and $drop_rate2");
 			}
         }
        	else{
@@ -87,7 +75,6 @@ sub check_drops {
 			$textmsg_cdrops = ' Can not read drop rate';
 			if ($text_out==$refresh_timer) {
 				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
-				$logger->info("bypass is on, Can not read drop rate!");
 			}
 		$droprate_read = 0;	
 		}

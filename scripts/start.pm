@@ -4,10 +4,6 @@ package scripts::start;
 This module starting DPI
 =cut
 
-############
-# Build 1  #
-############
-
 use strict;
 use warnings;
 use Exporter;
@@ -29,16 +25,11 @@ BEGIN {
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
-
 sub start {
 	$CWD = '/usr/adm/adm_s1';
     system('./start');
     print "$datestring DPI process not found. Starting DPI-Engine.\n";
     system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
-	$logger->info("DPI process not found. Starting DPI-Engine.");
 }
 
 1;

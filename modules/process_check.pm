@@ -4,25 +4,14 @@ package modules::process_check;
 This module checking process for dpi
 =cut
 
-############
-# Build 5  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
-#--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/scripts';
 use scripts::start;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -44,7 +33,6 @@ sub process_check {
 		$textmsg_proc = ' Did not find DPI process in process list';
 		if ($text_out==$refresh_timer) {
 			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
-			$logger->info("$datestring bypass on, Did not find DPI process in process list");
 		}
 		start();
     }

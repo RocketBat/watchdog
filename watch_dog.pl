@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 136 |
+# Build 137 |
 #-----------|
 
 #------SERVER NAME------|
@@ -15,7 +15,6 @@ use warnings;
 use File::stat;
 use File::chdir;
 use Exporter;
-use Log::Log4perl;
 
 #--include my libraries
 use modules::bypass_state;
@@ -32,10 +31,6 @@ use scripts::bypass_off;
 sub watch_dog;
 sub status;
 sub textout;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_debug");
 
 #--main logic of script
 bypass_state();

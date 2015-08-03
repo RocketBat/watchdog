@@ -4,27 +4,17 @@ package scripts::bypass_off;
 This module set bypass to OFF state
 =cut
 
-############
-# Build 2  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -61,7 +51,6 @@ sub bypass_check {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
-			$logger->info("save system state, because bypass is recently ON");
 			$text_out = 0;
 		}
 		else {$text_out++;}
@@ -74,7 +63,6 @@ sub bypass_check {
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
-		$logger->info("Bypass turn off");
 	}
 }
 

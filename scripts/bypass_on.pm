@@ -4,27 +4,17 @@ package scripts::bypass_on;
 This module set bypass to ON state
 =cut
 
-############
-# Build 4  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
-
-#--initialise logging config
-Log::Log4perl::init($log_params);
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;

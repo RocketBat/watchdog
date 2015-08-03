@@ -5,17 +5,11 @@ This module checks the status of the bypass
 during the initial initialization script.
 =cut
 
-############
-# Build 6  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-#use lib '/home/mihail/Develop/Watch_dog/configs';
-#use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
