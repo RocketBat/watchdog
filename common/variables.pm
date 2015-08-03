@@ -40,7 +40,7 @@ our $refresh_timer = $config->{main}->{refresh_timer}; #----speed of logging
 our $delay_removal_from_bypass = $config->{main}->{delay_removal_from_bypass}; # this delay needs when Bypass is turned off earlier than necessary
 our $readDropRateDelay = $config->{main}->{readDropRateDelay}; # how many times needs to be in "can not read drop rate" state
 our $shaper_type = $config->{dpi}->{shaper};
-our $watchdog_log = '/usr/adm/watchdog/bypass.log'; #---CHECK FULL PATH
+our $watchdog_log = '/usr/adm/watchdog/logs/bypass.log'; #---CHECK FULL PATH
 our $directory = '/usr/adm/adm_s1/logs/';
 
 #--secondary variables
