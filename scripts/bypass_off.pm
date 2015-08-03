@@ -4,27 +4,17 @@ package scripts::bypass_off;
 This module set bypass to OFF state
 =cut
 
-############
-# Build 1  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
-
-#--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -61,20 +51,28 @@ sub bypass_check {
 		if ($text_out == $refresh_timer) {
 			print "$datestring save system state, because bypass is recently ON\n";
 			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
-			$logger->info("save system state, because bypass is recently ON");
 			$text_out = 0;
 		}
 		else {$text_out++;}
 	}
 	else {
 		$bypass=0;
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-		#####################################################|
+		if ($revision eq "debug") {
+			############REMEMBER: add the real function of bypass|
+			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
+			#####################################################|
+		}
+		elsif ($revision eq "release")  {
+			############REMEMBER: add the real function of bypass|
+			`bpctl_util all set_bypass off`;#        			 |
+			#####################################################|
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
 		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
-		$logger->info("Bypass turn off");
 	}
 }
 

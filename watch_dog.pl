@@ -1,11 +1,11 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 119 |
+# Build 138 |
 #-----------|
 
 #------SERVER NAME------|
-#my $server = 'Mighty';#|
+#        'Mighty'       |
 #-----------------------|
 
 #--includes
@@ -15,11 +15,6 @@ use warnings;
 use File::stat;
 use File::chdir;
 use Exporter;
-use Log::Log4perl;
-
-#--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
-my $logger = Log::Log4perl->get_logger("wd_debug");
 
 #--include my libraries
 use modules::bypass_state;
@@ -37,13 +32,17 @@ sub watch_dog;
 sub status;
 sub textout;
 
-
 #--main logic of script
 bypass_state();
 while (1) {
     $date = strftime "%F", localtime;
-    $log_file = $directory.$date.'-master-out.log';
-    while (1){
+	if ($shaper_type eq "twin") {
+    	$log_file = $directory.$date.'-master-out.log';
+    }
+	elsif ($shaper_type eq "one") {
+		$log_file = $directory.$date.'-out.log';
+	}
+	while (1){
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}

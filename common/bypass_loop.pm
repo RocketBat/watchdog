@@ -4,24 +4,14 @@ package common::bypass_loop;
 This module prevents bypass looping
 =cut
 
-############
-# Build 2  #
-############
-
 use POSIX qw(strftime);
 use strict;
 use warnings;
 use Exporter;
 
 #--our libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
-
-#--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
-my $logger = Log::Log4perl->get_logger("wd_debug");
 
 BEGIN {
     require Exporter;
@@ -40,11 +30,19 @@ sub bypass_loop {
 	if ($t1 && $t-$t1 < 180) {
 		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
 		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
-		$logger->info("$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!");
-		$logger->debug("Bypass is on");
-		###########Bypass#ON##################
-		system("echo 'Vkl bypass na chas'"); #----------------------REMEMBER: add the real function of bypass
-		######################################
+		if ($revision eq "debug") {
+			###########Bypass#ON##################
+			system("echo 'Vkl bypass na chas'"); #
+			######################################
+		}
+		elsif ($revision eq "release") {
+			###########Bypass#ON##################
+			`bpctl_util all set_bypass on`;		 #
+			######################################
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}	
 		send_mail("$server bypass status is permanently ON ","$datestring Bypass is ON by 1 hour!");
 		sleep 3600;
 	}

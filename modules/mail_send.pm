@@ -4,17 +4,11 @@ package modules::mail_send;
 This module is required for sending status of the bypass via email 
 =cut
 
-############
-# Build 5  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
@@ -51,8 +45,8 @@ sub send_mail { #<--- CHECK THIS
         print MAIL "Cc: Coffe-man\@mail.ru\n";
     }
     elsif ($revision eq "release") {
-        print MAIL "Cc: yuriy\@adm-systems.com\n";
-        print MAIL "Cc: a.matyzhonok\@adm-systems.com\n";
+       print MAIL "Cc: yuriy\@adm-systems.com\n";
+       print MAIL "Cc: a.matyzhonok\@adm-systems.com\n";
     }
 	print MAIL "Subject: $subject\n\n";
 	

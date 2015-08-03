@@ -5,17 +5,11 @@ This module checks the status of the bypass
 during the initial initialization script.
 =cut
 
-############
-# Build 5  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 
@@ -45,7 +39,7 @@ sub bypass_state {
         }
     }
     elsif ($revision eq "release") {
-        if (`cat get_bypass | grep on | grep -v grep` eq "") {   #<--- CHECK THIS
+        if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
 		$bypass=0;
 		print "Bypass is off\n";
 	}

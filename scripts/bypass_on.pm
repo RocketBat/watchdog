@@ -4,27 +4,17 @@ package scripts::bypass_on;
 This module set bypass to ON state
 =cut
 
-############
-# Build 3  #
-############
-
 use strict;
 use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/configs';
-use configs::main;
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
-
-#--initialise logging config
-Log::Log4perl::init('/home/mihail/Develop/Watch_dog/configs/log.conf');
-my $logger = Log::Log4perl->get_logger("wd_info");
 
 BEGIN {
     require Exporter;
@@ -42,13 +32,22 @@ sub bypass_out_status_bad {
 	if ($bypass == 0) {
 		$bypass=1;
 		$bypass_on_time=time();
-		############REMEMBER: add the real function of bypass|
-		system("echo 'Bypasss is onnnN!'");#                 |
-		#####################################################|
+		if ($revision eq "debug") {
+			############REMEMBER: add the real function of bypass|
+			system("echo 'Bypasss is onnnN!'");#                 |
+			#####################################################|
+		}
+		elsif ($revision eq "release") {
+			############REMEMBER: add the real function of bypass|
+			`bpctl_util all set_bypass on`;#	                 |
+			#####################################################|
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		$logger->info("Bypass turn on");
 		bypass_loop();
 	}
 	else {
