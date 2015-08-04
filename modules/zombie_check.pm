@@ -24,13 +24,14 @@ sub zombie_check {
 	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
 	if ($zombie_ck eq "") {
 		$check=0;
-		$textmsg_zcheck=' No zombie processes.';
+		$textmsg_zcheck = ' No zombie processes.';
+		$logmsg_zcheck = ' No zombie processes';
 	}
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
 		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
-}
+	}
 	return $check;
 }
 

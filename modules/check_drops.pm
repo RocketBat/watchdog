@@ -37,6 +37,7 @@ sub check_drops {
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
+            $logmsg_cdrops = ' Drops level is in normal range';
 		}
     }
     elsif ($shaper_type eq 'one' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s/){
@@ -50,6 +51,7 @@ sub check_drops {
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
+            $logmsg_cdrops = ' Drops level is in normal range';
 		}
     }
     else{

@@ -34,6 +34,7 @@ sub process_check {
     else{
         $check=0;
         $textmsg_proc=' Found DPI process in process list.';
+        $logmsg_proc = ' Found DPI process in process list';
     }
     return $check;
 }

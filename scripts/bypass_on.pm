@@ -18,14 +18,9 @@ use modules::mail_send;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(bypass_out_status_bad);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
 sub bypass_out_status_bad {

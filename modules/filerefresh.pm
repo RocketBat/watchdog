@@ -29,6 +29,7 @@ sub filerefresh {
     my $st = $mt -> mtime;
     if ($st +1 >= time()) {
         $textmsg_fresh=' Log file updating ';
+        $logmsg_fresh = ' Log file updating';
         $obnovlenie=0;
     }
     else {
