@@ -30,10 +30,10 @@ sub textout {
 
 sub outlog {
 	if ($text_out==$refresh_timer) {
-		print "$datestring $logmsg_proc \n";
-		print "$datestring $logmsg_zcheck \n";
-		print "$datestring $logmsg_fresh \n";
-		print "$datestring $logmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
+		system("echo $datestring $logmsg_proc >>  $watchdog_log");
+		system("echo $datestring $logmsg_zcheck >>  $watchdog_log");
+		system("echo $datestring $logmsg_fresh >>  $watchdog_log");
+		system("echo $datestring $logmsg_cdrops ' drop ' $drop_rate1 ' and ' $drop_rate2 >>  $watchdog_log");	
 	}
 }
 
