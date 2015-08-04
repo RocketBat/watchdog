@@ -36,3 +36,5 @@ sub outlog {
 		print "$datestring $logmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
 	}
 }
+
+1;
