@@ -14,14 +14,9 @@ use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(zombie_check);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
 sub zombie_check {
@@ -34,10 +29,8 @@ sub zombie_check {
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'Achtung! Found ZOMBIE in process list!' >> $watchdog_log");
-		}
-	}
+		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
+}
 	return $check;
 }
 

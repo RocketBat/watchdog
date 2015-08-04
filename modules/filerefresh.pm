@@ -18,14 +18,9 @@ use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(filerefresh);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
 sub filerefresh {
@@ -39,10 +34,8 @@ sub filerefresh {
     else {
         $obnovlenie=1;
         $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-		}
-	}
+		$logmsg_fresh = ' bypass on, Log does not updating!';
+}
     return $obnovlenie;
 }
 

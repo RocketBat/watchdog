@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 138 |
+# Build 139 |
 #-----------|
 
 #------SERVER NAME------|
@@ -15,6 +15,7 @@ use warnings;
 use File::stat;
 use File::chdir;
 use Exporter;
+use Forks::Super;
 
 #--include my libraries
 use modules::bypass_state;
@@ -27,10 +28,10 @@ use modules::zombie_check;
 use scripts::restart;
 use scripts::bypass_on;
 use scripts::bypass_off;
+use modules::logging;
 
 sub watch_dog;
 sub status;
-sub textout;
 
 #--main logic of script
 bypass_state();
@@ -52,6 +53,7 @@ while (1) {
 		}
 		else {
 			textout();
+			outlog();
 			bypass_out_status_bad();
 		}
 	}
@@ -75,14 +77,4 @@ sub status {
 	elsif ($wd_status==3) {$stat="Achtung! Log file does not updating!";}
 	elsif ($wd_status==4) {$stat="Achtung! Drops very high!";}
 	return 1;
-}
-
-#---text out function
-sub textout {
-	if ($text_out==$refresh_timer) {
-		print "$datestring $textmsg_zcheck \n";
-		print "$datestring $textmsg_proc \n";
-		print "$datestring $textmsg_fresh \n";
-		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-	}
 }

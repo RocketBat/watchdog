@@ -15,9 +15,6 @@ use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(process_check);
@@ -31,9 +28,7 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'bypass on, Did not find DPI process in process list' >> $watchdog_log");
-		}
+        $logmsg_proc = ' bypass on, Did not find DPI process in process list';
 		start();
     }
     else{
