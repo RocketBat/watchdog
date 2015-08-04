@@ -39,8 +39,11 @@ our $directory = '/usr/adm/adm_s1/logs/';
 if ($revision eq "revision") {
     our $watchdog_log = '/usr/adm/watchdog/logs/bypass.log'; #---CHECK FULL PATH
 }
-elsif ($revison eq "debug") {
+elsif ($revision eq "debug") {
     our $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log';
+}
+else {
+    print "wrong parameter revision in config\n";
 }
 
 #--secondary variables
