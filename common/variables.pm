@@ -69,6 +69,6 @@ our $logmsg_proc;
 our $logmsg_fresh;
 our $logmsg_cdrops;
 our $logmsg_zcheck;
-our $logtime_delay;
+our $logtime_delay = 0;
 
 1;
