@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 144 |
+# Build 145 |
 #-----------|
 
 #------SERVER NAME------|
@@ -55,6 +55,7 @@ while (1) {
 		}
 		else {
 			textout();
+			$logtime_delay = time()
 			$logprocess = fork  { sub => 'outlog' };
 			bypass_out_status_bad();
 		}

@@ -14,7 +14,7 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw($logmsg_zcheck $logmsg_cdrops $logmsg_fresh $logmsg_proc $log_params $shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
+    our @EXPORT      = qw($logtime_delay $logmsg_zcheck $logmsg_cdrops $logmsg_fresh $logmsg_proc $log_params $shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
 }
 
 #--open the config
@@ -69,5 +69,6 @@ our $logmsg_proc;
 our $logmsg_fresh;
 our $logmsg_cdrops;
 our $logmsg_zcheck;
+our $logtime_delay;
 
 1;
