@@ -15,6 +15,7 @@ use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
+use modules::logging;
 
 BEGIN {
     require Exporter;
@@ -43,12 +44,7 @@ sub bypass_out_status_ok {
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {
-		if ($text_out == $refresh_timer) {
-			print "$datestring save system state, because bypass is recently ON\n";
-			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
-			$text_out = 0;
-		}
-		else {$text_out++;}
+		setSavestate_good();
 	}
 	else {
 		$bypass=0;
