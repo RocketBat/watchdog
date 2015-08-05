@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 139 |
+# Build 140 |
 #-----------|
 
 #------SERVER NAME------|
@@ -16,6 +16,7 @@ use File::stat;
 use File::chdir;
 use Exporter;
 use Forks::Super;
+use IO::Handle;
 
 #--include my libraries
 use modules::bypass_state;
@@ -32,6 +33,7 @@ use modules::logging;
 
 sub watch_dog;
 sub status;
+my $logprocess;
 
 #--main logic of script
 bypass_state();
@@ -53,7 +55,7 @@ while (1) {
 		}
 		else {
 			textout();
-			outlog();
+			$logprocess = fork  { sub => 'outlog' };
 			bypass_out_status_bad();
 		}
 	}
