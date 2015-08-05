@@ -47,7 +47,7 @@ sub bypass_out_status_bad {
 		bypass_loop();
 	}
 	else {
-		setSavestate_bad();
+		setSavestate();
 	}
 }
 

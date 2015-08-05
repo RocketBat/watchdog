@@ -16,7 +16,7 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(textout outlog setSavestate_good setSavestate_bad);
+    our @EXPORT      = qw(textout outlog setSavestate setSavestate_bypass);
 }
 
 sub textout {
@@ -38,14 +38,14 @@ sub outlog {
 	}
 }
 
-sub setSavestate_good {
+sub setSavestate_bypass {
 	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		print "$datestring save system state, because bypass is recently ON\n";
 		system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");	
 	}
 }
 
-sub setSavestate_bad {
+sub setSavestate {
 	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		system("echo 'Save system state'");
 	}

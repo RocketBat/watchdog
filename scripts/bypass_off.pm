@@ -30,11 +30,7 @@ sub bypass_check;
 sub bypass_out_status_ok {
 	if ($bypass == 0) {
 		$bypass=0;
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'Save system state'");
-			$text_out=0;
-		}
-		else {$text_out++;}
+		setSavestate();
 	}
 	else {
 		bypass_check();
@@ -44,7 +40,7 @@ sub bypass_out_status_ok {
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {
-		setSavestate_good();
+		setSavestate_bypass();
 	}
 	else {
 		$bypass=0;
