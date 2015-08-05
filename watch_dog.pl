@@ -55,7 +55,7 @@ while (1) {
 		}
 		else {
 			textout();
-			$logtime_delay = time()
+			$logtime_delay = time();
 			$logprocess = fork  { sub => 'outlog' };
 			bypass_out_status_bad();
 		}
