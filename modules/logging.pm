@@ -29,7 +29,7 @@ sub textout {
 }
 
 sub outlog {
-	if (time() - $logtime_delay <= $readDropRateDelay || $logtime_delay == 0) {
+	if (time() - $logtime_delay == $readDropRateDelay || $logtime_delay == 0) {
 		$logtime_delay = time();
 		system("echo $datestring $logmsg_proc >>  $watchdog_log");
 		system("echo $datestring $logmsg_zcheck >>  $watchdog_log");
