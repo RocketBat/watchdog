@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 142 |
+# Build 143 |
 #-----------|
 
 #------SERVER NAME------|
@@ -55,7 +55,7 @@ while (1) {
 		}
 		else {
 			textout();
-			$logprocess = fork  { sub => 'outlog' ; sleep 5 };
+			$logprocess = fork  { sub => 'outlog' };
 			bypass_out_status_bad();
 		}
 	}
