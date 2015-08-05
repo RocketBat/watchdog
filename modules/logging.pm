@@ -33,7 +33,7 @@ sub outlog {
 	system("echo $datestring $logmsg_zcheck >>  $watchdog_log");
 	system("echo $datestring $logmsg_fresh >>  $watchdog_log");
 	system("echo $datestring $logmsg_cdrops ' drop ' $drop_rate1 ' and ' $drop_rate2 >>  $watchdog_log");	
-	sleep 5;
+	fork(sub => sub { sleep 2 });
 }
 
 1;
