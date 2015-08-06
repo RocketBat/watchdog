@@ -19,14 +19,13 @@ BEGIN {
 #--my libraries
 use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
+use lib '/home/mihail/Develop/Watch_dog/modules';
+use modules::logging;
 
 sub start {
 	$CWD = '/usr/adm/adm_s1';
     system('./start');
-    if ($text_out==$refresh_timer) {
-        print "$datestring DPI process not found. Starting DPI-Engine.\n";
-        system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
-    }
+    setTextStartDPI();
 }
 
 1;
