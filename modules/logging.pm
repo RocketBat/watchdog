@@ -39,27 +39,27 @@ sub outlog {
 }
 
 sub setSavestate_bypass {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		print "$datestring save system state, because bypass is recently ON\n";
 		system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");	
 	}
 }
 
 sub setSavestate {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		system("echo 'Save system state'");
 	}
 }
 
 sub setTextStartDPI {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		print "$datestring DPI process not found. Starting DPI-Engine.\n";
    		system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
     }
 }
 
 sub setTextRestartDPI {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		print "$datestring Restarting DPI-Engine.\n";
 	    system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
     }
