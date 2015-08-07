@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 148 |
+# Build 149 |
 #-----------|
 
 #------SERVER NAME------|
@@ -32,8 +32,6 @@ use scripts::bypass_off;
 use modules::logging;
 
 sub watch_dog;
-sub status;
-my $logprocess;
 
 #--main logic of script
 bypass_state();
@@ -49,7 +47,7 @@ while (1) {
 		$datestring = strftime "%F %T", localtime;
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
-		if (status()==0) {
+		if (watch_dog()==0) {
 			textout();
 			bypass_out_status_ok();
 		}
@@ -63,20 +61,31 @@ while (1) {
 
 #--------big function (main function of this script)
 sub watch_dog {
-	if (zombie_check()==1) {restart(); return 1; }
-	if (process_check()==1)	{return 2;}
-	if (filerefresh()==1) {return 3;}
-	if (check_drops()==1) {return 4;}
+	if (zombie_check()==1) {
+		restart();  
+		$stat="Achtung! Zombi process detected!";
+		system("echo $datestring $logmsg >>  $watchdog_log");
+		return 1;
+	}
+	if (process_check()==1)	{
+		$stat="Achtung! DPI-process not found!";
+		system("echo $datestring $logmsg >>  $watchdog_log");
+		return 2;
+	}
+	if (filerefresh()==1) {
+		$stat="Achtung! Log file does not updating!";
+		system("echo $datestring $logmsg >>  $watchdog_log");
+		return 3;
+	}
+	if (check_drops()==1) {
+		$stat="Achtung! Drops very high!";
+		system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
+		return 4;
+	}
+	if (check_drops()==2) {
+		$stat="Achtung! Can not read drop rate!";
+		system("echo $datestring $logmsg >>  $watchdog_log");
+		return 5;
+	}
     return 0;
-}
-
-#----error status
-sub status {
-	my $wd_status=watch_dog();
-	if ($wd_status==0) {return 0;}
-	elsif ($wd_status==1) {$stat="Achtung! Zombi process detected!"; }
-	elsif ($wd_status==2) {$stat="Achtung! DPI-process not found!";}
-	elsif ($wd_status==3) {$stat="Achtung! Log file does not updating!";}
-	elsif ($wd_status==4) {$stat="Achtung! Drops very high!";}
-	return 1;
 }

@@ -28,13 +28,15 @@ sub process_check {
     if ($process_status eq ""){
         $check=1;
 		$textmsg_proc = ' Did not find DPI process in process list';
-        $logmsg_proc = ' bypass on, Did not find DPI process in process list';
-		start();
+        #$logmsg_proc = ' bypass on, Did not find DPI process in process list';
+		$logmsg = ' bypass on, Did not find DPI process in process list';
+        start();
     }
     else{
         $check=0;
         $textmsg_proc=' Found DPI process in process list.';
-        $logmsg_proc = ' Found DPI process in process list';
+        #$logmsg_proc = ' Found DPI process in process list';
+        $logmsg = ' Found DPI process in process list';
     }
     return $check;
 }

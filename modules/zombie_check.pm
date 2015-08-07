@@ -25,12 +25,14 @@ sub zombie_check {
 	if ($zombie_ck eq "") {
 		$check=0;
 		$textmsg_zcheck = ' No zombie processes.';
-		$logmsg_zcheck = ' No zombie processes';
+		#$logmsg_zcheck = ' No zombie processes';
+		$logmsg = ' No zombie processes';
 	}
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
+		#$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
+		$logmsg = ' No zombie processes';
 	}
 	return $check;
 }

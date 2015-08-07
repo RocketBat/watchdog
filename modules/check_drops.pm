@@ -32,7 +32,8 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-            $logmsg_cdrops = ' bypass is on, droprate is = ';
+            #$logmsg_cdrops = ' bypass is on, droprate is = ';
+            $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
             $check=0;
@@ -46,12 +47,14 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-			$logmsg_cdrops = ' bypass is on, droprate is = ';
+			#$logmsg_cdrops = ' bypass is on, droprate is = ';
+            $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
-            $logmsg_cdrops = ' Drops level is in normal range';
+            #$logmsg_cdrops = ' Drops level is in normal range';
+            $logmsg = ' Drops level is in normal range';
 		}
     }
     else{
@@ -63,11 +66,12 @@ sub check_drops {
             $droprate_read = 0; #--relevance "not read the log" has passed
         }
 		if ($droprate_read == $readDropRateDelay) {
-			$check=1;
+			$check=2;
             $timeCheckCNRdrops = time();
 			$textmsg_cdrops = ' Can not read drop rate';
-			$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
-			$droprate_read = 0;	
+			#$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
+			$logmsg = ' bypass is on, Can not read drop rate!';
+            $droprate_read = 0;	
 		}
 	}
     
