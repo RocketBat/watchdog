@@ -21,7 +21,7 @@ BEGIN {
 
 sub textout {
 	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
-		$logtime_delay = time();
+		#$logtime_delay = time();
 		print "$datestring $textmsg_proc \n";
 		print "$datestring $textmsg_zcheck \n";
 		print "$datestring $textmsg_fresh \n";
