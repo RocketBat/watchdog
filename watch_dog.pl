@@ -48,10 +48,12 @@ while (1) {
 		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 		if ($hour==3 && $min==0 && $sec <= 5) {last;}
 		if (watch_dog()==0) {
+			$logtime_delay = time();
 			textout();
 			bypass_out_status_ok();
 		}
 		else {
+			$logtime_delay = time();
 			textout();
 			outlog();
 			bypass_out_status_bad();
