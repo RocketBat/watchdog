@@ -33,8 +33,9 @@ use modules::logging;
 
 sub watch_dog;
 
-sub main_loop {
-	while (1) {
+my $mce = MCE->new(
+	user_func => sub {
+		while (1) {
     	$date = strftime "%F", localtime;
 		if ($shaper_type eq "twin") {
     		$log_file = $directory.$date.'-master-out.log';
@@ -59,10 +60,7 @@ sub main_loop {
 			}
 		}
 	}
-}
-
-my $mce = MCE->new(
-	user_func => sub main_loop();
+	};
 );
 
 #--main logic of script
