@@ -33,37 +33,40 @@ use modules::logging;
 
 sub watch_dog;
 
-#--main logic of script
-bypass_state();
-
-my $mce = MCE->new(
-while (1) {
-    $date = strftime "%F", localtime;
-	if ($shaper_type eq "twin") {
-    	$log_file = $directory.$date.'-master-out.log';
-    }
-	elsif ($shaper_type eq "one") {
-		$log_file = $directory.$date.'-out.log';
-	}
-	while (1){
-		$datestring = strftime "%F %T", localtime;
-		(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
-		if ($hour==3 && $min==0 && $sec <= 5) {last;}
-		if (watch_dog()==0) {
-			$logtime_delay = time();
-			textout();
-			bypass_out_status_ok();
+sub main_loop {
+	while (1) {
+    	$date = strftime "%F", localtime;
+		if ($shaper_type eq "twin") {
+    		$log_file = $directory.$date.'-master-out.log';
+    	}
+		elsif ($shaper_type eq "one") {
+			$log_file = $directory.$date.'-out.log';
 		}
-		else {
-			$logtime_delay = time();
-			textout();
-			outlog();
-			bypass_out_status_bad();
+		while (1) {
+			$datestring = strftime "%F %T", localtime;
+			(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
+			if ($hour==3 && $min==0 && $sec <= 5) {last;}
+			if (watch_dog()==0) {
+				$logtime_delay = time();
+				textout();
+				bypass_out_status_ok();
+			}
+			else {
+				$logtime_delay = time();
+				textout();
+				outlog();
+				bypass_out_status_bad();
+			}
 		}
 	}
 }
+
+my $mce = MCE->new(
+	user_func => sub main_loop();
 );
 
+#--main logic of script
+bypass_state();
 $mce->run;
 
 #--------big function (main function of this script)
