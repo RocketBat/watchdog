@@ -60,7 +60,7 @@ my $mce = MCE->new(
 			}
 		}
 	}
-	};
+	}
 );
 
 #--main logic of script
