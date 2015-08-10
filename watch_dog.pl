@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 151 |
+# Build 152 |
 #-----------|
 
 #------SERVER NAME------|
@@ -15,8 +15,8 @@ use warnings;
 use File::stat;
 use File::chdir;
 use Exporter;
-use Forks::Super;
 use IO::Handle;
+use MCE;
 
 #--include my libraries
 use modules::bypass_state;
@@ -35,6 +35,8 @@ sub watch_dog;
 
 #--main logic of script
 bypass_state();
+
+my $mce = MCE->new(
 while (1) {
     $date = strftime "%F", localtime;
 	if ($shaper_type eq "twin") {
@@ -60,6 +62,9 @@ while (1) {
 		}
 	}
 }
+);
+
+$mce->run;
 
 #--------big function (main function of this script)
 sub watch_dog {
