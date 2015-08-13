@@ -22,10 +22,10 @@ BEGIN {
 sub textout {
 	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
 		$logtime_delay = time();
-		print "$datestring $textmsg_proc \n";
-		print "$datestring $textmsg_zcheck \n";
-		print "$datestring $textmsg_fresh \n";
-		print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
+		#print "$datestring $textmsg_proc \n";
+		#print "$datestring $textmsg_zcheck \n";
+		#print "$datestring $textmsg_fresh \n";
+		#print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
 	}
 }
 
