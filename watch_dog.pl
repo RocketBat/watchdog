@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 154 |
+# Build 155 |
 #-----------|
 
 #------SERVER NAME------|
@@ -30,8 +30,7 @@ use scripts::restart;
 use scripts::bypass_on;
 use scripts::bypass_off;
 use modules::logging;
-
-sub watch_dog;
+use modules::wdlogstatus;
 
 my $mce = MCE->new(
 	user_func => sub {
@@ -64,34 +63,3 @@ my $mce = MCE->new(
 #--main logic of script
 bypass_state();
 $mce->run;
-
-#--------big function (main function of this script)
-sub watch_dog {
-	if (zombie_check()==1) {
-		restart();  
-		$stat="Achtung! Zombi process detected!";
-		system("echo $datestring $logmsg >>  $watchdog_log");
-		return 1;
-	}
-	if (process_check()==1)	{
-		$stat="Achtung! DPI-process not found!";
-		system("echo $datestring $logmsg >>  $watchdog_log");
-		return 2;
-	}
-	if (filerefresh()==1) {
-		$stat="Achtung! Log file does not updating!";
-		system("echo $datestring $logmsg >>  $watchdog_log");
-		return 3;
-	}
-	if (check_drops()==1) {
-		$stat="Achtung! Drops very high!";
-		system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
-		return 4;
-	}
-	if (check_drops()==2) {
-		$stat="Achtung! Can not read drop rate!";
-		system("echo $datestring $logmsg >>  $watchdog_log");
-		return 5;
-	}
-    return 0;
-}

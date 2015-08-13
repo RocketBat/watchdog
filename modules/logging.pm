@@ -16,7 +16,7 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(setTextRestartDPI setTextStartDPI textout outlog setSavestate setSavestate_bypass);
+    our @EXPORT      = qw(setloginfo setTextRestartDPI setTextStartDPI textout outlog setSavestate setSavestate_bypass);
 }
 
 sub textout {
@@ -63,6 +63,26 @@ sub setTextRestartDPI {
 		print "$datestring Restarting DPI-Engine.\n";
 	    system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
     }
+}
+
+sub setloginfo {
+	my ($module_type) = @_;
+	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+		if ($module_type eq "zombie") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "proc_check") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "fresh") { #file refresh
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "chk_drop") {
+			system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
+		}
+		elsif ($module_type eq "readn_drop") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}	
 }
 
 1;
