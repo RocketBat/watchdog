@@ -12,6 +12,10 @@ use lib '/home/mihail/Develop/Watch_dog/common';
 use common::variables;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::logging;
+use modules::check_drops;
+use modules::filerefresh;
+use modules::process_check;
+use modules::zombie_check;
 
 BEGIN {
     require Exporter;
