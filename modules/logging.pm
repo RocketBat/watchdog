@@ -83,6 +83,7 @@ sub setloginfo {
 		elsif ($module_type eq "readn_drop") {
 			system("echo $datestring $logmsg >>  $watchdog_log");
 		}	
+	}
 }
 
 1;
