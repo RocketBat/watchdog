@@ -29,14 +29,14 @@ sub textout {
 	}
 }
 
-sub outlog {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
-		system("echo $datestring $logmsg_proc >>  $watchdog_log");
-		system("echo $datestring $logmsg_zcheck >>  $watchdog_log");
-		system("echo $datestring $logmsg_fresh >>  $watchdog_log");
-		system("echo $datestring $logmsg_cdrops ' drop ' $drop_rate1 ' and ' $drop_rate2 >>  $watchdog_log");
-	}
-}
+#sub outlog {
+#	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+#		system("echo $datestring $logmsg_proc >>  $watchdog_log");
+#		system("echo $datestring $logmsg_zcheck >>  $watchdog_log");
+#		system("echo $datestring $logmsg_fresh >>  $watchdog_log");
+	#	system("echo $datestring $logmsg_cdrops ' drop ' $drop_rate1 ' and ' $drop_rate2 >>  $watchdog_log");
+	#}
+#}
 
 sub setSavestate_bypass {
 	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {

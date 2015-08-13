@@ -25,11 +25,12 @@ BEGIN {
     our @EXPORT_OK   = qw();
 }
 
+#this module prevent fast bypass status change
 sub bypass_loop {
 	my $t = time();
-	if ($t1 && $t-$t1 < 180) {
-		print "$datestring Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour!\n";
-		system("echo $datestring 'Achtung! Bypass is on 3 times per 3 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
+	if ($t1 && $t-$t1 < 300) {
+		print "$datestring Achtung! Bypass is on 3 times per 5 min! Enabling static bypass by 1 hour!\n";
+		system("echo $datestring 'Achtung! Bypass is on 3 times per 5 min! Enabling static bypass by 1 hour! ' >> $watchdog_log");
 		if ($revision eq "debug") {
 			###########Bypass#ON##################
 			system("echo 'Vkl bypass na chas'"); #

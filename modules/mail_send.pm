@@ -48,7 +48,6 @@ sub send_mail { #<--- CHECK THIS
 	# Email Body
 	print MAIL $message;
 	close(MAIL);
-	print "Email Sent Successfully\n";
 }
 
 1;

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 153 |
+# Build 154 |
 #-----------|
 
 #------SERVER NAME------|
@@ -53,7 +53,7 @@ my $mce = MCE->new(
 			}
 			else {
 				textout();
-				outlog();
+				#outlog();
 				bypass_out_status_bad();
 			}
 		}

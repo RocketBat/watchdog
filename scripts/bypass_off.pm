@@ -37,6 +37,8 @@ sub bypass_out_status_ok {
 	}
 }
 
+
+#this function check system for previous bypass state
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {

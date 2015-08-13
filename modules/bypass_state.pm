@@ -22,6 +22,7 @@ BEGIN {
 
 our $bypass;
 
+#read bypass state from network module
 sub bypass_state {
     if ($revision eq "debug") {
         if (`cat get_bypass | grep on | grep -v grep` eq "") {

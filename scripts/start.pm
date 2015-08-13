@@ -22,6 +22,7 @@ use common::variables;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::logging;
 
+#starting dpi
 sub start {
 	$CWD = '/usr/adm/adm_s1';
     system('./start');

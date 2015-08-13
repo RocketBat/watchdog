@@ -23,6 +23,7 @@ BEGIN {
 
 my $timeCheckCNRdrops = 0; # initial time to check "can not read drop rate"
 
+#checking drops from dpi out log
 sub check_drops {
     my $check;
     my $line = `tail -n 28 $log_file | grep "dropRate this moment"`;
@@ -32,7 +33,6 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-            #$logmsg_cdrops = ' bypass is on, droprate is = ';
             $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
@@ -47,17 +47,16 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-			#$logmsg_cdrops = ' bypass is on, droprate is = ';
             $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
-            #$logmsg_cdrops = ' Drops level is in normal range';
             $logmsg = ' Drops level is in normal range';
 		}
     }
     else{
+        #check that we really can not read drop rate from log 
 		$check = 0; #--need for return value
         if (time() - $timeCheckCNRdrops <= $readDropRateDelay) { 
             $droprate_read++;
@@ -69,12 +68,10 @@ sub check_drops {
 			$check=2;
             $timeCheckCNRdrops = time();
 			$textmsg_cdrops = ' Can not read drop rate';
-			#$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
 			$logmsg = ' bypass is on, Can not read drop rate!';
             $droprate_read = 0;	
 		}
 	}
-    
 	return ($drop_rate1, $drop_rate2, $max_drops, $check);
 }
 

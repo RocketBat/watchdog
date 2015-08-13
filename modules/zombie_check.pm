@@ -19,19 +19,18 @@ BEGIN {
     our @EXPORT      = qw(zombie_check);
 }
 
+#check dpi process for zombie status
 sub zombie_check {
 	my $check;
 	my $zombie_ck = `ps afx | grep "dpi-engine" | grep defunct | grep -v grep`;
 	if ($zombie_ck eq "") {
 		$check=0;
 		$textmsg_zcheck = ' No zombie processes.';
-		#$logmsg_zcheck = ' No zombie processes';
 		$logmsg = ' No zombie processes';
 	}
 	else {
 		$check=1;
 		$textmsg_zcheck=' Achtung! Found ZOMBIE!';
-		#$logmsg_zcheck = ' Achtung! Found ZOMBIE in process list!';
 		$logmsg = ' No zombie processes';
 	}
 	return $check;
