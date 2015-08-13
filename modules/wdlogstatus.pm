@@ -16,6 +16,10 @@ use modules::check_drops;
 use modules::filerefresh;
 use modules::process_check;
 use modules::zombie_check;
+use lib '/home/mihail/Develop/Watch_dog/scripts';
+use scripts::restart;
+use scripts::bypass_on;
+use scripts::bypass_off;
 
 BEGIN {
     require Exporter;
