@@ -19,15 +19,14 @@ BEGIN {
     our @EXPORT      = qw(setloginfo setTextRestartDPI setTextStartDPI textout outlog setSavestate setSavestate_bypass);
 }
 
-sub textout {
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
-		$logtime_delay = time();
+#sub textout {
+	#if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
 		#print "$datestring $textmsg_proc \n";
 		#print "$datestring $textmsg_zcheck \n";
 		#print "$datestring $textmsg_fresh \n";
 		#print "$datestring $textmsg_cdrops drop $drop_rate1 and $drop_rate2\n";
-	}
-}
+	#}
+#}
 
 #sub outlog {
 #	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
