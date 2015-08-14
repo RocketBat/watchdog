@@ -19,7 +19,7 @@ BEGIN {
 
 #--open the config
 my $config = Config::Tiny->new;
-$config = Config::Tiny->read('/home/mihail/Develop/Watch_dog/configs/wd_conf.cfg');
+$config = Config::Tiny->read('/home/mihail/Develop/watch_dog/configs/wd_conf.cfg');
 ####################REAL#CONFIG#FILE####################################
 #$config = Config::Tiny->read('/usr/adm/watchdog/configs/wd_conf.cfg');#
 ########################################################################
@@ -40,7 +40,7 @@ if ($revision eq "revision") {
     our $watchdog_log = '/usr/adm/watchdog/logs/bypass.log'; #---CHECK FULL PATH
 }
 elsif ($revision eq "debug") {
-    our $watchdog_log = '/home/mihail/Develop/Watch_dog/bypass.log';
+    our $watchdog_log = '/home/mihail/Develop/watch_dog/bypass.log';
 }
 else {
     print "wrong parameter revision in config\n";
