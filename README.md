@@ -16,3 +16,4 @@ This README for watchdog write on perl.
 * :white_check_mark: Check zombie process
 * :white_check_mark: Sending email
 * :no_entry: Check that traffic is come
+* :no_entry: history of previous bypass state
