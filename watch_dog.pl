@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 158 |
+# Build 159 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -46,13 +46,10 @@ my $mce = MCE->new(
 			$datestring = strftime "%F %T", localtime;
 			(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 			if ($hour==3 && $min==0 && $sec <= 5) {last;}
-			if ($sec == 5) {$logtime_delay = time();}
 			if (watch_dog()==0) {
-				#textout();
 				bypass_out_status_ok();
 			}
 			else {
-				#textout();
 				bypass_out_status_bad();
 			}
 		}

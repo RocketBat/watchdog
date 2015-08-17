@@ -30,7 +30,6 @@ sub bypass_check;
 sub bypass_out_status_ok {
 	if ($bypass == 0) {
 		$bypass=0;
-		setSavestate();
 	}
 	else {
 		bypass_check();

@@ -16,7 +16,7 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(setloginfo setTextRestartDPI setTextStartDPI textout outlog setSavestate setSavestate_bypass);
+    our @EXPORT      = qw(setloginfo setTextRestartDPI setTextStartDPI textout outlog setSavestate_bypass);
 }
 
 #sub textout {
@@ -38,51 +38,41 @@ BEGIN {
 #}
 
 sub setSavestate_bypass {
-	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
-		print "$datestring save system state, because bypass is recently ON\n";
-		system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");	
-	}
-}
-
-sub setSavestate {
-	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
-		system("echo 'Save system state'");
-	}
+	print "$datestring save system state, because bypass is recently ON\n";
+	system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");	
+	sleep 5;
 }
 
 sub setTextStartDPI {
-	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
 		print "$datestring DPI process not found. Starting DPI-Engine.\n";
    		system("echo $datestring 'DPI process not found. Starting DPI-Engine.' >> $watchdog_log");
-    }
+		sleep 5;
 }
 
 sub setTextRestartDPI {
-	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
-		print "$datestring Restarting DPI-Engine.\n";
-	    system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
-    }
+	print "$datestring Restarting DPI-Engine.\n";
+	system("echo $datestring 'Zombie found. Restarting DPI-Engine.' >> $watchdog_log");
+    sleep 5;
 }
 
 sub setloginfo {
 	my ($module_type) = @_;
-	if (time() - $logtime_delay >= $refresh_timer || $logtime_delay == 0) {
-		if ($module_type eq "zombie") {
-			system("echo $datestring $logmsg >>  $watchdog_log");
-		}
-		elsif ($module_type eq "proc_check") {
-			system("echo $datestring $logmsg >>  $watchdog_log");
-		}
-		elsif ($module_type eq "fresh") { #file refresh
-			system("echo $datestring $logmsg >>  $watchdog_log");
-		}
-		elsif ($module_type eq "chk_drop") {
-			system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
-		}
-		elsif ($module_type eq "readn_drop") {
-			system("echo $datestring $logmsg >>  $watchdog_log");
-		}	
+	if ($module_type eq "zombie") {
+		system("echo $datestring $logmsg >>  $watchdog_log");
 	}
+	elsif ($module_type eq "proc_check") {
+		system("echo $datestring $logmsg >>  $watchdog_log");
+	}
+	elsif ($module_type eq "fresh") { #file refresh
+		system("echo $datestring $logmsg >>  $watchdog_log");
+	}
+	elsif ($module_type eq "chk_drop") {
+		system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
+	}
+	elsif ($module_type eq "readn_drop") {
+		system("echo $datestring $logmsg >>  $watchdog_log");
+	}
+	sleep 5; #when bypass is on it is make sleep one thread
 }
 
 1;
