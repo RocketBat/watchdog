@@ -43,12 +43,12 @@ sub bypass_out_status_bad {
 		}
 		send_mail("$server bypass status is ON","$datestring $stat");
 		system("echo $datestring 'Bypass turn on'");
-		system("echo $datestring 'Bypass turn on' >> $watchdog_log");
-		
+		system("echo $datestring 'Bypass turn on' >> $watchdog_log");	
 		bypass_loop();
+		sleep 5;
 	}
 	else {
-		setSavestate();
+		sleep 5;
 	}
 }
 

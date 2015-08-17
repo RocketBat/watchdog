@@ -71,8 +71,7 @@ sub setloginfo {
 	}
 	elsif ($module_type eq "readn_drop") {
 		system("echo $datestring $logmsg >>  $watchdog_log");
-	}
-	sleep 5; #when bypass is on it is make sleep one thread
+	}	
 }
 
 1;
