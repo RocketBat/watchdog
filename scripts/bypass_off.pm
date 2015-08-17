@@ -46,9 +46,8 @@ sub bypass_check {
 	else {
 		$bypass=0;
 		if ($revision eq "debug") {
-			############REMEMBER: add the real function of bypass|
-			system("echo 'Bypasss is oFFFFFFFFuuuuu'");#         |
-			#####################################################|
+			system("echo 'Bypasss is oFFFFFFFFuuuuu'");
+			system("echo $datestring 'Bypass turn off'");
 		}
 		elsif ($revision eq "release")  {
 			############REMEMBER: add the real function of bypass|
@@ -59,7 +58,6 @@ sub bypass_check {
 			print "Wrong parameter revison in config\n";
 		}
 		send_mail("$server bypass status is OFF","$datestring Bypass is off");
-		system("echo $datestring 'Bypass turn off'");
 		system("echo $datestring 'Bypass turn off' >> $watchdog_log");
 	}
 }

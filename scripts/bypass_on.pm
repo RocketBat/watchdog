@@ -29,9 +29,8 @@ sub bypass_out_status_bad {
 		$bypass=1;
 		$bypass_on_time=time();
 		if ($revision eq "debug") {
-			############REMEMBER: add the real function of bypass|
-			system("echo 'Bypasss is onnnN!'");#                 |
-			#####################################################|
+			system("echo 'Bypasss is onnnN!'");
+			system("echo $datestring 'Bypass turn on'");
 		}
 		elsif ($revision eq "release") {
 			############REMEMBER: add the real function of bypass|
@@ -42,7 +41,6 @@ sub bypass_out_status_bad {
 			print "Wrong parameter revison in config\n";
 		}
 		send_mail("$server bypass status is ON","$datestring $stat");
-		system("echo $datestring 'Bypass turn on'");
 		system("echo $datestring 'Bypass turn on' >> $watchdog_log");	
 		bypass_loop();
 		sleep 5;
