@@ -1,12 +1,12 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 157 |
+# Build 158 |
 #-----------|
 
-#------SERVER NAME------|
-#        'Mighty'       |
-#-----------------------|
+#---------SERVER NAME------|
+#        'Generator'       |
+#--------------------------|
 
 #--includes
 use POSIX qw(strftime);
@@ -46,13 +46,12 @@ my $mce = MCE->new(
 			$datestring = strftime "%F %T", localtime;
 			(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
 			if ($hour==3 && $min==0 && $sec <= 5) {last;}
+			if ($sec == 5) {$logtime_delay = time();}
 			if (watch_dog()==0) {
-				$logtime_delay = time();
 				#textout();
 				bypass_out_status_ok();
 			}
 			else {
-				$logtime_delay = time();
 				#textout();
 				bypass_out_status_bad();
 			}
