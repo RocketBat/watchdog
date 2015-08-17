@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 159 |
+# Build 160 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -51,6 +51,7 @@ my $mce = MCE->new(
 			}
 			else {
 				bypass_out_status_bad();
+				sleep 5;
 			}
 		}
 	}
