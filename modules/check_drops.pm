@@ -9,9 +9,9 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/scripts';
+use lib '/home/mihail/Develop/watch_dog/scripts';
 use scripts::start;
-use lib '/home/mihail/Develop/Watch_dog/common';
+use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
 
 BEGIN {

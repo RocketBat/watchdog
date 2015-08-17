@@ -8,15 +8,15 @@ use strict;
 use warnings;
 use Exporter;
 
-use lib '/home/mihail/Develop/Watch_dog/common';
+use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
-use lib '/home/mihail/Develop/Watch_dog/modules';
+use lib '/home/mihail/Develop/watch_dog/modules';
 use modules::logging;
 use modules::check_drops;
 use modules::filerefresh;
 use modules::process_check;
 use modules::zombie_check;
-use lib '/home/mihail/Develop/Watch_dog/scripts';
+use lib '/home/mihail/Develop/watch_dog/scripts';
 use scripts::restart;
 use scripts::bypass_on;
 use scripts::bypass_off;

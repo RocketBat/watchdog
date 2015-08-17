@@ -9,10 +9,10 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/common';
+use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
 use common::bypass_loop;
-use lib '/home/mihail/Develop/Watch_dog/modules';
+use lib '/home/mihail/Develop/watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
 use modules::logging;

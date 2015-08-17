@@ -17,9 +17,9 @@ BEGIN {
 }
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/common';
+use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
-use lib '/home/mihail/Develop/Watch_dog/modules';
+use lib '/home/mihail/Develop/watch_dog/modules';
 use modules::logging;
 
 sub restart {
