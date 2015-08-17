@@ -66,7 +66,7 @@ sub setTextRestartDPI {
 
 sub setloginfo {
 	my ($module_type) = @_;
-	if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
+	#if (time() - $logtime_delay == $refresh_timer || $logtime_delay == 0) {
 		if ($module_type eq "zombie") {
 			system("echo $datestring $logmsg >>  $watchdog_log");
 		}
@@ -82,7 +82,7 @@ sub setloginfo {
 		elsif ($module_type eq "readn_drop") {
 			system("echo $datestring $logmsg >>  $watchdog_log");
 		}	
-	}
+	#}
 }
 
 1;
