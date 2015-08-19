@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 160 |
+# Build 161 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -35,26 +35,26 @@ use modules::wdlogstatus;
 my $mce = MCE->new(
 	user_func => sub {
 		while (1) {
-    	$date = strftime "%F", localtime;
-		if ($shaper_type eq "twin") {
-    		$log_file = $directory.$date.'-master-out.log';
-    	}
-		elsif ($shaper_type eq "one") {
-			$log_file = $directory.$date.'-out.log';
-		}
-		while (1) {
-			$datestring = strftime "%F %T", localtime;
-			(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
-			if ($hour==3 && $min==0 && $sec <= 5) {last;}
-			if (watch_dog()==0) {
-				bypass_out_status_ok();
+    		$date = strftime "%F", localtime;
+			if ($shaper_type eq "twin") {
+    			$log_file = $directory.$date.'-master-out.log';
+    		}
+			elsif ($shaper_type eq "one") {
+				$log_file = $directory.$date.'-out.log';
 			}
-			else {
-				bypass_out_status_bad();
-				sleep 5;
+			while (1) {
+				$datestring = strftime "%F %T", localtime;
+				(my $sec,my $min,my $hour,my $mday,my $mon,my $year,my $wday,my $yday,my $isdst) = localtime();
+				if ($hour==3 && $min==0 && $sec <= 5) {last;}
+				if (watch_dog()==0) {
+					bypass_out_status_ok();
+				}
+				else {
+					bypass_out_status_bad();
+					sleep 5;
+				}
 			}
 		}
-	}
 	}
 );
 

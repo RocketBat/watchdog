@@ -56,6 +56,11 @@ sub watch_dog {
         setloginfo("readn_drop");
 		return 5;
 	}
+	if (stuck_check()==1) {
+		$stat="There is not traffic in DPI. Turn on bypass for 2 min!";
+		setloginfo("stuck");
+		return 6;
+	}
     return 0;
 }
 

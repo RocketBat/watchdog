@@ -50,6 +50,9 @@ sub setloginfo {
 	}
 	elsif ($module_type eq "readn_drop") {
 		system("echo $datestring $logmsg >>  $watchdog_log");
+	}
+	elsif ($module_type eq "stuck") {
+		system("echo $datestring $logmsg >>  $watchdog_log");
 	}	
 }
 
