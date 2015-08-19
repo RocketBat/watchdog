@@ -16,6 +16,7 @@ use modules::check_drops;
 use modules::filerefresh;
 use modules::process_check;
 use modules::zombie_check;
+use modules::stuck_check;
 use lib '/home/mihail/Develop/watch_dog/scripts';
 use scripts::restart;
 use scripts::bypass_on;
