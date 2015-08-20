@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 161 |
+# Build 162 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -48,6 +48,7 @@ my $mce = MCE->new(
 				if ($hour==3 && $min==0 && $sec <= 5) {last;}
 				if (watch_dog()==0) {
 					bypass_out_status_ok();
+					getStuckRes();
 				}
 				else {
 					bypass_out_status_bad();

@@ -26,7 +26,7 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(watch_dog);
+    our @EXPORT      = qw(getStuckRes watch_dog);
 }
 
 #--------big function (main function of this script)
@@ -57,13 +57,14 @@ sub watch_dog {
         setloginfo("readn_drop");
 		return 5;
 	}
-	if (stuck_check()==1) {
-		$stat="There is not traffic in DPI. Turn on bypass for 2 min!";
-		setloginfo("stuck");
-		return 6;
-	}
     return 0;
 }
 
+sub getStuckRes {
+	if (stuck_check()==1) {
+		$stat="There is not traffic in DPI. Turn on bypass for 2 min!";
+		setloginfo("stuck");
+	}
+}
 
 1;
