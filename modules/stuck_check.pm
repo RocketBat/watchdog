@@ -10,12 +10,17 @@ use Exporter;
 
 use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
+use lib '/home/mihail/Develop/watch_dog/scripts';
+use scripts::bypass_on;
+use scripts::bypass_off;
+use lib '/home/mihail/Develop/watch_dog/modules';
+use modules::logging;
 
 BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw(stuck_check);
+    our @EXPORT      = qw(getStuckRes stuck_check);
 }
 
 my $count = 0; #needs for counting speed 
@@ -34,6 +39,7 @@ sub stuck_check {
 			$check = 1;
             $logmsg = ' Traffic does not return to dpi. Starting bypass for 2 min.';
 		    print "Traffic does not return!\n"; #debug infoermatinon
+            
         }
         else {
             $check = 0;
@@ -69,6 +75,28 @@ sub stuck_count {
         }
         $count_timer = time();
     }
+}
+
+# get information about speed and if speed less than 20 Mbps starting bypass
+sub getStuckRes {
+	if (stuck_check()==1) {
+		$stat="There is not traffic in DPI. Turn on bypass for 2 min!";
+		setloginfo("stuck");
+		if ($revision eq "debug") {
+			system("echo 'Bypasss is onnnN!'");
+			system("echo $datestring 'Bypass turn on'");
+		}
+		elsif ($revision eq "release") {
+			############REMEMBER: add the real function of bypass|
+			`bpctl_util all set_bypass on`;#	                 |
+			#####################################################|
+		}
+		else {
+			print "Wrong parameter revison in config\n";
+		}
+		send_mail("$server. ","$datestring $stat");
+		sleep 120; #2 minutes
+	}
 }
 
 1;
