@@ -24,3 +24,17 @@ This README for watchdog write on perl.
 * * :no_entry: Check that traffic is come
 * Statistics:
 * * :no_entry: Own statistics (ex. how many times bypass change state)
+
+---
+
+## Имеюшиеся зависимости в проекте ##
+
+1. File::chdir
+
+2. MCE
+
+3. Config::Tiny
+
+---
+
+Для того чтобы посылалась почта нужен модуль sendmail.
