@@ -37,4 +37,24 @@ This README for watchdog write on perl.
 
 ---
 
+## Sendmail ##
+
 Для того чтобы посылалась почта нужен модуль sendmail.
+
+Настраивается примерно так:
+
+1. Ставим sendmail
+
+2. Делаем чтобы почта посылалась с gmail'а:
+
+* * apt-get install ssmtp
+
+* * nano /etc/ssmtp/ssmtp.conf
+
+* * * AuthUser=pochta@gmail.com
+* * * AuthPass=Your-Gmail-Password
+* * * FromLineOverride=YES
+* * * mailhub=smtp.gmail.com:587
+* * * UseSTARTTLS=YES
+
+З.ы.: желательно выключить при этом sendmail, но не обязательно
