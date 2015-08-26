@@ -47,7 +47,7 @@ This README for watchdog write on perl.
 
 2. Делаем чтобы почта посылалась с gmail'а:
 
-* * apt-get install ssmtp
+* * apt-get install ssmtp mailutils
 
 * * nano /etc/ssmtp/ssmtp.conf
 
