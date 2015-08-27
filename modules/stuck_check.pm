@@ -93,7 +93,7 @@ sub getStuckRes {
 			print "Wrong parameter revison in config\n";
 		}
 		send_mail("$server. ","$datestring $stat");
-		sleep 120; #2 minutes
+		sleep 20; #2 minutes
 	}
 }
 
