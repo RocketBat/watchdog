@@ -79,7 +79,6 @@ sub stuck_check {
 sub getStuckRes {
 	if (stuck_check()==1) {
 		$stat="There is not traffic in DPI. Turn on bypass for 2 min!";
-		setloginfo("stuck");
 		if ($revision eq "debug") {
 			system("echo 'Bypasss is onnnN!'");
 			system("echo $datestring 'Bypass turn on'");
@@ -92,7 +91,8 @@ sub getStuckRes {
 		else {
 			print "Wrong parameter revison in config\n";
 		}
-		send_mail("$server. ","$datestring $stat");
+		send_mail("$server bypass status is ON ","$datestring $stat");
+        setloginfo("stuck");
 		sleep 20; #2 minutes
 	}
 }
