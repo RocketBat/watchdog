@@ -15,6 +15,7 @@ use scripts::bypass_on;
 use scripts::bypass_off;
 use lib '/home/mihail/Develop/watch_dog/modules';
 use modules::logging;
+use modules::mail_send;
 
 BEGIN {
     require Exporter;
