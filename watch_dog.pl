@@ -31,6 +31,7 @@ use scripts::bypass_on;
 use scripts::bypass_off;
 use modules::logging;
 use modules::wdlogstatus;
+use modules::stuck_check;
 
 my $mce = MCE->new(
 	user_func => sub {
