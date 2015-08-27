@@ -24,3 +24,37 @@ This README for watchdog write on perl.
 * * :no_entry: Check that traffic is come
 * Statistics:
 * * :no_entry: Own statistics (ex. how many times bypass change state)
+
+---
+
+## Имеюшиеся зависимости в проекте ##
+
+1. File::chdir
+
+2. MCE
+
+3. Config::Tiny
+
+---
+
+## Sendmail ##
+
+Для того чтобы посылалась почта нужен модуль sendmail.
+
+Настраивается примерно так:
+
+1. Ставим sendmail
+
+2. Делаем чтобы почта посылалась с gmail'а:
+
+* * apt-get install ssmtp mailutils
+
+* * nano /etc/ssmtp/ssmtp.conf
+
+* * * AuthUser=pochta@gmail.com
+* * * AuthPass=Your-Gmail-Password
+* * * FromLineOverride=YES
+* * * mailhub=smtp.gmail.com:587
+* * * UseSTARTTLS=YES
+
+З.ы.: желательно выключить при этом sendmail, но не обязательно
