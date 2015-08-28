@@ -1,3 +1,7 @@
 language: perl
 perl:
   - "5.14"
+before_install:
+  - mkdir /usr/adm/adm_s1/logs
+  - cd /usr/adm/adm_s1/logs
+  - echo "test" > `date +%Y-%m-%d:%H:%M:%S`-master-out.log
