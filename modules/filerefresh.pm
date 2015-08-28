@@ -11,38 +11,33 @@ use File::stat;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/Watch_dog/scripts';
+use lib '/home/mihail/Develop/watch_dog/scripts';
 use scripts::start;
-use lib '/home/mihail/Develop/Watch_dog/common';
+use lib '/home/mihail/Develop/watch_dog/common';
 use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(filerefresh);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
+#check log for it's updating
 sub filerefresh {
     my $obnovlenie;
     my $mt = stat($log_file);
     my $st = $mt -> mtime;
-    if ($st +1 >= time()) {
+    if ($st + 1 >= time()) {
         $textmsg_fresh=' Log file updating ';
+        $logmsg = ' Log file updating';
         $obnovlenie=0;
     }
     else {
         $obnovlenie=1;
         $textmsg_fresh = ' Achtung! Log does not updating!';
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'bypass on, Log does not updating!' >> $watchdog_log");
-		}
-	}
+        $logmsg = ' bypass on, Log does not updating!';
+}
     return $obnovlenie;
 }
 
