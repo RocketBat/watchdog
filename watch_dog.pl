@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 165 |
+# Build 166 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -37,16 +37,14 @@ my $mce = MCE->new(
 	user_func => sub {
 		while (1) {
     		$date = strftime "%F", localtime;
-			if -f $log_file {
-				if ($shaper_type eq "twin") {
-    				$log_file = $directory.$date.'-master-out.log';
-    			}
-				elsif ($shaper_type eq "one") {
-					$log_file = $directory.$date.'-out.log';
-				}
+			if ($shaper_type eq "twin") {
+    			$log_file = $directory.$date.'-master-out.log';
+    		}
+			elsif ($shaper_type eq "one") {
+				$log_file = $directory.$date.'-out.log';
 			}
-			else {
-				print "DPI log file does not exist!\n";
+			if (-f $log_file) {
+				print "DPI log file does not exist\n";
 			}
 			while (1) {
 				$datestring = strftime "%F %T", localtime;
