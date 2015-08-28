@@ -16,14 +16,9 @@ use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(check_drops);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
 my $timeCheckCNRdrops = 0; # initial time to check "can not read drop rate"
@@ -37,13 +32,13 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-			if ($text_out==$refresh_timer) {
-				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-			}
+            #$logmsg_cdrops = ' bypass is on, droprate is = ';
+            $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
+            $logmsg_cdrops = ' Drops level is in normal range';
 		}
     }
     elsif ($shaper_type eq 'one' && $line =~ m/dropRate this moment\s+(\d.*)\s+(\d.*)\s/){
@@ -52,13 +47,14 @@ sub check_drops {
        	if($drop_rate1 > $max_drops || $drop_rate2 > $max_drops){
         	$check=1;
             $textmsg_cdrops = ' Drops level exceeds the configured maximum of drops';
-			if ($text_out==$refresh_timer) {
-				system("echo $datestring 'bypass is on, droprate is = $drop_rate1 and $drop_rate2' >> $watchdog_log");
-			}
+			#$logmsg_cdrops = ' bypass is on, droprate is = ';
+            $logmsg = ' bypass is on, droprate is = ';
         }
        	else{
             $check=0;
             $textmsg_cdrops=' Drops level is in normal range';
+            #$logmsg_cdrops = ' Drops level is in normal range';
+            $logmsg = ' Drops level is in normal range';
 		}
     }
     else{
@@ -70,13 +66,12 @@ sub check_drops {
             $droprate_read = 0; #--relevance "not read the log" has passed
         }
 		if ($droprate_read == $readDropRateDelay) {
-			$check=1;
+			$check=2;
             $timeCheckCNRdrops = time();
 			$textmsg_cdrops = ' Can not read drop rate';
-			if ($text_out==$refresh_timer) {
-				system("echo $datestring 'bypass is on, Can not read drop rate!' >> $watchdog_log");
-			}
-		$droprate_read = 0;	
+			#$logmsg_cdrops = ' bypass is on, Can not read drop rate!';
+			$logmsg = ' bypass is on, Can not read drop rate!';
+            $droprate_read = 0;	
 		}
 	}
     

@@ -15,14 +15,9 @@ use common::variables;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(bypass_state $bypass);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 
 our $bypass;
@@ -42,7 +37,7 @@ sub bypass_state {
         if (`bpctl_util all get_bypass | grep on | grep -v grep` eq "") {
 		$bypass=0;
 		print "Bypass is off\n";
-	}
+	   }  
 	else {
 		$bypass=1;
 		print "Bypass is on\n";

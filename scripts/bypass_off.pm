@@ -15,17 +15,13 @@ use common::bypass_loop;
 use lib '/home/mihail/Develop/Watch_dog/modules';
 use modules::bypass_state;
 use modules::mail_send;
+use modules::logging;
 
 BEGIN {
     require Exporter;
-    # set the version for version checking
-    our $VERSION     = 1.7.0;
-    # Inherit from Exporter to export functions and variables
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
     our @EXPORT      = qw(bypass_out_status_ok);
-    # Functions and variables which can be optionally exported
-    our @EXPORT_OK   = qw();
 }
 #--prototype
 sub bypass_check;
@@ -34,11 +30,7 @@ sub bypass_check;
 sub bypass_out_status_ok {
 	if ($bypass == 0) {
 		$bypass=0;
-		if ($text_out==$refresh_timer) {
-			system("echo $datestring 'Save system state'");
-			$text_out=0;
-		}
-		else {$text_out++;}
+		setSavestate();
 	}
 	else {
 		bypass_check();
@@ -48,12 +40,7 @@ sub bypass_out_status_ok {
 sub bypass_check {
 	$bypass_off_time=time();
 	if ($bypass_off_time - $bypass_on_time <= $delay_removal_from_bypass) {
-		if ($text_out == $refresh_timer) {
-			print "$datestring save system state, because bypass is recently ON\n";
-			system("echo $datestring ' save system state, because bypass is recently ON' >> $watchdog_log");
-			$text_out = 0;
-		}
-		else {$text_out++;}
+		setSavestate_bypass();
 	}
 	else {
 		$bypass=0;
