@@ -22,6 +22,7 @@ This README for watchdog write on perl.
 * * :no_entry: history of previous bypass state
 * Common:
 * * :no_entry: Check that traffic is come
+* * :no_entry: Add instalation via Makefile.pl (easy installing and portable)
 * Statistics:
 * * :no_entry: Own statistics (ex. how many times bypass change state)
 
