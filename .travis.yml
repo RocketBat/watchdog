@@ -3,5 +3,5 @@ perl:
   - "5.14"                     # normal pre-installed perl
   - "blead"                    # install perl from git
 before_install:
-  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - git clone https://github.com/RocketBat/watchdog/tree/feature/fastlink_ext_module ~/watchdog
   
