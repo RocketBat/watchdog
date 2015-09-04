@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 #-----------|
-# Build 170 |
+# Build 171 |
 #-----------|
 
 #---------SERVER NAME------|
@@ -43,7 +43,7 @@ my $mce = MCE->new(
 			elsif ($shaper_type eq "one") {
 				$log_file = $directory.$date.'-out.log';
 			}
-			if (-f $log_file) {
+			if (! -f $log_file) {
 				print "DPI log file does not exist\n";
 			}
 			while (1) {
