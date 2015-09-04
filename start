@@ -1,0 +1,3 @@
+#!/bin/bash
+
+nohup ./bin/watchdog.pl 1>./logs/status.log 2>./logs/err.log &
