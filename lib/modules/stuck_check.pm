@@ -35,13 +35,13 @@ sub stuck_count {
     $stuckTime = time() - $count_timer;
     # 120 second delay before bypass is going ON
     if ($mspeed1 <= 20 && $mspeed2 <= 20 && $stuckTime >= 1 && $bypass == 0) {
-        if (time() - $count_timer <= 20) { #120 sec means 2 min
+        if (time() - $count_timer <= 120) { #120 sec means 2 min
             $count++;
-            print "Traffic count ++ does not return!\n"; #debug infoermatinon
+            #print "Traffic count ++ does not return!\n"; #debug infoermatinon
         }
         else {
             $count = 0;
-            print "Traffic does not return set by zer0 !\n"; #debug infoermatinon
+            #print "Traffic does not return set by zer0 !\n"; #debug infoermatinon
         }
         $count_timer = time();
     }
@@ -52,10 +52,10 @@ sub stuck_func {
     $mspeed1 = $1;
 	$mspeed2 = $2;
     stuck_count();
-	if ($mspeed1 <= 20 && $mspeed2 <= 20 && $count == 20 && $bypass == 0) {
+	if ($mspeed1 <= 20 && $mspeed2 <= 20 && $count == 120 && $bypass == 0) {
 		$check = 1;
         $logmsg = ' Traffic does not return to dpi. Starting bypass for 2 min.';
-		print "Traffic does not return!\n"; #debug infoermatinon 
+		#print "Traffic does not return!\n"; #debug infoermatinon 
     }
     else {
         $check = 0;
@@ -94,7 +94,7 @@ sub getStuckRes {
 		}
 		send_mail("$server bypass status is ON ","$datestring $stat");
         setloginfo("stuck");
-		sleep 20; #2 minutes
+		sleep 120; #2 minutes
 	}
 }
 
