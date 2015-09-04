@@ -12,6 +12,8 @@ use Exporter;
 use lib '/usr/adm/watchdog/lib/common';
 use common::variables;
 
+my $setLogoutTime = 0; #time need for corrrectly logging
+
 BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
@@ -36,24 +38,27 @@ sub setTextRestartDPI {
 
 sub setloginfo {
 	my ($module_type) = @_;
-	if ($module_type eq "zombie") {
-		system("echo $datestring $logmsg >>  $watchdog_log");
+	if (time() - $setLogoutTime >= 5 || $setLogoutTime == 0) {
+		$setLogoutTime == time();
+		if ($module_type eq "zombie") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "proc_check") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "fresh") { #file refresh
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "chk_drop") {
+			system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
+		}
+		elsif ($module_type eq "readn_drop") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}
+		elsif ($module_type eq "stuck") {
+			system("echo $datestring $logmsg >>  $watchdog_log");
+		}	
 	}
-	elsif ($module_type eq "proc_check") {
-		system("echo $datestring $logmsg >>  $watchdog_log");
-	}
-	elsif ($module_type eq "fresh") { #file refresh
-		system("echo $datestring $logmsg >>  $watchdog_log");
-	}
-	elsif ($module_type eq "chk_drop") {
-		system("echo $datestring $logmsg $drop_rate1 ' and ' $drop_rate2>>  $watchdog_log");
-	}
-	elsif ($module_type eq "readn_drop") {
-		system("echo $datestring $logmsg >>  $watchdog_log");
-	}
-	elsif ($module_type eq "stuck") {
-		system("echo $datestring $logmsg >>  $watchdog_log");
-	}	
 }
 
 1;
