@@ -14,12 +14,15 @@ BEGIN {
     require Exporter;
     our @ISA         = qw(Exporter);
     # Functions and variables which are exported by default
-    our @EXPORT      = qw($mspeed2 $mspeed1 $logmsg $logtime_delay $logmsg_zcheck $logmsg_cdrops $logmsg_fresh $logmsg_proc $log_params $shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
+    our @EXPORT      = qw($path2lib $mspeed2 $mspeed1 $logmsg $logtime_delay $logmsg_zcheck $logmsg_cdrops $logmsg_fresh $logmsg_proc $log_params $shaper_type $revision $readDropRateDelay $server $t1 $t2 $log_file $textmsg_zcheck $textmsg_cdrops $textmsg_fresh $textmsg_proc $max_drops $datestring $directory $date $stat $refresh_timer $text_out $drop_rate1 $drop_rate2 $bypass_on_time $bypass_off_time $watchdog_log $delay_removal_from_bypass $droprate_read);
 }
+
+#path to lib
+our $path2lib = '~/Develop/watchdog';
 
 #--open the config
 my $config = Config::Tiny->new;
-$config = Config::Tiny->read('/home/mihail/Develop/watch_dog/configs/wd_conf.cfg');
+$config = Config::Tiny->read('/usr/adm/watchdog/configs/wd_conf.cfg');
 ####################REAL#CONFIG#FILE####################################
 #$config = Config::Tiny->read('/usr/adm/watchdog/configs/wd_conf.cfg');#
 ########################################################################
@@ -40,7 +43,7 @@ if ($revision eq "revision") {
     our $watchdog_log = '/usr/adm/watchdog/logs/bypass.log'; #---CHECK FULL PATH
 }
 elsif ($revision eq "debug") {
-    our $watchdog_log = '/home/mihail/Develop/watch_dog/bypass.log';
+    our $watchdog_log = '/usr/adm/watchdog/logs/bypass.log';
 }
 else {
     print "wrong parameter revision in config\n";

@@ -17,9 +17,9 @@ BEGIN {
 }
 
 #--my libraries
-use lib '/home/mihail/Develop/watch_dog/common';
+use lib '/usr/adm/watchdog/lib/common';
 use common::variables;
-use lib '/home/mihail/Develop/watch_dog/modules';
+use lib '/usr/adm/watchdog/lib/modules';
 use modules::logging;
 
 #starting dpi

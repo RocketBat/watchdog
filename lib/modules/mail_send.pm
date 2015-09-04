@@ -9,7 +9,7 @@ use warnings;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/watch_dog/common';
+use lib '/usr/adm/watchdog/lib/common';
 use common::variables;
 
 BEGIN {

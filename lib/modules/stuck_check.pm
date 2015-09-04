@@ -8,12 +8,12 @@ use strict;
 use warnings;
 use Exporter;
 
-use lib '/home/mihail/Develop/watch_dog/common';
+use lib '/usr/adm/watchdog/lib/common';
 use common::variables;
-use lib '/home/mihail/Develop/watch_dog/scripts';
+use lib '/usr/adm/watchdog/lib/scripts';
 use scripts::bypass_on;
 use scripts::bypass_off;
-use lib '/home/mihail/Develop/watch_dog/modules';
+use lib '/usr/adm/watchdog/lib/modules';
 use modules::logging;
 use modules::mail_send;
 

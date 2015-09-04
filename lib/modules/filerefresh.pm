@@ -11,9 +11,9 @@ use File::stat;
 use Exporter;
 
 #--my libraries
-use lib '/home/mihail/Develop/watch_dog/scripts';
+use lib '/usr/adm/watchdog/lib/scripts';
 use scripts::start;
-use lib '/home/mihail/Develop/watch_dog/common';
+use lib '/usr/adm/watchdog/lib/common';
 use common::variables;
 
 BEGIN {

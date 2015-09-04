@@ -1,1 +1,8 @@
-configs/*.cfg
+^.*\.cfg
+Makefile$
+^blib
+^pm_to_blib
+^.*\.bak
+^.*\.old
+^.*\.md
+^.*\.yml
