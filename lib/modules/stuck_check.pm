@@ -16,6 +16,7 @@ use scripts::bypass_off;
 use lib '/usr/adm/watchdog/lib/modules';
 use modules::logging;
 use modules::mail_send;
+use modules::bypass_state;
 
 BEGIN {
     require Exporter;
@@ -33,7 +34,7 @@ my $check;
 sub stuck_count {
     $stuckTime = time() - $count_timer;
     # 120 second delay before bypass is going ON
-    if ($mspeed1 <= 20 && $mspeed2 <= 20 && $stuckTime >= 1) {
+    if ($mspeed1 <= 20 && $mspeed2 <= 20 && $stuckTime >= 1 && $bypass == 0) {
         if (time() - $count_timer <= 20) { #120 sec means 2 min
             $count++;
             print "Traffic count ++ does not return!\n"; #debug infoermatinon
@@ -51,7 +52,7 @@ sub stuck_func {
     $mspeed1 = $1;
 	$mspeed2 = $2;
     stuck_count();
-	if ($mspeed1 <= 20 && $mspeed2 <= 20 && $count == 20) {
+	if ($mspeed1 <= 20 && $mspeed2 <= 20 && $count == 20 && $bypass == 0) {
 		$check = 1;
         $logmsg = ' Traffic does not return to dpi. Starting bypass for 2 min.';
 		print "Traffic does not return!\n"; #debug infoermatinon 
